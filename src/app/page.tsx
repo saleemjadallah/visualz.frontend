@@ -22,7 +22,7 @@ export default function HomePage() {
       <footer className="bg-gray-900 text-white py-12">
         <div className="container mx-auto px-6 text-center">
           <div className="flex items-center justify-center space-x-3 mb-6">
-            <div className="w-8 h-8 bg-gradient-to-br from-cultural-primary to-cultural-accent rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-500 rounded-lg flex items-center justify-center">
               ✨
             </div>
             <h3 className="text-xl font-display font-semibold">DesignVisualz</h3>

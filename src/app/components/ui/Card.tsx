@@ -9,12 +9,11 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, hover = true, cultural = false, children, ...props }, ref) => {
-    const baseClasses = `
-      bg-white rounded-2xl border border-gray-100 shadow-lg
-      ${hover ? 'hover:shadow-xl hover:-translate-y-1' : ''}
-      ${cultural ? 'bg-gradient-to-br from-white to-blue-25' : ''}
-      transition-all duration-300 ease-out
-    `;
+    const baseClasses = [
+      "bg-white rounded-2xl border border-gray-100 shadow-lg transition-all duration-300 ease-out",
+      hover ? "hover:shadow-xl hover:-translate-y-1" : "",
+      cultural ? "bg-gradient-to-br from-white to-blue-50" : ""
+    ].filter(Boolean).join(" ");
     
     return (
       <div 
