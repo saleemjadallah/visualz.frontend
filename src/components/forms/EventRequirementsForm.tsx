@@ -116,7 +116,7 @@ const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
 
   return (
     <div className={cn("min-h-screen bg-gradient-to-br from-primary-50 to-cultural-primary/5", className)}>
-      <Container maxWidth="4xl" padding="lg" className="py-8">
+      <Container maxWidth="2xl" padding="lg" className="py-8">
         {/* Progress Header */}
         <div className="mb-12">
           <div className="text-center mb-8">

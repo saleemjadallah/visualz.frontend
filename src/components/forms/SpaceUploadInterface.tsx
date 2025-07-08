@@ -144,7 +144,7 @@ const SpaceUploadInterface: React.FC<SpaceUploadInterfaceProps> = ({
 
   return (
     <div className={cn("space-y-8", className)}>
-      <Container maxWidth="4xl" padding="lg">
+      <Container maxWidth="2xl" padding="lg">
         {/* Header */}
         <div className="text-center mb-8">
           <motion.div
