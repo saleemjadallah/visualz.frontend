@@ -15,54 +15,57 @@ const NavigationHeader = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-100 shadow-lg">
+    <header className="sticky top-0 z-50 header-cultural">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-4">
-          {/* Logo & Brand */}
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-              <Sparkles className="w-6 h-6 text-white" />
+          {/* Cultural Logo */}
+          <div className="flex items-center space-x-4">
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl animate-cultural-float"
+                 style={{
+                   background: 'linear-gradient(135deg, var(--cultural-primary), var(--cultural-accent))'
+                 }}>
+              <Sparkles className="w-7 h-7 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-display font-bold text-gray-900">
+              <h1 className="text-2xl font-display font-bold text-cultural-heading">
                 DesignVisualz
               </h1>
-              <p className="text-xs text-gray-500 font-medium">Cultural Intelligence AI</p>
+              <p className="text-sm text-cultural-body font-medium">Cultural Intelligence AI</p>
             </div>
           </div>
           
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-2">
+          {/* Cultural Navigation */}
+          <nav className="hidden md:flex items-center space-x-3">
             {navigationItems.map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
                 onClick={() => setActiveTab(id)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
+                className={`flex items-center space-x-3 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 ${
                   activeTab === id 
-                    ? 'bg-blue-100 text-blue-700' 
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                    ? 'nav-cultural-active' 
+                    : 'nav-cultural-inactive hover:nav-cultural-inactive'
                 }`}
               >
-                <Icon className="w-4 h-4" />
+                <Icon className="w-5 h-5" />
                 <span>{label}</span>
               </button>
             ))}
           </nav>
           
-          {/* User Actions */}
-          <div className="flex items-center space-x-3">
-            <button className="hidden sm:flex items-center px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
-              <Share2 className="w-4 h-4 mr-2" />
+          {/* Cultural Actions */}
+          <div className="flex items-center space-x-4">
+            <button className="btn-cultural-secondary hidden sm:flex">
+              <Share2 className="w-5 h-5 mr-2" />
               Share
             </button>
-            <button className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
-              <Download className="w-4 h-4 mr-2" />
-              Export
+            <button className="btn-cultural">
+              <Download className="w-5 h-5 mr-2" />
+              Export Design
             </button>
             
             {/* Mobile Menu Button */}
             <button 
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              className="md:hidden p-2 rounded-lg text-cultural-primary hover:text-cultural-accent hover:bg-cultural-soft transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -72,8 +75,8 @@ const NavigationHeader = () => {
         
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden pb-4 border-t border-gray-100 mt-4">
-            <nav className="flex flex-col space-y-2 pt-4">
+          <div className="md:hidden py-4 border-t border-cultural-secondary">
+            <div className="flex flex-col space-y-2">
               {navigationItems.map(({ id, label, icon: Icon }) => (
                 <button
                   key={id}
@@ -81,20 +84,17 @@ const NavigationHeader = () => {
                     setActiveTab(id);
                     setMobileMenuOpen(false);
                   }}
-                  className={`
-                    flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-sm text-left
-                    transition-all duration-200 ${
-                      activeTab === id 
-                        ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-500' 
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                    }
-                  `}
+                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    activeTab === id 
+                      ? 'nav-cultural-active' 
+                      : 'nav-cultural-inactive hover:nav-cultural-inactive'
+                  }`}
                 >
-                  <Icon className="w-5 h-5" />
+                  <Icon className="w-4 h-4" />
                   <span>{label}</span>
                 </button>
               ))}
-            </nav>
+            </div>
           </div>
         )}
       </div>

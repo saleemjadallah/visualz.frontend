@@ -710,3 +710,663 @@ export { ComponentName, componentVariants };
 5. **Documentation** - Clear component and cultural usage documentation
 
 This todo list provides a comprehensive, step-by-step approach to building the AI Event Visualizer UI/UX. Each phase builds upon the previous one, ensuring a solid foundation while maintaining focus on cultural intelligence and premium user experience.
+
+# 🎨 Authentic Cultural Color Palettes - Transport Users Through Design
+
+## Philosophy: Colors That Tell Stories
+
+Instead of generic corporate blues, let's use colors that evoke **specific memories and emotions**:
+- **Japanese**: Morning mist over bamboo forests, aged cedar, golden temple bells
+- **Swedish**: Weathered pine, soft winter light, hand-knitted wool, lingonberry jam
+- **Italian**: Sun-baked terracotta, olive grove shadows, aged Parmesan, autumn vineyards  
+- **French**: Lavender fields, aged brass, cream stone châteaux, vintage wine labels
+
+---
+
+## 🇯🇵 JAPANESE PALETTE: "Temple Garden at Dawn"
+
+### Core Colors
+```css
+:root {
+  /* Japanese Cultural Palette */
+  --jp-ink-wash: #2d3436;        /* Sumi-e ink wash */
+  --jp-bamboo-mist: #636e72;     /* Morning bamboo mist */
+  --jp-aged-cedar: #8b7355;      /* Weathered temple wood */
+  --jp-temple-gold: #f39c12;     /* Golden temple accents */
+  --jp-cherry-blush: #fd79a8;    /* Sakura petals */
+  --jp-stone-garden: #ddd;       /* Zen garden stones */
+  --jp-paper-white: #ffeaa7;     /* Washi paper cream */
+  --jp-moss-green: #00b894;      /* Temple moss */
+}
+
+/* Japanese Theme Implementation */
+.theme-japanese {
+  --cultural-primary: var(--jp-ink-wash);
+  --cultural-secondary: var(--jp-aged-cedar);
+  --cultural-accent: var(--jp-temple-gold);
+  --cultural-neutral: var(--jp-paper-white);
+  --cultural-soft: var(--jp-stone-garden);
+}
+```
+
+### Visual Atmosphere
+- **Gradients**: Ink wash to mist `linear-gradient(135deg, #2d3436, #636e72)`
+- **Accent**: Warm temple gold for buttons and highlights
+- **Texture**: Subtle paper-like backgrounds
+- **Shadows**: Soft, like filtered light through shoji screens
+
+---
+
+## 🇸🇪 SWEDISH PALETTE: "Cozy Cabin Winter"
+
+### Core Colors
+```css
+:root {
+  /* Swedish Cultural Palette */
+  --se-pine-bark: #5d4e37;       /* Weathered pine bark */
+  --se-winter-sky: #74b9ff;      /* Clear winter sky */
+  --se-wool-cream: #f8f5f0;      /* Hand-knitted wool */
+  --se-lingonberry: #e84393;     /* Lingonberry preserve */
+  --se-birch-white: #ffefd5;     /* Birch bark white */
+  --se-forest-deep: #2d3436;     /* Deep forest shadow */
+  --se-copper-pot: #d63031;      /* Traditional copper */
+  --se-sage-green: #a4b494;      /* Nordic sage */
+}
+
+/* Swedish Theme Implementation */
+.theme-scandinavian {
+  --cultural-primary: var(--se-pine-bark);
+  --cultural-secondary: var(--se-sage-green);
+  --cultural-accent: var(--se-lingonberry);
+  --cultural-neutral: var(--se-wool-cream);
+  --cultural-soft: var(--se-birch-white);
+}
+```
+
+### Visual Atmosphere
+- **Gradients**: Pine to winter sky `linear-gradient(135deg, #5d4e37, #74b9ff)`
+- **Cozy Elements**: Wool cream backgrounds, warm lingonberry accents
+- **Texture**: Wood grain patterns, knitted textures
+- **Lighting**: Soft, warm, like candlelight in winter
+
+---
+
+## 🇮🇹 ITALIAN PALETTE: "Tuscan Autumn"
+
+### Core Colors
+```css
+:root {
+  /* Italian Cultural Palette */
+  --it-terracotta: #c0392b;      /* Sun-baked clay */
+  --it-olive-grove: #27ae60;     /* Ancient olive trees */
+  --it-vineyard-gold: #f39c12;   /* Autumn vine leaves */
+  --it-stone-cream: #f8f5f1;     /* Tuscan stone walls */
+  --it-wine-deep: #8e44ad;       /* Aged Chianti */
+  --it-herb-sage: #95a5a6;       /* Wild herbs */
+  --it-lemon-zest: #f1c40f;      /* Amalfi lemons */
+  --it-earth-brown: #795548;     /* Rich earth */
+}
+
+/* Italian Theme Implementation */
+.theme-italian {
+  --cultural-primary: var(--it-terracotta);
+  --cultural-secondary: var(--it-olive-grove);
+  --cultural-accent: var(--it-vineyard-gold);
+  --cultural-neutral: var(--it-stone-cream);
+  --cultural-soft: var(--it-herb-sage);
+}
+```
+
+### Visual Atmosphere
+- **Gradients**: Terracotta to vineyard gold `linear-gradient(135deg, #c0392b, #f39c12)`
+- **Warmth**: Sun-baked earth tones, golden hour lighting
+- **Texture**: Stone textures, weathered surfaces
+- **Richness**: Deep wines, golden harvests
+
+---
+
+## 🇫🇷 FRENCH PALETTE: "Provence Afternoon"
+
+### Core Colors
+```css
+:root {
+  /* French Cultural Palette */
+  --fr-lavender: #9b59b6;        /* Provence lavender */
+  --fr-château-cream: #f8f6f0;   /* Limestone château */
+  --fr-vintage-brass: #d4af37;   /* Antique brass */
+  --fr-wine-burgundy: #722f37;   /* Burgundy wine */
+  --fr-sage-grey: #95a5a6;       /* French grey-green */
+  --fr-honey-gold: #f39c12;      /* Acacia honey */
+  --fr-chalk-white: #fdfcfb;     /* Champagne chalk */
+  --fr-forest-green: #27ae60;    /* Loire forest */
+}
+
+/* French Theme Implementation */
+.theme-french {
+  --cultural-primary: var(--fr-wine-burgundy);
+  --cultural-secondary: var(--fr-sage-grey);
+  --cultural-accent: var(--fr-vintage-brass);
+  --cultural-neutral: var(--fr-château-cream);
+  --cultural-soft: var(--fr-chalk-white);
+}
+```
+
+### Visual Atmosphere
+- **Gradients**: Burgundy to brass `linear-gradient(135deg, #722f37, #d4af37)`
+- **Elegance**: Sophisticated jewel tones, vintage metallics
+- **Texture**: Limestone, aged brass, silk
+- **Refinement**: Subtle luxury, timeless sophistication
+
+---
+
+## 🎯 ENHANCED GLOBAL CSS WITH AUTHENTIC PALETTES
+
+### Replace app/globals.css with this enhanced version:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* === AUTHENTIC CULTURAL COLOR PALETTES === */
+
+:root {
+  /* Default/Universal Palette */
+  --cultural-primary: #2d3436;
+  --cultural-secondary: #636e72;
+  --cultural-accent: #f39c12;
+  --cultural-neutral: #f8f5f0;
+  --cultural-soft: #ddd;
+  
+  /* Japanese: Temple Garden at Dawn */
+  --jp-ink-wash: #2d3436;
+  --jp-bamboo-mist: #636e72;
+  --jp-aged-cedar: #8b7355;
+  --jp-temple-gold: #f39c12;
+  --jp-cherry-blush: #fd79a8;
+  --jp-stone-garden: #ecf0f1;
+  --jp-paper-white: #ffeaa7;
+  --jp-moss-green: #00b894;
+  
+  /* Swedish: Cozy Cabin Winter */
+  --se-pine-bark: #5d4e37;
+  --se-winter-sky: #74b9ff;
+  --se-wool-cream: #f8f5f0;
+  --se-lingonberry: #e84393;
+  --se-birch-white: #ffefd5;
+  --se-forest-deep: #2d3436;
+  --se-copper-pot: #d63031;
+  --se-sage-green: #a4b494;
+  
+  /* Italian: Tuscan Autumn */
+  --it-terracotta: #c0392b;
+  --it-olive-grove: #27ae60;
+  --it-vineyard-gold: #f39c12;
+  --it-stone-cream: #f8f5f1;
+  --it-wine-deep: #8e44ad;
+  --it-herb-sage: #95a5a6;
+  --it-lemon-zest: #f1c40f;
+  --it-earth-brown: #795548;
+  
+  /* French: Provence Afternoon */
+  --fr-lavender: #9b59b6;
+  --fr-château-cream: #f8f6f0;
+  --fr-vintage-brass: #d4af37;
+  --fr-wine-burgundy: #722f37;
+  --fr-sage-grey: #95a5a6;
+  --fr-honey-gold: #f39c12;
+  --fr-chalk-white: #fdfcfb;
+  --fr-forest-green: #27ae60;
+}
+
+/* === CULTURAL THEME CLASSES === */
+
+.theme-japanese {
+  --cultural-primary: var(--jp-ink-wash);
+  --cultural-secondary: var(--jp-aged-cedar);
+  --cultural-accent: var(--jp-temple-gold);
+  --cultural-neutral: var(--jp-paper-white);
+  --cultural-soft: var(--jp-stone-garden);
+}
+
+.theme-scandinavian {
+  --cultural-primary: var(--se-pine-bark);
+  --cultural-secondary: var(--se-sage-green);
+  --cultural-accent: var(--se-lingonberry);
+  --cultural-neutral: var(--se-wool-cream);
+  --cultural-soft: var(--se-birch-white);
+}
+
+.theme-italian {
+  --cultural-primary: var(--it-terracotta);
+  --cultural-secondary: var(--it-olive-grove);
+  --cultural-accent: var(--it-vineyard-gold);
+  --cultural-neutral: var(--it-stone-cream);
+  --cultural-soft: var(--it-herb-sage);
+}
+
+.theme-french {
+  --cultural-primary: var(--fr-wine-burgundy);
+  --cultural-secondary: var(--fr-sage-grey);
+  --cultural-accent: var(--fr-vintage-brass);
+  --cultural-neutral: var(--fr-château-cream);
+  --cultural-soft: var(--fr-chalk-white);
+}
+
+/* === BASE STYLES === */
+
+html {
+  scroll-behavior: smooth;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  color: #2d3436;
+  background: linear-gradient(135deg, #fdfcfb 0%, #f8f5f0 100%);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* === CULTURAL COMPONENT STYLES === */
+
+@layer components {
+  
+  /* Enhanced Buttons with Cultural Flair */
+  .btn-cultural {
+    @apply inline-flex items-center justify-center px-8 py-4 font-semibold rounded-2xl transition-all duration-500 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 shadow-xl hover:shadow-2xl;
+    background: linear-gradient(135deg, var(--cultural-primary), var(--cultural-accent));
+    color: white;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn-cultural::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+  
+  .btn-cultural:hover::before {
+    left: 100%;
+  }
+  
+  .btn-cultural-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3 font-medium rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2;
+    background: var(--cultural-neutral);
+    color: var(--cultural-primary);
+    border: 2px solid var(--cultural-secondary);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  
+  .btn-cultural-secondary:hover {
+    background: var(--cultural-soft);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+  
+  /* Cultural Cards */
+  .card-cultural {
+    @apply rounded-3xl border transition-all duration-500 hover:-translate-y-2;
+    background: linear-gradient(135deg, var(--cultural-neutral) 0%, var(--cultural-soft) 100%);
+    border: 1px solid var(--cultural-secondary);
+    box-shadow: 
+      0 10px 25px -5px rgba(0,0,0,0.1),
+      0 4px 6px -2px rgba(0,0,0,0.05),
+      inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+  
+  .card-cultural:hover {
+    box-shadow: 
+      0 25px 50px -12px rgba(0,0,0,0.15),
+      0 10px 20px -5px rgba(0,0,0,0.1),
+      inset 0 1px 0 rgba(255,255,255,0.2);
+  }
+  
+  /* Cultural Headers */
+  .header-cultural {
+    background: linear-gradient(135deg, 
+      var(--cultural-neutral) 0%, 
+      var(--cultural-soft) 50%, 
+      var(--cultural-neutral) 100%);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--cultural-secondary);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  /* Cultural Badges */
+  .badge-cultural {
+    @apply inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105;
+    background: linear-gradient(135deg, var(--cultural-accent), var(--cultural-secondary));
+    color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  
+  /* Cultural Sections */
+  .section-cultural {
+    background: linear-gradient(135deg, 
+      var(--cultural-neutral) 0%, 
+      rgba(255,255,255,0.8) 50%, 
+      var(--cultural-soft) 100%);
+  }
+  
+  /* Cultural Navigation */
+  .nav-cultural-active {
+    background: linear-gradient(135deg, var(--cultural-accent), var(--cultural-secondary));
+    color: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  
+  .nav-cultural-inactive {
+    background: var(--cultural-soft);
+    color: var(--cultural-primary);
+    border: 1px solid var(--cultural-secondary);
+  }
+  
+  .nav-cultural-inactive:hover {
+    background: var(--cultural-neutral);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+}
+
+/* === CULTURAL ANIMATIONS === */
+
+@keyframes cultural-float {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg); 
+  }
+  50% { 
+    transform: translateY(-8px) rotate(1deg); 
+  }
+}
+
+@keyframes cultural-glow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(var(--cultural-accent-rgb), 0.3); 
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(var(--cultural-accent-rgb), 0.5); 
+  }
+}
+
+.animate-cultural-float {
+  animation: cultural-float 4s ease-in-out infinite;
+}
+
+.animate-cultural-glow {
+  animation: cultural-glow 3s ease-in-out infinite;
+}
+
+/* === TYPOGRAPHY ENHANCEMENTS === */
+
+.text-cultural-heading {
+  font-family: 'Playfair Display', serif;
+  background: linear-gradient(135deg, var(--cultural-primary), var(--cultural-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-cultural-body {
+  color: var(--cultural-primary);
+  opacity: 0.8;
+}
+
+/* === RESPONSIVE CULTURAL DESIGN === */
+
+@media (max-width: 768px) {
+  .btn-cultural {
+    @apply px-6 py-3 text-sm;
+  }
+  
+  .card-cultural {
+    @apply rounded-2xl;
+  }
+}
+
+/* === CULTURAL THEME SELECTOR === */
+
+.theme-selector {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.theme-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+.theme-button.japanese {
+  background: linear-gradient(135deg, #2d3436, #f39c12);
+}
+
+.theme-button.scandinavian {
+  background: linear-gradient(135deg, #5d4e37, #e84393);
+}
+
+.theme-button.italian {
+  background: linear-gradient(135deg, #c0392b, #f39c12);
+}
+
+.theme-button.french {
+  background: linear-gradient(135deg, #722f37, #d4af37);
+}
+
+/* === CULTURAL PATTERNS === */
+
+.pattern-japanese {
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(139, 115, 85, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(243, 156, 18, 0.1) 0%, transparent 50%);
+}
+
+.pattern-scandinavian {
+  background-image: 
+    linear-gradient(45deg, rgba(164, 180, 148, 0.1) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(164, 180, 148, 0.1) 25%, transparent 25%);
+  background-size: 40px 40px;
+}
+
+.pattern-italian {
+  background-image: 
+    radial-gradient(circle at 1px 1px, rgba(192, 57, 43, 0.1) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+
+.pattern-french {
+  background-image: 
+    linear-gradient(30deg, rgba(155, 89, 182, 0.1) 12%, transparent 12.5%, transparent 87%, rgba(155, 89, 182, 0.1) 87.5%);
+  background-size: 30px 30px;
+}
+```
+
+---
+
+## 🎨 ENHANCED COMPONENT UPDATES
+
+### Updated Navigation Header with Cultural Authenticity:
+
+```typescript
+// app/components/layout/NavigationHeader.tsx
+'use client';
+
+import React, { useState } from 'react';
+import { Share2, Download, Palette, Eye, Globe, Menu, X, Sparkles } from 'lucide-react';
+
+const NavigationHeader = () => {
+  const [activeTab, setActiveTab] = useState('design');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  return (
+    <header className="sticky top-0 z-50 header-cultural">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between py-4">
+          {/* Cultural Logo */}
+          <div className="flex items-center space-x-4">
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl animate-cultural-float"
+                 style={{
+                   background: 'linear-gradient(135deg, var(--cultural-primary), var(--cultural-accent))'
+                 }}>
+              <Sparkles className="w-7 h-7 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-display font-bold text-cultural-heading">
+                DesignVisualz
+              </h1>
+              <p className="text-sm text-cultural-body font-medium">Cultural Intelligence AI</p>
+            </div>
+          </div>
+          
+          {/* Cultural Navigation */}
+          <nav className="hidden md:flex items-center space-x-3">
+            {[
+              { id: 'design', label: 'Design Studio', icon: Palette },
+              { id: 'gallery', label: 'Gallery', icon: Eye },
+              { id: 'cultural', label: 'Cultural Guide', icon: Globe },
+              { id: 'vendors', label: 'Marketplace', icon: Menu }
+            ].map(({ id, label, icon: Icon }) => (
+              <button
+                key={id}
+                onClick={() => setActiveTab(id)}
+                className={`flex items-center space-x-3 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 ${
+                  activeTab === id 
+                    ? 'nav-cultural-active' 
+                    : 'nav-cultural-inactive hover:nav-cultural-inactive'
+                }`}
+              >
+                <Icon className="w-5 h-5" />
+                <span>{label}</span>
+              </button>
+            ))}
+          </nav>
+          
+          {/* Cultural Actions */}
+          <div className="flex items-center space-x-4">
+            <button className="btn-cultural-secondary hidden sm:flex">
+              <Share2 className="w-5 h-5 mr-2" />
+              Share
+            </button>
+            <button className="btn-cultural">
+              <Download className="w-5 h-5 mr-2" />
+              Export Design
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default NavigationHeader;
+```
+
+---
+
+## 🌍 CULTURAL THEME SELECTOR COMPONENT
+
+Create this new component for theme switching:
+
+```typescript
+// app/components/cultural/ThemeSelector.tsx
+'use client';
+
+import React, { useState } from 'react';
+
+const ThemeSelector = () => {
+  const [currentTheme, setCurrentTheme] = useState('japanese');
+  
+  const themes = [
+    { 
+      id: 'japanese', 
+      name: 'Japanese Temple', 
+      flag: '🇯🇵',
+      description: 'Zen gardens & aged cedar'
+    },
+    { 
+      id: 'scandinavian', 
+      name: 'Swedish Cabin', 
+      flag: '🇸🇪',
+      description: 'Cozy wool & lingonberry'
+    },
+    { 
+      id: 'italian', 
+      name: 'Tuscan Vineyard', 
+      flag: '🇮🇹',
+      description: 'Terracotta & autumn vines'
+    },
+    { 
+      id: 'french', 
+      name: 'Provence Château', 
+      flag: '🇫🇷',
+      description: 'Lavender & vintage brass'
+    }
+  ];
+  
+  const switchTheme = (themeId: string) => {
+    setCurrentTheme(themeId);
+    document.documentElement.className = `theme-${themeId}`;
+  };
+  
+  return (
+    <div className="theme-selector">
+      {themes.map((theme) => (
+        <button
+          key={theme.id}
+          onClick={() => switchTheme(theme.id)}
+          className={`theme-button ${theme.id} ${currentTheme === theme.id ? 'scale-110' : ''}`}
+          title={`${theme.name}: ${theme.description}`}
+        >
+          <span className="text-2xl">{theme.flag}</span>
+        </button>
+      ))}
+    </div>
+  );
+};
+
+export default ThemeSelector;
+```
+
+---
+
+## ✨ IMMEDIATE IMPLEMENTATION
+
+1. **Replace your globals.css** with the enhanced cultural version above
+2. **Update your NavigationHeader** component  
+3. **Add the ThemeSelector** component to your layout
+4. **Restart your dev server**: `npm run dev`
+
+You'll immediately see the transformation from generic blue to authentic, story-telling colors that transport users to different cultural experiences!
+
+The colors will now evoke:
+- **Japanese**: Walking through a misty temple garden at sunrise
+- **Swedish**: Cozying up in a pine cabin with lingonberry tea  
+- **Italian**: Sunset over Tuscan vineyards with terracotta roofs
+- **French**: Afternoon in Provence with lavender and vintage brass
+
+This creates an emotional connection that makes users feel they've traveled somewhere special! 🌟

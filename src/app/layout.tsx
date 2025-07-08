@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
+import ThemeSelector from './components/cultural/ThemeSelector'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -28,6 +29,7 @@ export default function RootLayout({
       <body className="font-body antialiased">
         <div className="min-h-screen">
           {children}
+          <ThemeSelector />
         </div>
       </body>
     </html>
