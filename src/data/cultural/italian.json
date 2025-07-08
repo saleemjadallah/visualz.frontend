@@ -1,0 +1,78 @@
+{
+  "culture": "italian",
+  "name": "Italian Design Philosophy",
+  "flag": "🇮🇹",
+  "primaryColor": "#c53030",
+  "accentColor": "#d69e2e",
+  "description": "Italian design celebrates beauty, craftsmanship, and the art of living well through thoughtful presentation.",
+  "principles": [
+    {
+      "name": "Bella Figura",
+      "description": "Making a beautiful impression through style and presentation",
+      "application": "Elegant presentations, refined details, visual sophistication",
+      "colors": ["#c53030", "#fffaf0", "#d69e2e"],
+      "materials": ["fine fabrics", "marble", "quality metals", "handcrafted items"],
+      "patterns": ["elegant", "refined", "sophisticated"],
+      "examples": [
+        "Elegant table settings",
+        "Sophisticated color palettes",
+        "Attention to visual details",
+        "Quality material choices"
+      ]
+    },
+    {
+      "name": "Sprezzatura",
+      "description": "Studied carelessness - effortless elegance",
+      "application": "Relaxed sophistication, natural flow, effortless beauty",
+      "colors": ["#8B4513", "#F5E6D3", "#DEB887"],
+      "materials": ["weathered stone", "aged wood", "natural linens"],
+      "patterns": ["effortless", "natural", "relaxed"],
+      "examples": [
+        "Naturally flowing arrangements",
+        "Effortless luxury",
+        "Relaxed formal settings",
+        "Casual elegance"
+      ]
+    },
+    {
+      "name": "Convivialità",
+      "description": "Creating warmth and togetherness through gathering",
+      "application": "Communal spaces, family-style arrangements, shared experiences",
+      "colors": ["#FF6B35", "#FFF8DC", "#CD853F"],
+      "materials": ["warm wood", "terracotta", "rich fabrics"],
+      "patterns": ["communal", "warm", "inviting"],
+      "examples": [
+        "Family-style dining",
+        "Communal gathering spaces",
+        "Warm, inviting atmospheres",
+        "Shared experience design"
+      ]
+    }
+  ],
+  "colorPalette": {
+    "primary": "#c53030",
+    "secondary": "#d69e2e",
+    "accent": "#fffaf0",
+    "neutral": ["#fff8dc", "#f5e6d3", "#deb887"],
+    "warm": ["#ff6b35", "#cd853f", "#8b4513"]
+  },
+  "guidelines": [
+    "Use warm, rich colors inspired by Italian landscapes",
+    "Incorporate high-quality materials and craftsmanship",
+    "Create spaces that encourage gathering and conversation",
+    "Balance elegance with comfort and accessibility",
+    "Celebrate the art of presentation and style"
+  ],
+  "culturalSensitivity": {
+    "appropriate": [
+      "Using quality materials respectfully",
+      "Creating spaces for community and gathering",
+      "Appreciating craftsmanship and artistry"
+    ],
+    "inappropriate": [
+      "Stereotyping Italian culture",
+      "Using sacred or regional symbols inappropriately",
+      "Ignoring the importance of family and community"
+    ]
+  }
+}

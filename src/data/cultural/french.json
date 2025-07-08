@@ -1,0 +1,78 @@
+{
+  "culture": "french",
+  "name": "French Design Philosophy",
+  "flag": "🇫🇷",
+  "primaryColor": "#2563eb",
+  "accentColor": "#d4af37",
+  "description": "French design embodies sophistication, artistry, and the pursuit of beauty in everyday life.",
+  "principles": [
+    {
+      "name": "Savoir-Vivre",
+      "description": "The art of living well with grace and sophistication",
+      "application": "Refined details, quality materials, sophisticated arrangements",
+      "colors": ["#2563eb", "#f8fafc", "#d4af37"],
+      "materials": ["silk", "fine crystal", "quality metals", "artisanal crafts"],
+      "patterns": ["refined", "sophisticated", "graceful"],
+      "examples": [
+        "Refined table settings",
+        "Quality fabric choices",
+        "Sophisticated lighting",
+        "Artisanal decorative elements"
+      ]
+    },
+    {
+      "name": "Joie de Vivre",
+      "description": "Joy of living expressed through celebration and beauty",
+      "application": "Vibrant celebrations, artistic expressions, joyful gatherings",
+      "colors": ["#ec4899", "#fef3c7", "#8b5cf6"],
+      "materials": ["fresh flowers", "artistic elements", "vibrant textiles"],
+      "patterns": ["joyful", "celebratory", "artistic"],
+      "examples": [
+        "Vibrant floral arrangements",
+        "Artistic table designs",
+        "Celebratory color schemes",
+        "Expressive decorative elements"
+      ]
+    },
+    {
+      "name": "L'Art de Recevoir",
+      "description": "The art of receiving and hosting with elegance",
+      "application": "Gracious hospitality, thoughtful details, memorable experiences",
+      "colors": ["#1e40af", "#f1f5f9", "#f59e0b"],
+      "materials": ["fine china", "elegant linens", "quality glassware"],
+      "patterns": ["elegant", "hospitable", "memorable"],
+      "examples": [
+        "Thoughtful place settings",
+        "Gracious hosting details",
+        "Memorable presentation",
+        "Elegant service elements"
+      ]
+    }
+  ],
+  "colorPalette": {
+    "primary": "#2563eb",
+    "secondary": "#d4af37",
+    "accent": "#f8fafc",
+    "neutral": ["#f1f5f9", "#e2e8f0", "#cbd5e1"],
+    "vibrant": ["#ec4899", "#8b5cf6", "#f59e0b"]
+  },
+  "guidelines": [
+    "Use elegant, refined color palettes",
+    "Incorporate artistic and cultural elements",
+    "Create spaces that celebrate beauty and sophistication",
+    "Pay attention to details and presentation",
+    "Balance formality with warmth and hospitality"
+  ],
+  "culturalSensitivity": {
+    "appropriate": [
+      "Appreciating French artistic traditions",
+      "Using quality materials and craftsmanship",
+      "Creating elegant, hospitable environments"
+    ],
+    "inappropriate": [
+      "Stereotyping French culture",
+      "Using cultural symbols inappropriately",
+      "Ignoring the importance of artistic expression"
+    ]
+  }
+}

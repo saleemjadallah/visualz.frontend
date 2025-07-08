@@ -1,0 +1,78 @@
+{
+  "culture": "scandinavian",
+  "name": "Scandinavian Design Philosophy",
+  "flag": "🇸🇪",
+  "primaryColor": "#4299e1",
+  "accentColor": "#d69e2e",
+  "description": "Scandinavian design emphasizes functionality, minimalism, and creating cozy, comfortable environments.",
+  "principles": [
+    {
+      "name": "Hygge",
+      "description": "Creating cozy, comfortable, and content atmosphere",
+      "application": "Warm lighting, soft textures, intimate gathering spaces",
+      "colors": ["#F7F7F7", "#E8E8E8", "#D4AF37"],
+      "materials": ["wool", "sheepskin", "natural wood", "candles"],
+      "patterns": ["cozy", "intimate", "warm"],
+      "examples": [
+        "Candles and warm lighting",
+        "Cozy blankets and pillows",
+        "Natural wood elements",
+        "Intimate seating arrangements"
+      ]
+    },
+    {
+      "name": "Lagom",
+      "description": "The perfect balance - not too little, not too much",
+      "application": "Balanced proportions, moderate luxury, sustainable choices",
+      "colors": ["#5b9bd5", "#fafafa", "#d2b48c"],
+      "materials": ["sustainable wood", "quality textiles", "natural fibers"],
+      "patterns": ["balanced", "moderate", "sustainable"],
+      "examples": [
+        "Balanced color schemes",
+        "Moderate decoration",
+        "Quality over quantity",
+        "Sustainable material choices"
+      ]
+    },
+    {
+      "name": "Funktionalism",
+      "description": "Form follows function in beautiful, practical design",
+      "application": "Multi-purpose furniture, clean lines, practical beauty",
+      "colors": ["#4299e1", "#ffffff", "#718096"],
+      "materials": ["birch wood", "steel", "glass", "linen"],
+      "patterns": ["functional", "clean", "practical"],
+      "examples": [
+        "Multi-functional furniture",
+        "Clean architectural lines",
+        "Practical storage solutions",
+        "Efficient space usage"
+      ]
+    }
+  ],
+  "colorPalette": {
+    "primary": "#4299e1",
+    "secondary": "#d69e2e",
+    "accent": "#fafafa",
+    "neutral": ["#ffffff", "#f7f7f7", "#e8e8e8"],
+    "natural": ["#d2b48c", "#8b7355", "#5b9bd5"]
+  },
+  "guidelines": [
+    "Use light, natural colors to combat darkness",
+    "Incorporate natural materials like wood and wool",
+    "Create cozy gathering spaces",
+    "Emphasize functionality and practicality",
+    "Use warm lighting to create atmosphere"
+  ],
+  "culturalSensitivity": {
+    "appropriate": [
+      "Using natural materials sustainably",
+      "Creating functional, comfortable spaces",
+      "Incorporating cozy elements respectfully"
+    ],
+    "inappropriate": [
+      "Stereotyping Nordic culture",
+      "Ignoring sustainability principles",
+      "Misusing cultural symbols"
+    ]
+  }
+}

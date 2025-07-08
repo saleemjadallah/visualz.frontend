@@ -1,0 +1,78 @@
+{
+  "culture": "japanese",
+  "name": "Japanese Design Philosophy",
+  "flag": "🇯🇵",
+  "primaryColor": "#2c3e50",
+  "accentColor": "#d4af37",
+  "description": "Japanese design emphasizes harmony with nature, minimalism, and the beauty of imperfection.",
+  "principles": [
+    {
+      "name": "Wabi-Sabi",
+      "description": "Finding beauty in imperfection and impermanence",
+      "application": "Use natural materials, embrace asymmetry, celebrate aging",
+      "colors": ["#8B4513", "#F5E6D3", "#2F4F4F"],
+      "materials": ["weathered wood", "natural stone", "aged metal", "handmade ceramics"],
+      "patterns": ["asymmetric", "organic", "minimal"],
+      "examples": [
+        "Weathered wood surfaces",
+        "Asymmetrical arrangements",
+        "Natural stone textures",
+        "Handmade ceramic pieces"
+      ]
+    },
+    {
+      "name": "Ma (Negative Space)",
+      "description": "The power of emptiness and pause in design",
+      "application": "Create breathing room, strategic emptiness, mindful spacing",
+      "colors": ["#FFFFFF", "#F8F8F8", "#E8E8E8"],
+      "materials": ["empty space", "light fabrics", "transparent elements"],
+      "patterns": ["spacious", "minimal", "contemplative"],
+      "examples": [
+        "Minimalist table settings",
+        "Spacious room layouts",
+        "Thoughtful silence moments",
+        "Strategic empty spaces"
+      ]
+    },
+    {
+      "name": "Kanso (Simplicity)",
+      "description": "Eliminating clutter and expressing more with less",
+      "application": "Clean lines, essential elements only, functional beauty",
+      "colors": ["#2c3e50", "#8b7355", "#fafaf9"],
+      "materials": ["bamboo", "natural wood", "simple metals"],
+      "patterns": ["clean", "essential", "functional"],
+      "examples": [
+        "Simple bamboo decorations",
+        "Uncluttered surfaces",
+        "Natural material focus",
+        "Essential elements only"
+      ]
+    }
+  ],
+  "colorPalette": {
+    "primary": "#2c3e50",
+    "secondary": "#8b7355",
+    "accent": "#d4af37",
+    "neutral": ["#fafaf9", "#f5f5f4", "#e7e5e4"],
+    "natural": ["#8B4513", "#F5E6D3", "#2F4F4F"]
+  },
+  "guidelines": [
+    "Use natural materials: wood, bamboo, stone, paper",
+    "Maintain low furniture and eye levels",
+    "Incorporate water elements for tranquility",
+    "Embrace asymmetry and imperfection",
+    "Create spaces for contemplation and quiet"
+  ],
+  "culturalSensitivity": {
+    "appropriate": [
+      "Using natural materials respectfully",
+      "Incorporating principles of simplicity",
+      "Creating peaceful, contemplative spaces"
+    ],
+    "inappropriate": [
+      "Using sacred symbols as decoration",
+      "Misrepresenting cultural meanings",
+      "Combining inappropriately with other cultures"
+    ]
+  }
+}
