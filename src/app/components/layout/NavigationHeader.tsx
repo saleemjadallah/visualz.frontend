@@ -15,12 +15,12 @@ const NavigationHeader = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-100 shadow-soft">
-      <div className="container-custom">
+    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-100 shadow-lg">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-4">
           {/* Logo & Brand */}
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-medium">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
               <Sparkles className="w-6 h-6 text-white" />
             </div>
             <div>
@@ -37,11 +37,11 @@ const NavigationHeader = () => {
               <button
                 key={id}
                 onClick={() => setActiveTab(id)}
-                className={
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
                   activeTab === id 
-                    ? 'nav-link-active' 
-                    : 'nav-link-inactive'
-                }
+                    ? 'bg-blue-100 text-blue-700' 
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                }`}
               >
                 <Icon className="w-4 h-4" />
                 <span>{label}</span>
@@ -51,11 +51,11 @@ const NavigationHeader = () => {
           
           {/* User Actions */}
           <div className="flex items-center space-x-3">
-            <button className="btn-secondary hidden sm:flex">
+            <button className="hidden sm:flex items-center px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
               <Share2 className="w-4 h-4 mr-2" />
               Share
             </button>
-            <button className="btn-primary">
+            <button className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
               <Download className="w-4 h-4 mr-2" />
               Export
             </button>
