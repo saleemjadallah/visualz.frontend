@@ -125,7 +125,8 @@ const updateCSSVariables = (theme: CulturalTheme) => {
 
   // Add cultural theme class to body for CSS targeting
   document.body.className = document.body.className
-    .replace(/culture-\w+/g, '') + ` culture-${theme.culture}`;
+    .replace(/culture-\w+/g, '')
+    .trim() + ` culture-${theme.culture}`;
 };
 
 // Theme Selector Component

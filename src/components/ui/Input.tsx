@@ -302,12 +302,12 @@ const FileUpload = ({
     onFileSelect?.(files);
   };
   
-  const baseClasses = `
-    relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 cursor-pointer
-    hover:border-primary-400 hover:bg-primary-50
-    ${dragActive ? 'border-cultural-primary bg-cultural-primary/5' : 'border-primary-300'}
-    ${cultural ? 'border-cultural-primary/30' : ''}
-  `;
+  const baseClasses = cn(
+    'relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 cursor-pointer',
+    'hover:border-primary-400 hover:bg-primary-50',
+    dragActive ? 'border-cultural-primary bg-cultural-primary/5' : 'border-primary-300',
+    cultural ? 'border-cultural-primary/30' : ''
+  );
   
   return (
     <div className="space-y-2">

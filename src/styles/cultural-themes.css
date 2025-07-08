@@ -30,6 +30,16 @@
               box-shadow var(--theme-transition-duration) var(--theme-transition-easing);
 }
 
+/* Prevent layout shifts during theme transitions */
+.theme-transitioning {
+  overflow: hidden;
+}
+
+/* Ensure only one culture class is active at a time */
+body[class*="culture-"] > * {
+  isolation: isolate;
+}
+
 /* Cultural Theme Specific Classes */
 
 /* Japanese Theme */

@@ -65,6 +65,19 @@ body {
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Prevent content overlap */
+* {
+  box-sizing: border-box;
+}
+
+/* Ensure proper stacking context */
+main {
+  position: relative;
+  z-index: 1;
 }
 
 /* Custom Scrollbar */
@@ -186,6 +199,26 @@ body {
   .grid-responsive {
     @apply grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
   }
+}
+
+/* Debug overlapping content */
+.debug-borders * {
+  outline: 1px solid red !important;
+}
+
+/* Ensure sections don't overlap */
+section {
+  position: relative;
+  contain: layout;
+}
+
+/* Fix z-index stacking issues */
+.relative {
+  z-index: auto;
+}
+
+.z-10 {
+  z-index: 10;
 }
 
 /* Print Styles */

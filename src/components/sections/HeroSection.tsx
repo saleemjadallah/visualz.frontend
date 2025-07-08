@@ -130,9 +130,9 @@ const HeroSection: React.FC = () => {
   ];
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center overflow-hidden isolate">
       {/* Dynamic Background */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 -z-10">
         <motion.div 
           className="absolute inset-0 opacity-60"
           style={{

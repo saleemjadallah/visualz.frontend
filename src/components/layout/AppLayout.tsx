@@ -34,7 +34,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
         showSearch={showSearch}
       />
       
-      <main className="flex-1">
+      <main className="flex-1 relative isolate">
         {children}
       </main>
       
