@@ -1,38 +1,35 @@
-import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
-import "./globals.css";
-import "../styles/cultural-themes.css";
-import { CulturalThemeProvider } from "@/components/cultural/ThemeProvider";
+import type { Metadata } from 'next'
+import { Inter, Playfair_Display } from 'next/font/google'
+import './globals.css'
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
+const inter = Inter({ 
+  subsets: ['latin'],
+  variable: '--font-inter'
+})
 
-const playfairDisplay = Playfair_Display({
-  variable: "--font-playfair-display", 
-  subsets: ["latin"],
-});
+const playfair = Playfair_Display({ 
+  subsets: ['latin'],
+  variable: '--font-playfair'
+})
 
 export const metadata: Metadata = {
-  title: "DesignVisualz - AI-Powered Event Design",
-  description: "Create stunning, culturally-aware event designs using AI that understands traditions, aesthetics, and the art of beautiful celebrations.",
-};
+  title: 'DesignVisualz - AI-Powered Cultural Event Design',
+  description: 'Create stunning, culturally-aware event designs using AI that understands traditions, aesthetics, and the art of beautiful celebrations.',
+  keywords: 'event design, cultural intelligence, AI design, event planning',
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="en">
-      <body
-        className={`${inter.variable} ${playfairDisplay.variable} antialiased font-body`}
-      >
-        <CulturalThemeProvider defaultTheme="japanese" enableTransitions={true}>
+    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+      <body className={`${inter.className} antialiased bg-white text-gray-900`}>
+        <div className="min-h-screen">
           {children}
-        </CulturalThemeProvider>
+        </div>
       </body>
     </html>
-  );
+  )
 }

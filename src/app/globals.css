@@ -1,3 +1,4 @@
+/* app/globals.css - REPLACE ENTIRE FILE */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,10 +6,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Cultural Color System - Dynamically Updated */
-  --cultural-primary: #2c3e50;
-  --cultural-secondary: #8b7355;
-  --cultural-accent: #d4af37;
+  /* Cultural Color System */
+  --cultural-primary: rgb(44, 62, 80);
+  --cultural-secondary: rgb(139, 115, 85);
+  --cultural-accent: rgb(212, 175, 55);
   
   /* Japanese Theme */
   --japanese-ink: #2c3e50;
@@ -19,16 +20,6 @@
   --scandi-blue: #5b9bd5;
   --scandi-white: #fafafa;
   --scandi-wood: #d2b48c;
-  
-  /* Italian Theme */
-  --italian-terracotta: #a0522d;
-  --italian-cream: #faf0e6;
-  --italian-gold: #ffd700;
-  
-  /* French Theme */
-  --french-blue: #6495ed;
-  --french-cream: #f8f6f0;
-  --french-gold: #d4af37;
 }
 
 /* Cultural Theme Classes */
@@ -44,18 +35,6 @@
   --cultural-accent: var(--scandi-white);
 }
 
-.theme-italian {
-  --cultural-primary: var(--italian-terracotta);
-  --cultural-secondary: var(--italian-cream);
-  --cultural-accent: var(--italian-gold);
-}
-
-.theme-french {
-  --cultural-primary: var(--french-blue);
-  --cultural-secondary: var(--french-cream);
-  --cultural-accent: var(--french-gold);
-}
-
 /* Base Styles */
 html {
   scroll-behavior: smooth;
@@ -65,44 +44,8 @@ body {
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* Prevent content overlap */
-* {
-  box-sizing: border-box;
-}
-
-/* Ensure proper stacking context */
-main {
-  position: relative;
-  z-index: 1;
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
-}
-
-/* Glass Morphism Effect */
-.glass {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: white;
+  color: rgb(17, 24, 39);
 }
 
 /* Custom Utilities */
@@ -120,115 +63,17 @@ main {
   }
 }
 
-/* Animation Classes */
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-
-.animate-pulse-soft {
-  animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pulse-soft {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.8; }
-}
-
-/* Cultural Pattern Overlays */
-.pattern-japanese {
-  background-image: 
-    radial-gradient(circle at 1px 1px, rgba(212, 175, 55, 0.15) 1px, transparent 0);
-  background-size: 20px 20px;
-}
-
-.pattern-scandinavian {
-  background-image: 
-    linear-gradient(45deg, rgba(91, 155, 213, 0.05) 25%, transparent 25%),
-    linear-gradient(-45deg, rgba(91, 155, 213, 0.05) 25%, transparent 25%);
-  background-size: 30px 30px;
-}
-
-/* Form Enhancements */
-.form-input {
-  @apply w-full px-4 py-3 border border-primary-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-cultural-primary focus:border-transparent transition-all duration-200;
-}
-
-.form-label {
-  @apply block text-sm font-medium text-primary-700 mb-2;
-}
-
-/* Button Hover Effects */
-.btn-primary {
-  @apply bg-gradient-to-r from-cultural-primary to-cultural-accent text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-cultural-accent focus:ring-offset-2;
-}
-
-.btn-secondary {
-  @apply bg-white text-cultural-primary border-2 border-cultural-primary px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:bg-cultural-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-cultural-primary focus:ring-offset-2;
-}
-
-/* Card Hover Effects */
-.card-hover {
-  @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:shadow-cultural;
-}
-
-/* Loading States */
-.loading-skeleton {
-  @apply bg-gradient-to-r from-primary-100 via-primary-50 to-primary-100 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite];
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-/* Mobile Optimizations */
-@media (max-width: 768px) {
-  .container {
-    @apply px-4;
+/* Component Base Styles */
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-to-r from-cultural-primary to-cultural-accent text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-cultural-accent focus:ring-offset-2 inline-flex items-center justify-center;
   }
   
-  .text-responsive {
-    @apply text-2xl md:text-4xl lg:text-5xl;
+  .btn-secondary {
+    @apply bg-white text-gray-900 border-2 border-gray-200 px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 inline-flex items-center justify-center;
   }
   
-  .grid-responsive {
-    @apply grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
-  }
-}
-
-/* Debug overlapping content */
-.debug-borders * {
-  outline: 1px solid red !important;
-}
-
-/* Ensure sections don't overlap */
-section {
-  position: relative;
-  contain: layout;
-}
-
-/* Fix z-index stacking issues */
-.relative {
-  z-index: auto;
-}
-
-.z-10 {
-  z-index: 10;
-}
-
-/* Print Styles */
-@media print {
-  .no-print {
-    display: none !important;
-  }
-  
-  body {
-    background: white !important;
-    color: black !important;
+  .card-base {
+    @apply bg-white rounded-2xl border border-gray-100 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
   }
 }
