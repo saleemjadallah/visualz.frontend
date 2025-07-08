@@ -71,7 +71,7 @@ export default function HomePage() {
             </p>
           </div>
           
-          <Grid cols={2} gap="lg" className="lg:grid-cols-2">
+          <Grid cols={1} gap="lg" responsive={{ md: 2 }} className="grid-cols-1 md:grid-cols-2">
             {features.map((feature, index) => (
               <Card key={index} className="p-8 hover:shadow-lg transition-shadow duration-300">
                 <div className={`inline-flex p-3 rounded-xl bg-primary-50 mb-4 ${feature.color}`}>

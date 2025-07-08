@@ -180,7 +180,7 @@ const HeroSection: React.FC = () => {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-[80vh]"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-[80vh]"
         >
           {/* Left Content */}
           <div className="space-y-8">
@@ -232,12 +232,12 @@ const HeroSection: React.FC = () => {
 
             {/* CTA Buttons */}
             <motion.div variants={itemVariants}>
-              <HStack spacing="md" className="flex-wrap">
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                 <Button 
                   variant="cultural" 
                   size="lg" 
                   icon={<Camera />}
-                  className="text-lg px-8 py-4 shadow-xl hover:shadow-2xl"
+                  className="text-lg px-8 py-4 shadow-xl hover:shadow-2xl w-full sm:w-auto"
                 >
                   Start Creating
                   <ArrowRight className="w-5 h-5 ml-2" />
@@ -246,11 +246,11 @@ const HeroSection: React.FC = () => {
                   variant="ghost" 
                   size="lg"
                   icon={<Play />}
-                  className="text-lg px-8 py-4 border-2 border-primary-200 hover:border-cultural-primary"
+                  className="text-lg px-8 py-4 border-2 border-primary-200 hover:border-cultural-primary w-full sm:w-auto"
                 >
                   Watch Demo
                 </Button>
-              </HStack>
+              </div>
             </motion.div>
 
             {/* Features */}
@@ -273,7 +273,7 @@ const HeroSection: React.FC = () => {
 
             {/* Stats */}
             <motion.div variants={itemVariants} className="pt-6">
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                 {stats.map((stat, index) => (
                   <motion.div
                     key={index}
