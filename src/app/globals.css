@@ -1,26 +1,201 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Cultural Color System - Dynamically Updated */
+  --cultural-primary: #2c3e50;
+  --cultural-secondary: #8b7355;
+  --cultural-accent: #d4af37;
+  
+  /* Japanese Theme */
+  --japanese-ink: #2c3e50;
+  --japanese-gold: #d4af37;
+  --japanese-warm: #8b7355;
+  
+  /* Scandinavian Theme */
+  --scandi-blue: #5b9bd5;
+  --scandi-white: #fafafa;
+  --scandi-wood: #d2b48c;
+  
+  /* Italian Theme */
+  --italian-terracotta: #a0522d;
+  --italian-cream: #faf0e6;
+  --italian-gold: #ffd700;
+  
+  /* French Theme */
+  --french-blue: #6495ed;
+  --french-cream: #f8f6f0;
+  --french-gold: #d4af37;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Cultural Theme Classes */
+.theme-japanese {
+  --cultural-primary: var(--japanese-ink);
+  --cultural-secondary: var(--japanese-warm);
+  --cultural-accent: var(--japanese-gold);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.theme-scandinavian {
+  --cultural-primary: var(--scandi-blue);
+  --cultural-secondary: var(--scandi-wood);
+  --cultural-accent: var(--scandi-white);
+}
+
+.theme-italian {
+  --cultural-primary: var(--italian-terracotta);
+  --cultural-secondary: var(--italian-cream);
+  --cultural-accent: var(--italian-gold);
+}
+
+.theme-french {
+  --cultural-primary: var(--french-blue);
+  --cultural-secondary: var(--french-cream);
+  --cultural-accent: var(--french-gold);
+}
+
+/* Base Styles */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Glass Morphism Effect */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Custom Utilities */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .shadow-cultural {
+    box-shadow: 0 10px 25px -3px rgba(212, 175, 55, 0.1), 0 4px 6px -2px rgba(212, 175, 55, 0.05);
+  }
+  
+  .gradient-cultural {
+    background: linear-gradient(135deg, var(--cultural-primary), var(--cultural-accent));
+  }
+}
+
+/* Animation Classes */
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+/* Cultural Pattern Overlays */
+.pattern-japanese {
+  background-image: 
+    radial-gradient(circle at 1px 1px, rgba(212, 175, 55, 0.15) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+
+.pattern-scandinavian {
+  background-image: 
+    linear-gradient(45deg, rgba(91, 155, 213, 0.05) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(91, 155, 213, 0.05) 25%, transparent 25%);
+  background-size: 30px 30px;
+}
+
+/* Form Enhancements */
+.form-input {
+  @apply w-full px-4 py-3 border border-primary-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-cultural-primary focus:border-transparent transition-all duration-200;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-primary-700 mb-2;
+}
+
+/* Button Hover Effects */
+.btn-primary {
+  @apply bg-gradient-to-r from-cultural-primary to-cultural-accent text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-cultural-accent focus:ring-offset-2;
+}
+
+.btn-secondary {
+  @apply bg-white text-cultural-primary border-2 border-cultural-primary px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:bg-cultural-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-cultural-primary focus:ring-offset-2;
+}
+
+/* Card Hover Effects */
+.card-hover {
+  @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:shadow-cultural;
+}
+
+/* Loading States */
+.loading-skeleton {
+  @apply bg-gradient-to-r from-primary-100 via-primary-50 to-primary-100 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite];
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .container {
+    @apply px-4;
+  }
+  
+  .text-responsive {
+    @apply text-2xl md:text-4xl lg:text-5xl;
+  }
+  
+  .grid-responsive {
+    @apply grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
 }

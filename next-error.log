@@ -1,0 +1,80 @@
+   ▲ Next.js 14.0.3
+   - Local:        http://localhost:3456
+   - Environments: .env.local
+
+ ✓ Ready in 1362ms
+ ○ Compiling / ...
+ ✓ Compiled / in 3.3s (1094 modules)
+ ✓ Compiled in 173ms (1062 modules)
+ ✓ Compiled in 66ms (1062 modules)
+ ✓ Compiled /not-found in 201ms (1067 modules)
+ ✓ Compiled /favicon.ico in 112ms (575 modules)
+ ✓ Compiled in 373ms (1066 modules)
+ ✓ Compiled in 206ms (1066 modules)
+ ✓ Compiled in 322ms (1083 modules)
+ ✓ Compiled in 141ms (1074 modules)
+ ⨯ ./src/components/ui/Input.tsx
+Error: 
+  [31mx[0m Expected unicode escape
+     ,-[[36;1;4m/Users/saleemjadallah/Desktop/DesignVisualz/frontend/src/components/ui/Input.tsx[0m:291:1]
+ [2m291[0m |     setError(null);
+ [2m292[0m |     
+ [2m293[0m |     // Validate file size
+ [2m294[0m |     for (let i = 0; i < files.length; i++) {\n      const file = files[i];\n      if (file.size > maxSize * 1024 * 1024) {\n        setError(`File ${file.name} is too large. Maximum size is ${maxSize}MB.`);\n        return;\n      }\n    }\n    \n    onFileSelect?.(files);\n  };\n  \n  const baseClasses = `\n    relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 cursor-pointer\n    hover:border-primary-400 hover:bg-primary-50\n    ${dragActive ? 'border-cultural-primary bg-cultural-primary/5' : 'border-primary-300'}\n    ${cultural ? 'border-cultural-primary/30' : ''}\n  `;\n  \n  return (\n    <div className=\"space-y-2\">\n      <div\n        className={cn(baseClasses, className)}\n        onDragEnter={handleDrag}\n        onDragLeave={handleDrag}\n        onDragOver={handleDrag}\n        onDrop={handleDrop}\n        onClick={() => fileInputRef.current?.click()}\n      >\n        <input\n          ref={fileInputRef}\n          type=\"file\"\n          accept={accept}\n          multiple={multiple}\n          onChange={(e) => e.target.files && handleFiles(e.target.files)}\n          className=\"hidden\"\n        />\n        \n        {children || (\n          <div className=\"space-y-4\">\n            <div className=\"w-16 h-16 bg-gradient-to-br from-cultural-primary to-cultural-accent rounded-xl flex items-center justify-center mx-auto\">\n              <Upload className=\"w-8 h-8 text-white\" />\n            </div>\n            \n            <div>\n              <h3 className=\"text-lg font-semibold text-primary-900 mb-2\">\n                Drop files here or click to upload\n              </h3>\n              <p className=\"text-primary-600 text-sm\">\n                {accept.includes('image') ? 'Images' : 'Files'} up to {maxSize}MB\n              </p>\n            </div>\n          </div>\n        )}\n      </div>\n      \n      {error && (\n        <div className=\"text-sm text-red-600 flex items-center gap-2\">\n          <AlertCircle className=\"w-4 h-4\" />\n          {error}\n        </div>\n      )}\n    </div>\n  );\n};\n\nFileUpload.displayName = 'FileUpload';\n\n// Select Component\nexport interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'size'> {\n  size?: ComponentSize;\n  error?: string;\n  success?: boolean;\n  helperText?: string;\n  label?: string;\n  cultural?: boolean;\n  options: { value: string; label: string; disabled?: boolean }[];\n  placeholder?: string;\n}\n\nconst Select = forwardRef<HTMLSelectElement, SelectProps>(\n  ({ \n    className, \n    size = 'md', \n    error, \n    success, \n    helperText, \n    label, \n    cultural = false,\n    options,\n    placeholder,\n    ...props \n  }, ref) => {\n    const baseClasses = `\n      w-full rounded-xl border transition-all duration-200\n      focus:outline-none focus:ring-2 focus:ring-offset-1\n      disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-50\n      appearance-none bg-white\n    `;\n    \n    const sizes: Record<ComponentSize, string> = {\n      sm: 'px-3 py-2 text-sm h-8',\n      md: 'px-4 py-3 text-base h-10',\n      lg: 'px-5 py-4 text-lg h-12',\n      xl: 'px-6 py-5 text-xl h-14'\n    };\n    \n    const stateClasses = error \n      ? 'border-red-300 focus:border-red-500 focus:ring-red-500'\n      : success\n      ? 'border-green-300 focus:border-green-500 focus:ring-green-500'\n      : cultural\n      ? 'border-cultural-primary/20 focus:border-cultural-primary focus:ring-cultural-primary'\n      : 'border-primary-200 focus:border-cultural-primary focus:ring-cultural-primary';\n    \n    return (\n      <div className=\"space-y-1\">\n        {label && (\n          <label className=\"block text-sm font-medium text-primary-700 mb-2\">\n            {label}\n          </label>\n        )}\n        \n        <div className=\"relative\">\n          <select\n            ref={ref}\n            className={cn(\n              baseClasses,\n              sizes[size],\n              stateClasses,\n              'pr-8', // Space for dropdown arrow\n              className\n            )}\n            {...props}\n          >\n            {placeholder && (\n              <option value=\"\" disabled>\n                {placeholder}\n              </option>\n            )}\n            {options.map((option) => (\n              <option \n                key={option.value} \n                value={option.value}\n                disabled={option.disabled}\n              >\n                {option.label}\n              </option>\n            ))}\n          </select>\n          \n          {/* Custom dropdown arrow */}\n          <div className=\"absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none\">\n            <svg className=\"w-4 h-4 text-primary-400\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n              <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={2} d=\"M19 9l-7 7-7-7\" />\n            </svg>\n          </div>\n          \n          {success && !error && (\n            <div className=\"absolute right-8 top-1/2 transform -translate-y-1/2 text-green-500\">\n              <Check className=\"w-4 h-4\" />\n            </div>\n          )}\n          \n          {error && (\n            <div className=\"absolute right-8 top-1/2 transform -translate-y-1/2 text-red-500\">\n              <AlertCircle className=\"w-4 h-4\" />\n            </div>\n          )}\n        </div>\n        \n        {(error || success || helperText) && (\n          <div className={cn(\n            'text-sm',\n            error ? 'text-red-600' : success ? 'text-green-600' : 'text-primary-500'\n          )}>\n            {error || helperText}\n          </div>\n        )}\n      </div>\n    );\n  }\n);\n\nSelect.displayName = 'Select';\n\nexport { Input, SearchInput, Textarea, FileUpload, Select };\nexport type { InputProps, SearchInputProps, TextareaProps, FileUploadProps, SelectProps };
+     : [31;1m                                            ^[0m
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/ui/Input.tsx
+./src/components/layout/Header.tsx
+./src/components/layout/AppLayout.tsx
+./src/app/page.tsx
+<w> [webpack.cache.PackFileCacheStrategy] Restoring pack from /Users/saleemjadallah/Desktop/DesignVisualz/frontend/.next/cache/webpack/client-development.pack.gz failed: TypeError: Cannot read properties of undefined (reading 'hasStartTime')
+ ⨯ ./src/components/ui/Input.tsx
+Error: 
+  [31mx[0m Expected unicode escape
+     ,-[[36;1;4m/Users/saleemjadallah/Desktop/DesignVisualz/frontend/src/components/ui/Input.tsx[0m:297:1]
+ [2m297[0m |         setError(`File ${file.name} is too large. Maximum size is ${maxSize}MB.`);
+ [2m298[0m |         return;
+ [2m299[0m |       }
+ [2m300[0m |     }\n    \n    onFileSelect?.(files);\n  };\n  \n  const baseClasses = `\n    relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 cursor-pointer\n    hover:border-primary-400 hover:bg-primary-50\n    ${dragActive ? 'border-cultural-primary bg-cultural-primary/5' : 'border-primary-300'}\n    ${cultural ? 'border-cultural-primary/30' : ''}\n  `;\n  \n  return (\n    <div className=\"space-y-2\">\n      <div\n        className={cn(baseClasses, className)}\n        onDragEnter={handleDrag}\n        onDragLeave={handleDrag}\n        onDragOver={handleDrag}\n        onDrop={handleDrop}\n        onClick={() => fileInputRef.current?.click()}\n      >\n        <input\n          ref={fileInputRef}\n          type=\"file\"\n          accept={accept}\n          multiple={multiple}\n          onChange={(e) => e.target.files && handleFiles(e.target.files)}\n          className=\"hidden\"\n        />\n        \n        {children || (\n          <div className=\"space-y-4\">\n            <div className=\"w-16 h-16 bg-gradient-to-br from-cultural-primary to-cultural-accent rounded-xl flex items-center justify-center mx-auto\">\n              <Upload className=\"w-8 h-8 text-white\" />\n            </div>\n            \n            <div>\n              <h3 className=\"text-lg font-semibold text-primary-900 mb-2\">\n                Drop files here or click to upload\n              </h3>\n              <p className=\"text-primary-600 text-sm\">\n                {accept.includes('image') ? 'Images' : 'Files'} up to {maxSize}MB\n              </p>\n            </div>\n          </div>\n        )}\n      </div>\n      \n      {error && (\n        <div className=\"text-sm text-red-600 flex items-center gap-2\">\n          <AlertCircle className=\"w-4 h-4\" />\n          {error}\n        </div>\n      )}\n    </div>\n  );\n};\n\nFileUpload.displayName = 'FileUpload';\n\n// Select Component\nexport interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'size'> {\n  size?: ComponentSize;\n  error?: string;\n  success?: boolean;\n  helperText?: string;\n  label?: string;\n  cultural?: boolean;\n  options: { value: string; label: string; disabled?: boolean }[];\n  placeholder?: string;\n}\n\nconst Select = forwardRef<HTMLSelectElement, SelectProps>(\n  ({ \n    className, \n    size = 'md', \n    error, \n    success, \n    helperText, \n    label, \n    cultural = false,\n    options,\n    placeholder,\n    ...props \n  }, ref) => {\n    const baseClasses = `\n      w-full rounded-xl border transition-all duration-200\n      focus:outline-none focus:ring-2 focus:ring-offset-1\n      disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-50\n      appearance-none bg-white\n    `;\n    \n    const sizes: Record<ComponentSize, string> = {\n      sm: 'px-3 py-2 text-sm h-8',\n      md: 'px-4 py-3 text-base h-10',\n      lg: 'px-5 py-4 text-lg h-12',\n      xl: 'px-6 py-5 text-xl h-14'\n    };\n    \n    const stateClasses = error \n      ? 'border-red-300 focus:border-red-500 focus:ring-red-500'\n      : success\n      ? 'border-green-300 focus:border-green-500 focus:ring-green-500'\n      : cultural\n      ? 'border-cultural-primary/20 focus:border-cultural-primary focus:ring-cultural-primary'\n      : 'border-primary-200 focus:border-cultural-primary focus:ring-cultural-primary';\n    \n    return (\n      <div className=\"space-y-1\">\n        {label && (\n          <label className=\"block text-sm font-medium text-primary-700 mb-2\">\n            {label}\n          </label>\n        )}\n        \n        <div className=\"relative\">\n          <select\n            ref={ref}\n            className={cn(\n              baseClasses,\n              sizes[size],\n              stateClasses,\n              'pr-8', // Space for dropdown arrow\n              className\n            )}\n            {...props}\n          >\n            {placeholder && (\n              <option value=\"\" disabled>\n                {placeholder}\n              </option>\n            )}\n            {options.map((option) => (\n              <option \n                key={option.value} \n                value={option.value}\n                disabled={option.disabled}\n              >\n                {option.label}\n              </option>\n            ))}\n          </select>\n          \n          {/* Custom dropdown arrow */}\n          <div className=\"absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none\">\n            <svg className=\"w-4 h-4 text-primary-400\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n              <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={2} d=\"M19 9l-7 7-7-7\" />\n            </svg>\n          </div>\n          \n          {success && !error && (\n            <div className=\"absolute right-8 top-1/2 transform -translate-y-1/2 text-green-500\">\n              <Check className=\"w-4 h-4\" />\n            </div>\n          )}\n          \n          {error && (\n            <div className=\"absolute right-8 top-1/2 transform -translate-y-1/2 text-red-500\">\n              <AlertCircle className=\"w-4 h-4\" />\n            </div>\n          )}\n        </div>\n        \n        {(error || success || helperText) && (\n          <div className={cn(\n            'text-sm',\n            error ? 'text-red-600' : success ? 'text-green-600' : 'text-primary-500'\n          )}>\n            {error || helperText}\n          </div>\n        )}\n      </div>\n    );\n  }\n);\n\nSelect.displayName = 'Select';\n\nexport { Input, SearchInput, Textarea, FileUpload, Select };\nexport type { InputProps, SearchInputProps, TextareaProps, FileUploadProps, SelectProps };
+     : [31;1m     ^[0m
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/ui/Input.tsx
+./src/components/layout/Header.tsx
+./src/components/layout/AppLayout.tsx
+./src/app/page.tsx
+ ✓ Compiled in 211ms (522 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ✓ Compiled /not-found in 176ms (527 modules)
+ ✓ Compiled /favicon.ico in 37ms (305 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Restoring pack from /Users/saleemjadallah/Desktop/DesignVisualz/frontend/.next/cache/webpack/client-development.pack.gz failed: TypeError: Cannot read properties of undefined (reading 'hasStartTime')
+ ✓ Compiled in 310ms (522 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Restoring pack from /Users/saleemjadallah/Desktop/DesignVisualz/frontend/.next/cache/webpack/client-development.pack.gz failed: TypeError: Cannot read properties of undefined (reading 'hasStartTime')
+ ✓ Compiled in 136ms (522 modules)
+ ✓ Compiled in 90ms (522 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Restoring pack from /Users/saleemjadallah/Desktop/DesignVisualz/frontend/.next/cache/webpack/client-development.pack.gz failed: TypeError: Cannot read properties of undefined (reading 'hasStartTime')
+ ✓ Compiled in 141ms (522 modules)
+ ✓ Compiled in 205ms (522 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Restoring pack from /Users/saleemjadallah/Desktop/DesignVisualz/frontend/.next/cache/webpack/client-development.pack.gz failed: TypeError: Cannot read properties of undefined (reading 'hasStartTime')
+ ✓ Compiled in 312ms (522 modules)
+ ✓ Compiled in 523ms (1120 modules)
+ ✓ Compiled in 78ms (1120 modules)
+ ✓ Compiled in 52ms (1120 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Restoring pack from /Users/saleemjadallah/Desktop/DesignVisualz/frontend/.next/cache/webpack/client-development.pack.gz failed: TypeError: Cannot read properties of undefined (reading 'hasStartTime')
+ ✓ Compiled in 162ms (1120 modules)
+ ✓ Compiled in 80ms (1120 modules)
+ ✓ Compiled in 99ms (1120 modules)
+ ✓ Compiled in 72ms (1120 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Restoring pack from /Users/saleemjadallah/Desktop/DesignVisualz/frontend/.next/cache/webpack/client-development.pack.gz failed: TypeError: Cannot read properties of undefined (reading 'hasStartTime')
+ ✓ Compiled /not-found in 278ms (1125 modules)
+ ✓ Compiled /favicon.ico in 40ms (604 modules)
+[?25h

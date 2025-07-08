@@ -1,0 +1,282 @@
+/* Cultural Theme CSS Variables and Transitions */
+
+:root {
+  /* Default Cultural Variables (Japanese theme) */
+  --cultural-primary: #2c3e50;
+  --cultural-secondary: #8b7355;
+  --cultural-accent: #d4af37;
+  --cultural-neutral-1: #f8f9fa;
+  --cultural-neutral-2: #e9ecef;
+  --cultural-neutral-3: #dee2e6;
+  --cultural-neutral-4: #ced4da;
+  --cultural-neutral-5: #adb5bd;
+  
+  /* Transition Duration Variables */
+  --theme-transition-duration: 300ms;
+  --theme-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Theme Transition Class */
+.theme-transitioning {
+  transition: background-color var(--theme-transition-duration) var(--theme-transition-easing),
+              border-color var(--theme-transition-duration) var(--theme-transition-easing),
+              color var(--theme-transition-duration) var(--theme-transition-easing);
+}
+
+.theme-transitioning * {
+  transition: background-color var(--theme-transition-duration) var(--theme-transition-easing),
+              border-color var(--theme-transition-duration) var(--theme-transition-easing),
+              color var(--theme-transition-duration) var(--theme-transition-easing),
+              box-shadow var(--theme-transition-duration) var(--theme-transition-easing);
+}
+
+/* Cultural Theme Specific Classes */
+
+/* Japanese Theme */
+.culture-japanese {
+  --cultural-primary: #2c3e50;
+  --cultural-secondary: #8b7355;
+  --cultural-accent: #d4af37;
+  --cultural-neutral-1: #f8f9fa;
+  --cultural-neutral-2: #e9ecef;
+  --cultural-neutral-3: #dee2e6;
+  --cultural-neutral-4: #ced4da;
+  --cultural-neutral-5: #adb5bd;
+}
+
+.culture-japanese .cultural-overlay {
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(212, 175, 55, 0.05) 0%, transparent 25%),
+    radial-gradient(circle at 75% 75%, rgba(44, 62, 80, 0.05) 0%, transparent 25%);
+}
+
+/* Scandinavian Theme */
+.culture-scandinavian {
+  --cultural-primary: #4a5c6a;
+  --cultural-secondary: #9db4c0;
+  --cultural-accent: #e8dcc6;
+  --cultural-neutral-1: #fefefe;
+  --cultural-neutral-2: #f5f5f5;
+  --cultural-neutral-3: #ebebeb;
+  --cultural-neutral-4: #d4d4d4;
+  --cultural-neutral-5: #a3a3a3;
+}
+
+.culture-scandinavian .cultural-overlay {
+  background-image: 
+    linear-gradient(135deg, rgba(157, 180, 192, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 30% 80%, rgba(232, 220, 198, 0.05) 0%, transparent 30%);
+}
+
+/* Italian Theme */
+.culture-italian {
+  --cultural-primary: #8b4513;
+  --cultural-secondary: #daa520;
+  --cultural-accent: #ff6347;
+  --cultural-neutral-1: #fffef7;
+  --cultural-neutral-2: #f4f1e8;
+  --cultural-neutral-3: #e8e2d0;
+  --cultural-neutral-4: #d3c7a8;
+  --cultural-neutral-5: #a69b83;
+}
+
+.culture-italian .cultural-overlay {
+  background-image: 
+    radial-gradient(ellipse at 60% 20%, rgba(255, 99, 71, 0.04) 0%, transparent 40%),
+    linear-gradient(45deg, rgba(218, 165, 32, 0.03) 0%, transparent 60%);
+}
+
+/* French Theme */
+.culture-french {
+  --cultural-primary: #2c3e50;
+  --cultural-secondary: #c0392b;
+  --cultural-accent: #f39c12;
+  --cultural-neutral-1: #fefefe;
+  --cultural-neutral-2: #f8f8f8;
+  --cultural-neutral-3: #efefef;
+  --cultural-neutral-4: #dcdcdc;
+  --cultural-neutral-5: #b8b8b8;
+}
+
+.culture-french .cultural-overlay {
+  background-image: 
+    linear-gradient(120deg, rgba(192, 57, 43, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 60%, rgba(243, 156, 18, 0.04) 0%, transparent 35%);
+}
+
+/* American Theme */
+.culture-american {
+  --cultural-primary: #1e3a8a;
+  --cultural-secondary: #dc2626;
+  --cultural-accent: #ffffff;
+  --cultural-neutral-1: #ffffff;
+  --cultural-neutral-2: #f9fafb;
+  --cultural-neutral-3: #f3f4f6;
+  --cultural-neutral-4: #d1d5db;
+  --cultural-neutral-5: #9ca3af;
+}
+
+.culture-american .cultural-overlay {
+  background-image: 
+    linear-gradient(90deg, rgba(30, 58, 138, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(220, 38, 38, 0.03) 0%, transparent 30%);
+}
+
+/* Cultural Component Enhancements */
+
+/* Cultural Buttons */
+.btn-cultural {
+  background: linear-gradient(135deg, var(--cultural-primary), var(--cultural-secondary));
+  border-color: var(--cultural-primary);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-cultural::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.btn-cultural:hover::before {
+  left: 100%;
+}
+
+.btn-cultural:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Cultural Input Focus */
+.input-cultural:focus {
+  border-color: var(--cultural-primary);
+  box-shadow: 0 0 0 3px rgba(var(--cultural-primary-rgb), 0.1);
+}
+
+/* Cultural Cards */
+.card-cultural {
+  background: linear-gradient(135deg, 
+    rgba(var(--cultural-primary-rgb), 0.02) 0%, 
+    rgba(var(--cultural-secondary-rgb), 0.01) 100%);
+  border-color: var(--cultural-primary);
+  border-opacity: 0.1;
+}
+
+.card-cultural:hover {
+  background: linear-gradient(135deg, 
+    rgba(var(--cultural-primary-rgb), 0.05) 0%, 
+    rgba(var(--cultural-secondary-rgb), 0.03) 100%);
+  border-opacity: 0.2;
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+/* Cultural Badge Styles */
+.badge-cultural {
+  background: linear-gradient(135deg, var(--cultural-primary), var(--cultural-accent));
+  color: white;
+  border: none;
+}
+
+/* Theme Transition Loading */
+.theme-loading {
+  position: relative;
+}
+
+.theme-loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(var(--cultural-primary-rgb), 0.1) 50%, 
+    transparent 100%);
+  animation: shimmer 1.5s infinite;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Cultural Typography */
+.culture-japanese .text-cultural {
+  font-family: 'Noto Sans JP', 'Inter', sans-serif;
+  letter-spacing: 0.025em;
+}
+
+.culture-scandinavian .text-cultural {
+  font-family: 'Inter', 'Helvetica Neue', sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+}
+
+.culture-italian .text-cultural {
+  font-family: 'Playfair Display', 'Georgia', serif;
+  font-style: italic;
+}
+
+.culture-french .text-cultural {
+  font-family: 'Playfair Display', 'Times New Roman', serif;
+  letter-spacing: 0.02em;
+}
+
+.culture-american .text-cultural {
+  font-family: 'Inter', 'Arial', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Cultural Animations */
+@keyframes cultural-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.cultural-pulse {
+  animation: cultural-pulse 2s infinite;
+}
+
+@keyframes cultural-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+.cultural-float {
+  animation: cultural-float 3s ease-in-out infinite;
+}
+
+/* Responsive Cultural Adjustments */
+@media (max-width: 768px) {
+  .culture-japanese {
+    --cultural-spacing-unit: 0.75rem;
+  }
+  
+  .culture-scandinavian {
+    --cultural-spacing-unit: 1rem;
+  }
+  
+  .culture-italian {
+    --cultural-spacing-unit: 0.875rem;
+  }
+  
+  .culture-french {
+    --cultural-spacing-unit: 0.875rem;
+  }
+  
+  .culture-american {
+    --cultural-spacing-unit: 1rem;
+  }
+}
