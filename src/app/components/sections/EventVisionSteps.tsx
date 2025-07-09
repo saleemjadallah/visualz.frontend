@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Palette, Home, Heart, Upload, Camera } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Palette, Home, Heart, Upload, Camera, Calendar, Users } from 'lucide-react';
 
 const EventVisionSteps = () => {
-  const [currentStep, setCurrentStep] = useState(3);
+  const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
+    eventType: '',
+    guestCount: '',
     culturalStyle: '',
     venueType: '',
     spaceSize: '',
@@ -22,7 +24,7 @@ const EventVisionSteps = () => {
   };
 
   const handlePrev = () => {
-    if (currentStep > 3) setCurrentStep(currentStep - 1);
+    if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
 
   const handleSelection = (field: string, value: string) => {
@@ -52,6 +54,8 @@ const EventVisionSteps = () => {
 
   const isStepComplete = () => {
     switch(currentStep) {
+      case 1: return formData.eventType !== '';
+      case 2: return formData.guestCount !== '';
       case 3: return formData.culturalStyle !== '';
       case 4: return formData.venueType !== '' && formData.spaceSize !== '' && formData.budgetRange !== '';
       case 5: return true; // Optional step
@@ -81,6 +85,218 @@ const EventVisionSteps = () => {
           )}
         </div>
       ))}
+    </div>
+  );
+
+  const Step1EventType = () => (
+    <div className="max-w-4xl mx-auto">
+      <div className="text-center mb-8">
+        <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 animate-gentle-float"
+             style={{ backgroundColor: 'var(--cultural-accent)' }}>
+          <Calendar className="w-8 h-8" style={{ color: 'var(--cultural-text)' }} />
+        </div>
+        <h2 className="section-title">
+          What kind of event are you planning?
+        </h2>
+        <p className="section-subtitle">
+          Choose the type of celebration that matches your vision
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[
+          {
+            id: 'wedding',
+            name: 'Wedding',
+            description: 'Celebrate your special day',
+            emoji: '💍',
+            details: 'Ceremony, reception, and celebration'
+          },
+          {
+            id: 'birthday',
+            name: 'Birthday Party',
+            description: 'Milestone celebrations',
+            emoji: '🎂',
+            details: 'From intimate to grand celebrations'
+          },
+          {
+            id: 'anniversary',
+            name: 'Anniversary',
+            description: 'Commemorating special moments',
+            emoji: '💝',
+            details: 'Romantic and meaningful gatherings'
+          },
+          {
+            id: 'corporate',
+            name: 'Corporate Event',
+            description: 'Professional gatherings',
+            emoji: '🏢',
+            details: 'Meetings, conferences, and team building'
+          },
+          {
+            id: 'graduation',
+            name: 'Graduation',
+            description: 'Academic achievements',
+            emoji: '🎓',
+            details: 'Celebrating educational milestones'
+          },
+          {
+            id: 'holiday',
+            name: 'Holiday Party',
+            description: 'Seasonal celebrations',
+            emoji: '🎄',
+            details: 'Christmas, New Year, and cultural holidays'
+          },
+          {
+            id: 'baby-shower',
+            name: 'Baby Shower',
+            description: 'Welcoming new arrivals',
+            emoji: '🍼',
+            details: 'Celebrating upcoming arrivals'
+          },
+          {
+            id: 'reunion',
+            name: 'Family Reunion',
+            description: 'Bringing families together',
+            emoji: '👨‍👩‍👧‍👦',
+            details: 'Multi-generational gatherings'
+          },
+          {
+            id: 'other',
+            name: 'Other Event',
+            description: 'Custom celebrations',
+            emoji: '✨',
+            details: 'Tell us about your unique vision'
+          }
+        ].map((event) => (
+          <div
+            key={event.id}
+            onClick={() => handleSelection('eventType', event.id)}
+            className={`
+              card-cultural p-6 cursor-pointer transition-all duration-300
+              ${formData.eventType === event.id 
+                ? 'border-2 transform -translate-y-1' 
+                : 'border border-opacity-50 hover:transform hover:-translate-y-1'}
+            `}
+            style={{
+              borderColor: formData.eventType === event.id 
+                ? 'var(--cultural-accent)' 
+                : 'var(--cultural-secondary)'
+            }}
+          >
+            <div className="text-4xl mb-3">{event.emoji}</div>
+            <h3 className="font-semibold text-lg mb-2" style={{ color: 'var(--cultural-text)' }}>
+              {event.name}
+            </h3>
+            <p className="text-sm mb-2" style={{ color: 'var(--cultural-text-light)' }}>
+              {event.description}
+            </p>
+            <p className="text-xs" style={{ color: 'var(--cultural-text-light)' }}>
+              {event.details}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const Step2GuestCount = () => (
+    <div className="max-w-4xl mx-auto">
+      <div className="text-center mb-8">
+        <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 animate-gentle-float"
+             style={{ backgroundColor: 'var(--cultural-accent)' }}>
+          <Users className="w-8 h-8" style={{ color: 'var(--cultural-text)' }} />
+        </div>
+        <h2 className="section-title">
+          How many guests will be attending?
+        </h2>
+        <p className="section-subtitle">
+          This helps us plan the perfect space and atmosphere
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[
+          {
+            id: 'intimate',
+            name: 'Intimate Gathering',
+            range: '1-10 guests',
+            emoji: '👥',
+            description: 'Close family and friends',
+            suggestions: 'Perfect for cozy, personal celebrations'
+          },
+          {
+            id: 'small',
+            name: 'Small Event',
+            range: '11-30 guests',
+            emoji: '👨‍👩‍👧‍👦',
+            description: 'Extended family and friends',
+            suggestions: 'Great for home venues or small halls'
+          },
+          {
+            id: 'medium',
+            name: 'Medium Event',
+            range: '31-75 guests',
+            emoji: '🎉',
+            description: 'Larger social circle',
+            suggestions: 'Requires dedicated event space'
+          },
+          {
+            id: 'large',
+            name: 'Large Event',
+            range: '76-150 guests',
+            emoji: '🏛️',
+            description: 'Full community celebration',
+            suggestions: 'Banquet halls and large venues'
+          },
+          {
+            id: 'grand',
+            name: 'Grand Event',
+            range: '151-300 guests',
+            emoji: '🎊',
+            description: 'Major celebration',
+            suggestions: 'Convention centers and ballrooms'
+          },
+          {
+            id: 'massive',
+            name: 'Massive Event',
+            range: '300+ guests',
+            emoji: '🎆',
+            description: 'Community-wide celebration',
+            suggestions: 'Large venues and outdoor spaces'
+          }
+        ].map((size) => (
+          <div
+            key={size.id}
+            onClick={() => handleSelection('guestCount', size.id)}
+            className={`
+              card-cultural p-6 cursor-pointer transition-all duration-300
+              ${formData.guestCount === size.id 
+                ? 'border-2 transform -translate-y-1' 
+                : 'border border-opacity-50 hover:transform hover:-translate-y-1'}
+            `}
+            style={{
+              borderColor: formData.guestCount === size.id 
+                ? 'var(--cultural-accent)' 
+                : 'var(--cultural-secondary)'
+            }}
+          >
+            <div className="text-4xl mb-3">{size.emoji}</div>
+            <h3 className="font-semibold text-lg mb-2" style={{ color: 'var(--cultural-text)' }}>
+              {size.name}
+            </h3>
+            <p className="text-sm font-medium mb-2" style={{ color: 'var(--cultural-accent)' }}>
+              {size.range}
+            </p>
+            <p className="text-sm mb-2" style={{ color: 'var(--cultural-text-light)' }}>
+              {size.description}
+            </p>
+            <p className="text-xs" style={{ color: 'var(--cultural-text-light)' }}>
+              {size.suggestions}
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 
@@ -581,6 +797,8 @@ const EventVisionSteps = () => {
 
         {/* Step Content */}
         <div className="mb-12">
+          {currentStep === 1 && <Step1EventType />}
+          {currentStep === 2 && <Step2GuestCount />}
           {currentStep === 3 && <Step3CulturalStyle />}
           {currentStep === 4 && <Step4SpaceBudget />}
           {currentStep === 5 && <Step5Personalization />}
@@ -590,10 +808,10 @@ const EventVisionSteps = () => {
         <div className="flex justify-between items-center max-w-4xl mx-auto">
           <button
             onClick={handlePrev}
-            disabled={currentStep === 3}
+            disabled={currentStep === 1}
             className={`
               btn-cultural-secondary flex items-center transition-all
-              ${currentStep === 3 
+              ${currentStep === 1 
                 ? 'opacity-50 cursor-not-allowed' 
                 : 'hover:transform hover:-translate-y-1'}
             `}
@@ -633,6 +851,22 @@ const EventVisionSteps = () => {
               Your Selection Summary
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+              {formData.eventType && (
+                <div>
+                  <span className="font-medium" style={{ color: 'var(--cultural-text)' }}>Event:</span>
+                  <span className="ml-2 capitalize" style={{ color: 'var(--cultural-text-light)' }}>
+                    {formData.eventType.replace('-', ' ')}
+                  </span>
+                </div>
+              )}
+              {formData.guestCount && (
+                <div>
+                  <span className="font-medium" style={{ color: 'var(--cultural-text)' }}>Size:</span>
+                  <span className="ml-2 capitalize" style={{ color: 'var(--cultural-text-light)' }}>
+                    {formData.guestCount}
+                  </span>
+                </div>
+              )}
               {formData.culturalStyle && (
                 <div>
                   <span className="font-medium" style={{ color: 'var(--cultural-text)' }}>Style:</span>
