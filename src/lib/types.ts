@@ -295,6 +295,229 @@ export interface ApiResponse<T = any> {
   data?: T;
   error?: string;
   message?: string;
+  meta?: {
+    pagination?: {
+      page: number;
+      limit: number;
+      total: number;
+      pages: number;
+    };
+    culturalContext?: CultureType;
+    timestamp: string;
+  };
+}
+
+// Enhanced API Types for Phase 15
+export interface APIError {
+  message: string;
+  code?: string;
+  status?: number;
+  errors?: string[];
+  culturalContext?: CultureType;
+}
+
+export interface CulturalValidationResult {
+  valid: boolean;
+  warnings: string[];
+  suggestions: string[];
+  culturalScore: number;
+  respectfulUsage: boolean;
+}
+
+export interface CulturalElement {
+  id: string;
+  name: string;
+  description: string;
+  culture: CultureType;
+  type: 'symbol' | 'color' | 'pattern' | 'material' | 'practice';
+  significance: string;
+  usage: string;
+  restrictions: string[];
+  respectfulGuidelines: string[];
+  appropriateContexts: EventType[];
+  inappropriateContexts: EventType[];
+}
+
+export interface CulturalThemeData {
+  culture: CultureType;
+  name: string;
+  displayName: string;
+  description: string;
+  principles: CulturalPrinciple[];
+  colorPalette: {
+    primary: string[];
+    secondary: string[];
+    accent: string[];
+    neutral: string[];
+  };
+  patterns: CulturalPattern[];
+  symbols: CulturalSymbol[];
+  materials: CulturalMaterial[];
+  guidelines: string[];
+  respectfulUsage: string[];
+  avoidances: string[];
+}
+
+export interface CulturalPattern {
+  id: string;
+  name: string;
+  description: string;
+  culture: CultureType;
+  significance: string;
+  usage: string;
+  restrictions: string[];
+  imageUrl?: string;
+}
+
+export interface CulturalSymbol {
+  id: string;
+  name: string;
+  description: string;
+  culture: CultureType;
+  significance: string;
+  usage: string;
+  restrictions: string[];
+  respectfulGuidelines: string[];
+  imageUrl?: string;
+}
+
+export interface CulturalMaterial {
+  id: string;
+  name: string;
+  description: string;
+  culture: CultureType;
+  significance: string;
+  usage: string;
+  restrictions: string[];
+  alternatives: string[];
+}
+
+// Loading States and UI Enhancement Types for Phase 16
+export interface LoadingState {
+  isLoading: boolean;
+  message?: string;
+  progress?: number;
+  stage?: string;
+  error?: string;
+}
+
+export interface EmptyState {
+  title: string;
+  description: string;
+  actionLabel?: string;
+  actionCallback?: () => void;
+  illustrationUrl?: string;
+  type: 'no-data' | 'no-results' | 'error' | 'coming-soon';
+}
+
+export interface NotificationState {
+  id: string;
+  type: 'success' | 'error' | 'warning' | 'info';
+  title: string;
+  message: string;
+  duration?: number;
+  dismissible?: boolean;
+  culturalContext?: CultureType;
+  timestamp: Date;
+}
+
+// Enhanced Form Types
+export interface FormFieldState {
+  value: any;
+  error?: string;
+  touched: boolean;
+  validated: boolean;
+  dirty: boolean;
+}
+
+export interface FormState {
+  fields: Record<string, FormFieldState>;
+  isSubmitting: boolean;
+  isValid: boolean;
+  isDirty: boolean;
+  culturalValidation?: CulturalValidationResult;
+}
+
+// AI Generation Types
+export interface AIGenerationRequest {
+  projectId: string;
+  prompt: string;
+  culturalContext: CultureType;
+  eventType: EventType;
+  budgetTier: BudgetTier;
+  stylePreferences: string[];
+  culturalElements: string[];
+  restrictions: string[];
+  customRequirements?: string;
+}
+
+export interface AIGenerationResponse {
+  designId: string;
+  design: Design;
+  culturalValidation: CulturalValidationResult;
+  estimatedTime: number;
+  progress: number;
+  stage: 'analyzing' | 'generating' | 'validating' | 'finalizing' | 'complete';
+}
+
+// Analytics and Monitoring Types
+export interface AnalyticsEvent {
+  event: string;
+  category: string;
+  action: string;
+  label?: string;
+  value?: number;
+  culturalContext?: CultureType;
+  userId?: string;
+  timestamp: Date;
+}
+
+export interface PerformanceMetric {
+  name: string;
+  value: number;
+  unit: string;
+  timestamp: Date;
+  culturalContext?: CultureType;
+}
+
+// Accessibility Types
+export interface AccessibilityFeatures {
+  screenReaderSupport: boolean;
+  keyboardNavigation: boolean;
+  highContrast: boolean;
+  reducedMotion: boolean;
+  fontSize: 'small' | 'medium' | 'large';
+  colorBlindnessSupport: boolean;
+  culturalAccessibility: boolean;
+}
+
+// Cultural Sensitivity Review Types
+export interface CulturalSensitivityReview {
+  id: string;
+  designId: string;
+  culture: CultureType;
+  reviewer: {
+    id: string;
+    name: string;
+    credentials: string[];
+    culturalBackground: CultureType[];
+  };
+  status: 'pending' | 'approved' | 'rejected' | 'needs-revision';
+  score: number;
+  feedback: {
+    positive: string[];
+    concerns: string[];
+    suggestions: string[];
+    culturalAccuracy: number;
+    respectfulness: number;
+    authenticity: number;
+  };
+  reviewDate: Date;
+  culturalElements: {
+    element: string;
+    appropriate: boolean;
+    feedback: string;
+  }[];
 }
 
 // Utility Types

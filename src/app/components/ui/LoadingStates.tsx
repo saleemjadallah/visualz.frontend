@@ -1,10 +1,399 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Loader2, Wifi, WifiOff, AlertCircle, CheckCircle, Clock, ImageIcon, AlertTriangle } from 'lucide-react';
 import { loadingSpinner, loadingDots, loadingPulse } from '@/lib/animations';
+import { SkeletonLoader } from './SkeletonLoader';
 
-// Spinner Loading Component
+// Enhanced Loading State with comprehensive error handling
+interface LoadingStateProps {
+  isLoading?: boolean;
+  error?: string | null;
+  retry?: () => void;
+  children?: React.ReactNode;
+  loadingText?: string;
+  emptyState?: React.ReactNode;
+  skeleton?: boolean;
+  culturalTheme?: boolean;
+}
+
+export const LoadingState: React.FC<LoadingStateProps> = ({
+  isLoading = false,
+  error = null,
+  retry,
+  children,
+  loadingText = 'Loading...',
+  emptyState,
+  skeleton = false,
+  culturalTheme = true,
+}) => {
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center p-8 text-center">
+        <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mb-4">
+          <AlertCircle className="w-8 h-8 text-red-600" />
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Something went wrong</h3>
+        <p className="text-gray-600 mb-4">{error}</p>
+        {retry && (
+          <button
+            onClick={retry}
+            className="btn-cultural"
+          >
+            Try Again
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    if (skeleton) {
+      return <SkeletonLoader count={3} height="60px" className="mb-4" />;
+    }
+
+    return (
+      <div className="flex flex-col items-center justify-center p-8">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cultural-accent mb-4"></div>
+        <p className="text-cultural-text">{loadingText}</p>
+      </div>
+    );
+  }
+
+  if (!children && emptyState) {
+    return <>{emptyState}</>;
+  }
+
+  return <>{children}</>;
+};
+
+// Progressive Loading with multiple stages
+interface ProgressiveLoadingProps {
+  stages: Array<{
+    key: string;
+    label: string;
+    duration?: number;
+  }>;
+  currentStage?: string;
+  onComplete?: () => void;
+}
+
+export const ProgressiveLoading: React.FC<ProgressiveLoadingProps> = ({
+  stages,
+  currentStage = '',
+  onComplete,
+}) => {
+  const [completedStages, setCompletedStages] = useState<Set<string>>(new Set());
+  const [activeStage, setActiveStage] = useState<string>(stages[0]?.key || '');
+
+  useEffect(() => {
+    if (currentStage) {
+      setActiveStage(currentStage);
+    }
+  }, [currentStage]);
+
+  useEffect(() => {
+    const currentIndex = stages.findIndex(stage => stage.key === activeStage);
+    if (currentIndex !== -1) {
+      // Mark previous stages as completed
+      const previousStages = stages.slice(0, currentIndex).map(stage => stage.key);
+      setCompletedStages(new Set(previousStages));
+    }
+
+    // Check if all stages are completed
+    if (currentIndex === stages.length - 1) {
+      setTimeout(() => {
+        setCompletedStages(new Set(stages.map(stage => stage.key)));
+        onComplete?.();
+      }, 1000);
+    }
+  }, [activeStage, stages, onComplete]);
+
+  return (
+    <div className="w-full max-w-md mx-auto p-6">
+      <div className="space-y-4">
+        {stages.map((stage, index) => {
+          const isCompleted = completedStages.has(stage.key);
+          const isActive = activeStage === stage.key;
+          const isPending = !isCompleted && !isActive;
+
+          return (
+            <div key={stage.key} className="flex items-center space-x-3">
+              <div className={`
+                w-8 h-8 rounded-full flex items-center justify-center
+                ${isCompleted ? 'bg-green-500' : isActive ? 'bg-cultural-accent' : 'bg-gray-300'}
+              `}>
+                {isCompleted ? (
+                  <CheckCircle className="w-5 h-5 text-white" />
+                ) : isActive ? (
+                  <Loader2 className="w-5 h-5 text-white animate-spin" />
+                ) : (
+                  <Clock className="w-5 h-5 text-gray-500" />
+                )}
+              </div>
+              
+              <div className="flex-1">
+                <p className={`
+                  text-sm font-medium
+                  ${isCompleted ? 'text-green-600' : isActive ? 'text-cultural-accent' : 'text-gray-500'}
+                `}>
+                  {stage.label}
+                </p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+// Network Status Monitor
+interface NetworkStatusProps {
+  onRetry?: () => void;
+}
+
+export const NetworkStatus: React.FC<NetworkStatusProps> = ({ onRetry }) => {
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [wasOffline, setWasOffline] = useState(false);
+
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOnline(true);
+      if (wasOffline) {
+        setWasOffline(false);
+        onRetry?.();
+      }
+    };
+
+    const handleOffline = () => {
+      setIsOnline(false);
+      setWasOffline(true);
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, [wasOffline, onRetry]);
+
+  if (isOnline) {
+    return null;
+  }
+
+  return (
+    <div className="fixed bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-50">
+      <div className="flex items-center space-x-2">
+        <WifiOff className="w-4 h-4" />
+        <span className="text-sm font-medium">You're offline</span>
+      </div>
+    </div>
+  );
+};
+
+// Lazy Component Loading
+interface LazyComponentProps {
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+  threshold?: number;
+  rootMargin?: string;
+}
+
+export const LazyComponent: React.FC<LazyComponentProps> = ({
+  children,
+  fallback = <SkeletonLoader height="200px" />,
+  threshold = 0.1,
+  rootMargin = '50px',
+}) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [ref, setRef] = useState<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!ref) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold, rootMargin }
+    );
+
+    observer.observe(ref);
+
+    return () => observer.disconnect();
+  }, [ref, threshold, rootMargin]);
+
+  return (
+    <div ref={setRef}>
+      {isVisible ? children : fallback}
+    </div>
+  );
+};
+
+// Infinite Scroll with loading
+interface InfiniteScrollProps {
+  children: React.ReactNode;
+  onLoadMore: () => void;
+  hasMore: boolean;
+  isLoading: boolean;
+  threshold?: number;
+}
+
+export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
+  children,
+  onLoadMore,
+  hasMore,
+  isLoading,
+  threshold = 0.8,
+}) => {
+  const [triggerRef, setTriggerRef] = useState<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!triggerRef || !hasMore || isLoading) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          onLoadMore();
+        }
+      },
+      { threshold }
+    );
+
+    observer.observe(triggerRef);
+
+    return () => observer.disconnect();
+  }, [triggerRef, hasMore, isLoading, onLoadMore, threshold]);
+
+  return (
+    <div>
+      {children}
+      
+      {hasMore && (
+        <div ref={setTriggerRef} className="py-8 text-center">
+          {isLoading ? (
+            <div className="flex items-center justify-center">
+              <Loader2 className="w-6 h-6 animate-spin text-cultural-accent mr-2" />
+              <span className="text-cultural-text">Loading more...</span>
+            </div>
+          ) : (
+            <button
+              onClick={onLoadMore}
+              className="btn-cultural-secondary"
+            >
+              Load More
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Loading Overlay
+interface LoadingOverlayProps {
+  isVisible: boolean;
+  message?: string;
+  progress?: number;
+  culturalTheme?: boolean;
+}
+
+export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
+  isVisible,
+  message = 'Loading...',
+  progress,
+  culturalTheme = true,
+}) => {
+  if (!isVisible) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className={`
+        bg-white rounded-lg p-8 max-w-sm w-full mx-4 text-center
+        ${culturalTheme ? 'bg-cultural-neutral border-cultural-secondary' : ''}
+      `}>
+        <div className="mb-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cultural-accent mx-auto"></div>
+        </div>
+        
+        <h3 className={`text-lg font-semibold mb-2 ${culturalTheme ? 'text-cultural-text' : 'text-gray-900'}`}>
+          {message}
+        </h3>
+        
+        {progress !== undefined && (
+          <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+            <div 
+              className="bg-cultural-accent h-2 rounded-full transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+        )}
+        
+        {progress !== undefined && (
+          <p className={`text-sm ${culturalTheme ? 'text-cultural-secondary' : 'text-gray-600'}`}>
+            {Math.round(progress)}% complete
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Empty State Component
+interface EmptyStateProps {
+  title: string;
+  description: string;
+  actionLabel?: string;
+  onAction?: () => void;
+  icon?: React.ReactNode;
+  culturalTheme?: boolean;
+}
+
+export const EmptyState: React.FC<EmptyStateProps> = ({
+  title,
+  description,
+  actionLabel,
+  onAction,
+  icon,
+  culturalTheme = true,
+}) => {
+  return (
+    <div className="text-center py-12 px-4">
+      <div className={`
+        w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4
+        ${culturalTheme ? 'bg-cultural-soft' : 'bg-gray-100'}
+      `}>
+        {icon || <Clock className="w-8 h-8 text-cultural-secondary" />}
+      </div>
+      
+      <h3 className={`text-lg font-semibold mb-2 ${culturalTheme ? 'text-cultural-text' : 'text-gray-900'}`}>
+        {title}
+      </h3>
+      
+      <p className={`mb-6 ${culturalTheme ? 'text-cultural-secondary' : 'text-gray-600'}`}>
+        {description}
+      </p>
+      
+      {actionLabel && onAction && (
+        <button
+          onClick={onAction}
+          className="btn-cultural"
+        >
+          {actionLabel}
+        </button>
+      )}
+    </div>
+  );
+};
+
+// Original Spinner Loading Component
 export const LoadingSpinner: React.FC<{
   size?: 'sm' | 'md' | 'lg';
   color?: string;
@@ -292,6 +681,13 @@ export const GalleryLoading: React.FC<{
 };
 
 export default {
+  LoadingState,
+  ProgressiveLoading,
+  NetworkStatus,
+  LazyComponent,
+  InfiniteScroll,
+  LoadingOverlay,
+  EmptyState,
   LoadingSpinner,
   LoadingDots,
   LoadingPulse,

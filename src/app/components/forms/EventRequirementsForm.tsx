@@ -1,42 +1,61 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { ChevronRight, Clock, Users, DollarSign, Heart } from 'lucide-react';
+import { useFormPersistence } from '../../../lib/hooks/useFormPersistence';
+import { EventType } from '../../../lib/types';
 
 const EventRequirementsForm = () => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 4;
+  const {
+    currentStep,
+    formData,
+    goToNextStep,
+    goToPrevStep,
+    updateField,
+    hasFieldError,
+    getFieldError,
+    getStepProgress,
+    isSubmitting,
+    handleSubmit
+  } = useFormPersistence();
+  
+  const totalSteps = 5;
   
   const eventTypes = [
     { 
-      id: 'birthday', 
+      id: 'birthday' as EventType, 
       label: 'Birthday Celebration', 
       icon: '🎂', 
       description: 'Personal milestone celebrations',
       color: 'from-pink-400 to-red-400'
     },
     { 
-      id: 'wedding', 
+      id: 'wedding' as EventType, 
       label: 'Wedding Reception', 
       icon: '💒', 
       description: 'Sacred union celebrations',
       color: 'from-purple-400 to-pink-400'
     },
     { 
-      id: 'corporate', 
+      id: 'corporate' as EventType, 
       label: 'Corporate Event', 
       icon: '🏢', 
       description: 'Professional gatherings',
       color: 'from-blue-400 to-indigo-400'
     },
     { 
-      id: 'cultural', 
+      id: 'cultural' as EventType, 
       label: 'Cultural Festival', 
       icon: '🎭', 
       description: 'Traditional celebrations',
       color: 'from-green-400 to-teal-400'
     }
   ];
+
+  const handleEventTypeSelect = (eventType: EventType) => {
+    updateField('eventType', eventType);
+    goToNextStep();
+  };
 
   return (
     <section className="section-padding bg-white">
@@ -73,7 +92,7 @@ const EventRequirementsForm = () => {
               <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200 -z-10">
                 <div 
                   className="h-full bg-blue-600 transition-all duration-500 ease-out"
-                  style={{ width: `${((currentStep - 1) / (totalSteps - 1)) * 100}%` }}
+                  style={{ width: `${getStepProgress()}%` }}
                 ></div>
               </div>
             </div>
@@ -103,17 +122,35 @@ const EventRequirementsForm = () => {
                   {eventTypes.map((type) => (
                     <button
                       key={type.id}
-                      className="group relative overflow-hidden p-8 rounded-2xl border-2 border-gray-200 hover:border-transparent transition-all duration-300 hover:scale-105 hover:shadow-xl text-left"
+                      onClick={() => handleEventTypeSelect(type.id)}
+                      className={`group relative overflow-hidden p-8 rounded-2xl border-2 transition-all duration-300 hover:scale-105 hover:shadow-xl text-left ${
+                        formData.eventType === type.id
+                          ? 'border-blue-500 bg-blue-50'
+                          : 'border-gray-200 hover:border-transparent'
+                      }`}
                     >
                       <div className={`absolute inset-0 bg-gradient-to-br ${type.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}></div>
                       <div className="relative">
                         <div className="text-4xl mb-4">{type.icon}</div>
                         <h4 className="text-xl font-semibold text-gray-900 mb-2">{type.label}</h4>
                         <p className="text-gray-600">{type.description}</p>
+                        {formData.eventType === type.id && (
+                          <div className="absolute top-4 right-4 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                            <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                        )}
                       </div>
                     </button>
                   ))}
                 </div>
+                
+                {hasFieldError('eventType') && (
+                  <div className="text-red-500 text-sm mt-4 text-center">
+                    {getFieldError('eventType')}
+                  </div>
+                )}
               </div>
             )}
 
@@ -156,7 +193,7 @@ const EventRequirementsForm = () => {
             {/* Navigation */}
             <div className="flex justify-between items-center mt-12">
               <button 
-                onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
+                onClick={goToPrevStep}
                 disabled={currentStep === 1}
                 className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -175,10 +212,11 @@ const EventRequirementsForm = () => {
               </div>
               
               <button 
-                onClick={() => setCurrentStep(Math.min(totalSteps, currentStep + 1))}
-                className="btn-primary group"
+                onClick={currentStep === totalSteps ? handleSubmit : goToNextStep}
+                disabled={isSubmitting}
+                className="btn-primary group disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {currentStep === totalSteps ? 'Generate Design' : 'Next Step'}
+                {isSubmitting ? 'Generating...' : currentStep === totalSteps ? 'Generate Design' : 'Next Step'}
                 <ChevronRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
               </button>
             </div>

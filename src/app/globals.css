@@ -2,6 +2,95 @@
 @tailwind components;
 @tailwind utilities;
 
+/* === ACCESSIBILITY STYLES === */
+
+/* Screen reader only - visually hidden but available to assistive technology */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Show screen reader only content when focused */
+.sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Skip links - hidden by default, visible when focused */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--cultural-accent);
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  z-index: 9999;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* Focus indicators */
+.focus-visible {
+  outline: 2px solid var(--cultural-accent);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .btn-cultural {
+    border: 2px solid currentColor;
+  }
+  
+  .card-cultural {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Touch target minimum size */
+@media (hover: none) and (pointer: coarse) {
+  button,
+  a,
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 /* === SOFT CULTURAL COLOR PALETTES === */
@@ -225,10 +314,376 @@ h1, h2, h3, h4, h5, h6 {
   animation: gentle-float 4s ease-in-out infinite;
 }
 
-/* === RESPONSIVE === */
+/* === RESPONSIVE DESIGN === */
 
-@media (max-width: 768px) {
+/* Mobile-first approach - Base styles are for mobile */
+html {
+  font-size: 16px; /* Base font size */
+  -webkit-text-size-adjust: 100%; /* Prevent iOS text size adjustment */
+  -ms-text-size-adjust: 100%; /* Prevent Windows Phone text size adjustment */
+}
+
+body {
+  /* Mobile-optimized line height */
+  line-height: 1.5;
+  /* Better text rendering on mobile */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* === MOBILE RESPONSIVE COMPONENTS === */
+
+@layer components {
+  
+  /* Mobile-first button styles */
   .btn-cultural {
-    @apply px-6 py-3 text-sm;
+    @apply px-4 py-3 text-sm font-medium rounded-xl;
+    /* Touch-friendly minimum size */
+    min-height: 44px;
+    min-width: 44px;
+    /* Better touch feedback */
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    user-select: none;
+  }
+  
+  /* Tablet improvements */
+  .btn-cultural {
+    @apply md:px-6 md:py-3 md:text-base md:rounded-2xl;
+  }
+  
+  /* Desktop enhancements */
+  .btn-cultural {
+    @apply lg:px-8 lg:py-4 lg:text-lg;
+  }
+  
+  /* Touch-specific styles */
+  @media (hover: none) and (pointer: coarse) {
+    .btn-cultural {
+      /* Larger touch targets on touch devices */
+      @apply px-6 py-4 text-base;
+    }
+  }
+  
+  /* Mobile-first card styles */
+  .card-cultural {
+    @apply rounded-lg p-4 mb-4;
+    /* Mobile-optimized shadows */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Tablet card improvements */
+  .card-cultural {
+    @apply md:rounded-xl md:p-6 md:mb-6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+  
+  /* Desktop card enhancements */
+  .card-cultural {
+    @apply lg:rounded-2xl lg:p-8 lg:mb-8;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  }
+  
+  /* Mobile navigation */
+  .nav-mobile {
+    @apply fixed inset-x-0 bottom-0 z-50 border-t bg-white/95 backdrop-blur-sm;
+    /* iOS safe area support */
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  /* Mobile form inputs */
+  .input-cultural {
+    @apply w-full px-4 py-3 text-base border rounded-lg;
+    /* Better mobile input experience */
+    font-size: 16px; /* Prevents zoom on iOS */
+    -webkit-appearance: none;
+    appearance: none;
+    /* Touch-friendly height */
+    min-height: 44px;
+  }
+  
+  /* Tablet input improvements */
+  .input-cultural {
+    @apply md:px-6 md:py-4 md:text-lg md:rounded-xl;
+  }
+  
+  /* Desktop input enhancements */
+  .input-cultural {
+    @apply lg:px-8 lg:py-5 lg:text-xl lg:rounded-2xl;
+  }
+  
+  /* Mobile-optimized spacing */
+  .section-padding {
+    @apply py-8 px-4;
+  }
+  
+  /* Tablet section padding */
+  .section-padding {
+    @apply md:py-12 md:px-6;
+  }
+  
+  /* Desktop section padding */
+  .section-padding {
+    @apply lg:py-16 lg:px-8;
+  }
+  
+  /* Mobile container */
+  .container-custom {
+    @apply max-w-full mx-auto px-4;
+  }
+  
+  /* Tablet container */
+  .container-custom {
+    @apply md:max-w-6xl md:px-6;
+  }
+  
+  /* Desktop container */
+  .container-custom {
+    @apply lg:max-w-7xl lg:px-8;
+  }
+  
+  /* Mobile grid systems */
+  .grid-responsive {
+    @apply grid gap-4;
+    /* Single column on mobile */
+    grid-template-columns: 1fr;
+  }
+  
+  /* Tablet grid - 2 columns */
+  .grid-responsive {
+    @apply md:gap-6;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  /* Desktop grid - 3 columns */
+  .grid-responsive {
+    @apply lg:gap-8;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  /* Mobile typography */
+  .text-responsive-heading {
+    @apply text-2xl font-bold leading-tight;
+  }
+  
+  /* Tablet typography */
+  .text-responsive-heading {
+    @apply md:text-3xl md:leading-tight;
+  }
+  
+  /* Desktop typography */
+  .text-responsive-heading {
+    @apply lg:text-4xl lg:leading-tight;
+  }
+  
+  /* Mobile body text */
+  .text-responsive-body {
+    @apply text-base leading-relaxed;
+  }
+  
+  /* Tablet body text */
+  .text-responsive-body {
+    @apply md:text-lg md:leading-relaxed;
+  }
+  
+  /* Desktop body text */
+  .text-responsive-body {
+    @apply lg:text-xl lg:leading-relaxed;
+  }
+}
+
+/* === DEVICE-SPECIFIC OPTIMIZATIONS === */
+
+/* iPhone specific optimizations */
+@supports (-webkit-appearance: none) {
+  .ios-optimized {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Android specific optimizations */
+@media screen and (-webkit-min-device-pixel-ratio: 2) {
+  .android-optimized {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
+  .high-dpi {
+    /* Sharper borders on high DPI */
+    border-width: 0.5px;
+  }
+}
+
+/* === RESPONSIVE BREAKPOINTS === */
+
+/* Extra small devices (phones) */
+@media (max-width: 474px) {
+  .btn-cultural {
+    @apply px-3 py-2 text-xs;
+  }
+  
+  .card-cultural {
+    @apply rounded-md p-3 mb-3;
+  }
+  
+  .section-padding {
+    @apply py-6 px-3;
+  }
+}
+
+/* Small devices (large phones) */
+@media (min-width: 475px) and (max-width: 639px) {
+  .btn-cultural {
+    @apply px-4 py-3 text-sm;
+  }
+  
+  .text-responsive-heading {
+    @apply text-xl;
+  }
+}
+
+/* Medium devices (tablets) */
+@media (min-width: 640px) and (max-width: 767px) {
+  .btn-cultural {
+    @apply px-5 py-3 text-base;
+  }
+  
+  .grid-responsive {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Large devices (desktops) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .btn-cultural {
+    @apply px-6 py-4 text-base;
+  }
+  
+  .grid-responsive {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Extra large devices (large desktops) */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .btn-cultural {
+    @apply px-7 py-4 text-lg;
+  }
+  
+  .grid-responsive {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 2XL devices (very large desktops) */
+@media (min-width: 1280px) {
+  .btn-cultural {
+    @apply px-8 py-5 text-lg;
+  }
+  
+  .grid-responsive {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* === TOUCH DEVICE OPTIMIZATIONS === */
+
+/* Touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .btn-cultural {
+    /* Larger touch targets */
+    min-height: 48px;
+    min-width: 48px;
+    @apply px-6 py-4;
+  }
+  
+  .card-cultural {
+    /* More padding for touch interactions */
+    @apply p-6;
+  }
+  
+  .input-cultural {
+    /* Larger input fields for touch */
+    min-height: 48px;
+    @apply py-4;
+  }
+  
+  /* Remove hover effects on touch devices */
+  .btn-cultural:hover,
+  .card-cultural:hover {
+    transform: none;
+    box-shadow: inherit;
+  }
+}
+
+/* Desktop devices with precise pointers */
+@media (hover: hover) and (pointer: fine) {
+  .btn-cultural:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .card-cultural:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* === ACCESSIBILITY IMPROVEMENTS === */
+
+/* Reduced motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .btn-cultural {
+    border-width: 2px;
+  }
+  
+  .card-cultural {
+    border-width: 1px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cultural-primary: #e5e7eb;
+    --cultural-secondary: #d1d5db;
+    --cultural-accent: #f59e0b;
+    --cultural-neutral: #1f2937;
+    --cultural-soft: #374151;
+    --cultural-text: #f9fafb;
+  }
+}
+
+/* === PRINT STYLES === */
+
+@media print {
+  .btn-cultural,
+  .nav-mobile,
+  .theme-selector {
+    display: none !important;
+  }
+  
+  .card-cultural {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
   }
 }
