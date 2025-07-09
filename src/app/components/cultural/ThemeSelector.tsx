@@ -1,3 +1,4 @@
+// app/components/cultural/ThemeSelector.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -8,27 +9,27 @@ const ThemeSelector = () => {
   const themes = [
     { 
       id: 'japanese', 
-      name: 'Japanese Temple', 
+      name: 'Temple Garden', 
       flag: '🇯🇵',
-      description: 'Zen gardens & aged cedar'
+      description: 'Soft bamboo & aged wood'
     },
     { 
       id: 'scandinavian', 
-      name: 'Swedish Cabin', 
+      name: 'Cozy Cabin', 
       flag: '🇸🇪',
-      description: 'Cozy wool & lingonberry'
+      description: 'Warm wool & gentle sage'
     },
     { 
       id: 'italian', 
-      name: 'Tuscan Vineyard', 
+      name: 'Countryside', 
       flag: '🇮🇹',
-      description: 'Terracotta & autumn vines'
+      description: 'Soft terracotta & honey'
     },
     { 
       id: 'french', 
-      name: 'Provence Château', 
+      name: 'Provence', 
       flag: '🇫🇷',
-      description: 'Lavender & vintage brass'
+      description: 'Gentle lavender & cream'
     }
   ];
   
@@ -38,15 +39,31 @@ const ThemeSelector = () => {
   };
   
   return (
-    <div className="theme-selector">
+    <div className="fixed top-1/2 right-6 transform -translate-y-1/2 z-40 space-y-3">
       {themes.map((theme) => (
         <button
           key={theme.id}
           onClick={() => switchTheme(theme.id)}
-          className={`theme-button ${theme.id} ${currentTheme === theme.id ? 'scale-110' : ''}`}
+          className={`
+            group relative w-14 h-14 rounded-full transition-all duration-300 
+            ${currentTheme === theme.id ? 'scale-110' : 'hover:scale-105'}
+          `}
+          style={{
+            background: currentTheme === theme.id ? 'var(--cultural-accent)' : 'var(--cultural-soft)',
+            border: '2px solid var(--cultural-secondary)',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+          }}
           title={`${theme.name}: ${theme.description}`}
         >
-          <span className="text-2xl">{theme.flag}</span>
+          <span className="text-xl">{theme.flag}</span>
+          
+          {/* Tooltip */}
+          <div className="absolute right-16 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+            <div className="bg-white px-3 py-2 rounded-lg shadow-lg border text-sm font-medium whitespace-nowrap">
+              {theme.name}
+              <div className="text-xs opacity-75">{theme.description}</div>
+            </div>
+          </div>
         </button>
       ))}
     </div>
