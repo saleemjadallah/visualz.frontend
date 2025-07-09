@@ -3,6 +3,7 @@ import NavigationHeader from './components/layout/NavigationHeader';
 import HeroSection from './components/sections/HeroSection';
 import CulturalThemeSelector from './components/cultural/CulturalThemeSelector';
 import EventRequirementsForm from './components/forms/EventRequirementsForm';
+import EventVisionSteps from './components/sections/EventVisionSteps';
 import SpaceUploadInterface from './components/sections/SpaceUploadInterface';
 import DesignGallery from './components/sections/DesignGallery';
 import CulturalIntelligencePanel from './components/cultural/CulturalIntelligencePanel';
@@ -20,6 +21,8 @@ export default function HomePage() {
         <section className="section-cultural pattern-japanese">
           <EventRequirementsForm />
         </section>
+        
+        <EventVisionSteps />
         
         <section className="section-cultural-alt pattern-japanese">
           <SpaceUploadInterface />
