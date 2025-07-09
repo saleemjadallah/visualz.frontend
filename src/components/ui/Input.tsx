@@ -1,5 +1,5 @@
 import React, { forwardRef, useState, useRef } from 'react';
-import { Upload, Search, Eye, EyeOff, AlertCircle, Check } from 'lucide-react';
+import { LineIcon } from './Icon';
 import { cn } from '@/lib/utils';
 import { ComponentSize } from '@/lib/types';
 
@@ -90,19 +90,19 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary-400 hover:text-primary-600"
             >
-              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              {showPassword ? <LineIcon name="EyeOff" className="w-4 h-4" /> : <LineIcon name="Eye" className="w-4 h-4" />}
             </button>
           )}
           
           {success && !error && (
             <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500">
-              <Check className="w-4 h-4" />
+              <LineIcon name="Check" className="w-4 h-4" />
             </div>
           )}
           
           {error && (
             <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-red-500">
-              <AlertCircle className="w-4 h-4" />
+              <LineIcon name="AlertCircle" className="w-4 h-4" />
             </div>
           )}
         </div>
@@ -141,7 +141,7 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
         ref={ref}
         type="search"
         placeholder={placeholder}
-        icon={<Search className="w-4 h-4" />}
+        icon={<LineIcon name="Search" className="w-4 h-4" />}
         onKeyDown={handleKeyDown}
         className={className}
         {...props}
@@ -217,13 +217,13 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           
           {success && !error && (
             <div className="absolute right-3 top-3 text-green-500">
-              <Check className="w-4 h-4" />
+              <LineIcon name="Check" className="w-4 h-4" />
             </div>
           )}
           
           {error && (
             <div className="absolute right-3 top-3 text-red-500">
-              <AlertCircle className="w-4 h-4" />
+              <LineIcon name="AlertCircle" className="w-4 h-4" />
             </div>
           )}
         </div>
@@ -331,7 +331,7 @@ const FileUpload = ({
         {children || (
           <div className="space-y-4">
             <div className="w-16 h-16 bg-gradient-to-br from-cultural-primary to-cultural-accent rounded-xl flex items-center justify-center mx-auto">
-              <Upload className="w-8 h-8 text-white" />
+              <LineIcon name="Upload" className="w-8 h-8 text-white" />
             </div>
             
             <div>
@@ -348,7 +348,7 @@ const FileUpload = ({
       
       {error && (
         <div className="text-sm text-red-600 flex items-center gap-2">
-          <AlertCircle className="w-4 h-4" />
+          <LineIcon name="AlertCircle" className="w-4 h-4" />
           {error}
         </div>
       )}
@@ -450,13 +450,13 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           
           {success && !error && (
             <div className="absolute right-8 top-1/2 transform -translate-y-1/2 text-green-500">
-              <Check className="w-4 h-4" />
+              <LineIcon name="Check" className="w-4 h-4" />
             </div>
           )}
           
           {error && (
             <div className="absolute right-8 top-1/2 transform -translate-y-1/2 text-red-500">
-              <AlertCircle className="w-4 h-4" />
+              <LineIcon name="AlertCircle" className="w-4 h-4" />
             </div>
           )}
         </div>

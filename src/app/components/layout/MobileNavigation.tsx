@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Palette, Eye, Globe, ShoppingBag, User, Settings, ChevronRight } from 'lucide-react';
+import { Menu, X, Palette, Camera, Globe, Home, Share, Download, ChevronRight, User, Settings, Eye, ShoppingBag } from 'lucide-react';
 import { useCulturalTheme } from '../../../lib/hooks/useCulturalTheme';
 
 interface MobileNavigationProps {
@@ -109,43 +109,46 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({ isOpen, onClose, on
 
           {/* Navigation Items */}
           <nav className="flex-1 px-4 py-6 space-y-2">
-            {navigationItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => handleNavigationClick(item.id)}
-                className={`
-                  w-full flex items-center space-x-4 p-4 rounded-xl transition-all duration-200 text-left
-                  ${activeSection === item.id 
-                    ? 'bg-opacity-20 transform scale-[0.98]' 
-                    : 'hover:bg-opacity-10 active:bg-opacity-20 active:scale-[0.98]'
-                  }
-                  ios-optimized android-optimized
-                `}
-                style={{
-                  backgroundColor: activeSection === item.id ? 'var(--cultural-accent)' : 'transparent',
-                  color: 'var(--cultural-text)',
-                }}
-              >
-                <div 
+            {navigationItems.map((item) => {
+              const IconComponent = item.icon;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavigationClick(item.id)}
                   className={`
-                    w-12 h-12 rounded-xl flex items-center justify-center transition-colors
-                    ${activeSection === item.id ? 'bg-white/20' : 'bg-gray-100'}
+                    w-full flex items-center space-x-4 p-4 rounded-xl transition-all duration-200 text-left
+                    ${activeSection === item.id 
+                      ? 'bg-opacity-20 transform scale-[0.98]' 
+                      : 'hover:bg-opacity-10 active:bg-opacity-20 active:scale-[0.98]'
+                    }
+                    ios-optimized android-optimized
                   `}
                   style={{
-                    background: activeSection === item.id ? 'var(--cultural-primary)' : 'var(--cultural-soft)',
+                    backgroundColor: activeSection === item.id ? 'var(--cultural-accent)' : 'transparent',
+                    color: 'var(--cultural-text)',
                   }}
                 >
-                  <item.icon className="w-6 h-6" style={{ 
-                    color: activeSection === item.id ? 'var(--cultural-neutral)' : 'var(--cultural-primary)' 
-                  }} />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-medium text-base">{item.label}</h3>
-                  <p className="text-sm opacity-75">{item.description}</p>
-                </div>
-                <ChevronRight className="w-5 h-5 opacity-50" />
-              </button>
-            ))}
+                  <div 
+                    className={`
+                      w-12 h-12 rounded-xl flex items-center justify-center transition-colors
+                      ${activeSection === item.id ? 'bg-white/20' : 'bg-gray-100'}
+                    `}
+                    style={{
+                      background: activeSection === item.id ? 'var(--cultural-primary)' : 'var(--cultural-soft)',
+                    }}
+                  >
+                    <IconComponent className="w-6 h-6" style={{ 
+                      color: activeSection === item.id ? 'var(--cultural-neutral)' : 'var(--cultural-primary)' 
+                    }} />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-medium text-base">{item.label}</h3>
+                    <p className="text-sm opacity-75">{item.description}</p>
+                  </div>
+                  <ChevronRight className="w-5 h-5 opacity-50" />
+                </button>
+              );
+            })}
           </nav>
 
           {/* Theme Selector */}

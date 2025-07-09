@@ -192,17 +192,18 @@ const CulturalGuide = () => {
   const selectedCultureData = cultures.find(c => c.id === selectedCulture) || cultures[0];
 
   return (
-    <section className="section-padding bg-gradient-to-br from-gray-50 to-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="section-cultural pattern-japanese">
+      <div className="container-cultural">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <Globe className="w-8 h-8 text-blue-600" />
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 animate-gentle-float"
+               style={{ backgroundColor: 'var(--cultural-accent)' }}>
+            <Globe className="w-8 h-8" style={{ color: 'var(--cultural-text)' }} />
           </div>
-          <h2 className="text-4xl lg:text-5xl font-display font-bold text-gray-900 mb-6">
+          <h2 className="hero-title" style={{ color: 'var(--cultural-text)' }}>
             Cultural Design Intelligence
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="section-subtitle max-w-3xl mx-auto">
             Explore authentic design principles from around the world. Learn how to respectfully 
             integrate cultural aesthetics into your event celebrations.
           </p>
@@ -211,8 +212,10 @@ const CulturalGuide = () => {
         <div className="grid lg:grid-cols-4 gap-8">
           {/* Culture Navigation Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-8">
-              <h3 className="text-lg font-semibold text-gray-900 mb-6">Cultural Traditions</h3>
+            <div className="card-cultural p-6 sticky top-8">
+              <h3 className="text-lg font-semibold mb-6" style={{ color: 'var(--cultural-text)' }}>
+                Cultural Traditions
+              </h3>
               <div className="space-y-2">
                 {cultures.map((culture) => (
                   <button
@@ -220,9 +223,20 @@ const CulturalGuide = () => {
                     onClick={() => setSelectedCulture(culture.id)}
                     className={`w-full flex items-center space-x-3 p-4 rounded-xl text-left transition-all duration-200 ${
                       selectedCulture === culture.id
-                        ? 'bg-blue-50 text-blue-700 border-2 border-blue-200'
-                        : 'hover:bg-gray-50 text-gray-700'
+                        ? 'border-2 transform -translate-y-1'
+                        : 'border hover:transform hover:-translate-y-1'
                     }`}
+                    style={{
+                      backgroundColor: selectedCulture === culture.id 
+                        ? 'var(--cultural-soft)' 
+                        : 'var(--cultural-primary)',
+                      borderColor: selectedCulture === culture.id 
+                        ? 'var(--cultural-accent)' 
+                        : 'var(--cultural-secondary)',
+                      color: selectedCulture === culture.id 
+                        ? 'var(--cultural-text)' 
+                        : 'var(--cultural-text-light)'
+                    }}
                   >
                     <span className="text-2xl">{culture.flag}</span>
                     <div>
@@ -240,20 +254,20 @@ const CulturalGuide = () => {
           {/* Main Content Area */}
           <div className="lg:col-span-3">
             {/* Culture Header */}
-            <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            <div className="card-cultural p-8 mb-8">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center space-x-4">
                   <div 
-                    className="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-3xl"
-                    style={{ backgroundColor: selectedCultureData.primaryColor }}
+                    className="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-3xl animate-gentle-float"
+                    style={{ backgroundColor: 'var(--cultural-accent)' }}
                   >
                     {selectedCultureData.flag}
                   </div>
                   <div>
-                    <h3 className="text-2xl font-display font-bold text-gray-900">
+                    <h3 className="text-2xl font-display font-bold" style={{ color: 'var(--cultural-text)' }}>
                       {selectedCultureData.name} Design Philosophy
                     </h3>
-                    <p className="text-gray-600">
+                    <p style={{ color: 'var(--cultural-text-light)' }}>
                       Authentic principles for respectful cultural integration
                     </p>
                   </div>
@@ -262,8 +276,11 @@ const CulturalGuide = () => {
                   {selectedCultureData.principles.slice(0, 3).map((principle, index) => (
                     <div 
                       key={index}
-                      className="w-6 h-6 rounded-full"
-                      style={{ backgroundColor: principle.colors[0] }}
+                      className="w-6 h-6 rounded-full border-2"
+                      style={{ 
+                        backgroundColor: principle.colors[0],
+                        borderColor: 'var(--cultural-secondary)'
+                      }}
                     />
                   ))}
                 </div>
@@ -273,35 +290,38 @@ const CulturalGuide = () => {
             {/* Principle Cards */}
             <div className="space-y-6">
               {selectedCultureData.principles.map((principle, index) => (
-                <div key={index} className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
+                <div key={index} className="card-cultural p-8 hover:transform hover:-translate-y-1 transition-all duration-300">
                   <div className="flex items-start space-x-6">
                     <div 
                       className="w-16 h-16 rounded-2xl flex items-center justify-center text-white"
-                      style={{ backgroundColor: selectedCultureData.primaryColor }}
+                      style={{ backgroundColor: 'var(--cultural-accent)' }}
                     >
                       <principle.icon className="w-8 h-8" />
                     </div>
                     <div className="flex-1">
-                      <h4 className="text-xl font-display font-semibold text-gray-900 mb-2">
+                      <h4 className="text-xl font-display font-semibold mb-2" style={{ color: 'var(--cultural-text)' }}>
                         {principle.name}
                       </h4>
-                      <p className="text-gray-600 mb-4 text-lg leading-relaxed">
+                      <p className="mb-4 text-lg leading-relaxed" style={{ color: 'var(--cultural-text-light)' }}>
                         {principle.description}
                       </p>
-                      <div className="bg-gray-50 rounded-xl p-4 mb-6">
-                        <p className="text-sm font-medium text-gray-700 mb-2">Application:</p>
-                        <p className="text-gray-600">{principle.application}</p>
+                      <div className="rounded-xl p-4 mb-6" style={{ backgroundColor: 'var(--cultural-soft)' }}>
+                        <p className="text-sm font-medium mb-2" style={{ color: 'var(--cultural-text)' }}>Application:</p>
+                        <p style={{ color: 'var(--cultural-text-light)' }}>{principle.application}</p>
                       </div>
                       
                       {/* Color Palette */}
                       <div className="mb-6">
-                        <p className="text-sm font-medium text-gray-700 mb-3">Color Palette:</p>
+                        <p className="text-sm font-medium mb-3" style={{ color: 'var(--cultural-text)' }}>Color Palette:</p>
                         <div className="flex space-x-2">
                           {principle.colors.map((color, colorIndex) => (
                             <div
                               key={colorIndex}
-                              className="w-8 h-8 rounded-lg border-2 border-gray-200"
-                              style={{ backgroundColor: color }}
+                              className="w-8 h-8 rounded-lg border-2"
+                              style={{ 
+                                backgroundColor: color,
+                                borderColor: 'var(--cultural-secondary)'
+                              }}
                               title={color}
                             />
                           ))}
@@ -310,11 +330,11 @@ const CulturalGuide = () => {
                       
                       {/* Examples */}
                       <div>
-                        <p className="text-sm font-medium text-gray-700 mb-3">Examples:</p>
+                        <p className="text-sm font-medium mb-3" style={{ color: 'var(--cultural-text)' }}>Examples:</p>
                         <div className="grid sm:grid-cols-3 gap-3">
                           {principle.examples.map((example, exampleIndex) => (
-                            <div key={exampleIndex} className="bg-blue-50 rounded-lg p-3">
-                              <p className="text-sm text-blue-800">{example}</p>
+                            <div key={exampleIndex} className="rounded-lg p-3" style={{ backgroundColor: 'var(--cultural-soft)' }}>
+                              <p className="text-sm" style={{ color: 'var(--cultural-text)' }}>{example}</p>
                             </div>
                           ))}
                         </div>
@@ -326,14 +346,14 @@ const CulturalGuide = () => {
             </div>
 
             {/* Cultural Sensitivity Note */}
-            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 mt-8">
+            <div className="card-cultural p-6 mt-8 border-2" style={{ borderColor: 'var(--cultural-accent)' }}>
               <div className="flex items-start space-x-3">
-                <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center">
-                  <Heart className="w-4 h-4 text-amber-600" />
+                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--cultural-accent)' }}>
+                  <Heart className="w-4 h-4" style={{ color: 'var(--cultural-text)' }} />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-amber-900 mb-2">Cultural Sensitivity Reminder</h4>
-                  <p className="text-amber-800 text-sm">
+                  <h4 className="font-semibold mb-2" style={{ color: 'var(--cultural-text)' }}>Cultural Sensitivity Reminder</h4>
+                  <p className="text-sm" style={{ color: 'var(--cultural-text-light)' }}>
                     These design principles are meant to inspire respectful cultural integration. 
                     Always consider the context, consult with cultural experts when appropriate, 
                     and avoid appropriation by understanding the deeper meaning behind each element.

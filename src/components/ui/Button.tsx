@@ -1,5 +1,5 @@
 import React from 'react';
-import { Loader2 } from 'lucide-react';
+import { LineIcon } from './Icon';
 import { cn } from '@/lib/utils';
 import { ButtonProps, ComponentVariant, ComponentSize } from '@/lib/types';
 
@@ -84,7 +84,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {loading && (
-          <Loader2 className={cn(
+          <LineIcon name="Refresh" className={cn(
             'animate-spin',
             size === 'sm' ? 'w-3 h-3' : 
             size === 'md' ? 'w-4 h-4' :

@@ -1,6 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { ComponentSize } from '@/lib/types';
+import { LineIcons, StyledLineIcons, LineIconName } from '@/lib/icons';
 
 // Core icon props
 export interface IconProps {
@@ -10,6 +11,12 @@ export interface IconProps {
   cultural?: boolean;
   spinning?: boolean;
   children?: React.ReactNode;
+}
+
+// LineIcon component props
+export interface LineIconProps extends Omit<IconProps, 'children'> {
+  name: LineIconName;
+  title?: string;
 }
 
 // Icon wrapper component
@@ -83,6 +90,52 @@ const Icon = React.forwardRef<HTMLSpanElement, IconProps>(
 );
 
 Icon.displayName = 'Icon';
+
+// LineIcon component - A bridge between Icon wrapper and LineIcons
+const LineIcon = React.forwardRef<HTMLSpanElement, LineIconProps>(
+  ({ name, title, size = 'md', color = 'current', className, ...props }, ref) => {
+    const IconComponent = LineIcons[name];
+    
+    if (!IconComponent) {
+      console.warn(`LineIcon: Icon "${name}" not found in LineIcons mapping`);
+      return null;
+    }
+    
+    const getSizeValue = () => {
+      if (typeof size === 'number') return size;
+      
+      const sizeMap = {
+        sm: 16,
+        md: 20,
+        lg: 24,
+        xl: 32
+      };
+      
+      return sizeMap[size] || 20;
+    };
+    
+    return (
+      <Icon 
+        ref={ref}
+        size={size} 
+        color={color} 
+        className={className}
+        {...props}
+      >
+        <IconComponent 
+          title={title}
+          style={{
+            width: getSizeValue(),
+            height: getSizeValue(),
+            display: 'block'
+          }}
+        />
+      </Icon>
+    );
+  }
+);
+
+LineIcon.displayName = 'LineIcon';
 
 // Cultural icon mappings
 export const CULTURAL_ICONS = {
@@ -271,4 +324,7 @@ const IconBadge = ({
 
 IconBadge.displayName = 'IconBadge';
 
-export { Icon, CulturalIcon, IconButton, IconBadge };
+export { Icon, LineIcon, CulturalIcon, IconButton, IconBadge };
+
+// Re-export LineIcons for direct usage
+export { LineIcons, StyledLineIcons } from '@/lib/icons';

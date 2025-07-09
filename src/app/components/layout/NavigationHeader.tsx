@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Share2, Download, Palette, Eye, Globe, Menu, X, Sparkles } from 'lucide-react';
+import { LineIcon } from '@/lib/icons/lineicons';
 import MobileNavigation from './MobileNavigation';
 
 const NavigationHeader = () => {
@@ -24,7 +24,7 @@ const NavigationHeader = () => {
                   border: '1px solid var(--cultural-secondary)'
                 }}
               >
-                <Sparkles className="w-5 h-5 md:w-6 md:h-6" style={{ color: 'var(--cultural-text)' }} />
+                <LineIcon name="sparkles" size="lg" style={{ color: 'var(--cultural-text)' }} />
               </div>
               <div>
                 <h1 className="text-lg md:text-xl font-display font-bold text-cultural-heading">
@@ -39,17 +39,17 @@ const NavigationHeader = () => {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-4">
               {[
-                { id: 'design', label: 'Design Studio', icon: Palette },
-                { id: 'gallery', label: 'Gallery', icon: Eye },
-                { id: 'cultural', label: 'Cultural Guide', icon: Globe },
-                { id: 'vendors', label: 'Marketplace', icon: Menu }
-              ].map(({ id, label, icon: Icon }) => (
+                { id: 'design', label: 'Design Studio', icon: 'palette' as const },
+                { id: 'gallery', label: 'Gallery', icon: 'camera' as const },
+                { id: 'cultural', label: 'Cultural Guide', icon: 'globe' as const },
+                { id: 'vendors', label: 'Marketplace', icon: 'home' as const }
+              ].map(({ id, label, icon }) => (
                 <button
                   key={id}
                   onClick={() => setActiveTab(id)}
                   className={`nav-item ${activeTab === id ? 'nav-item-active' : ''}`}
                 >
-                  <Icon className="w-4 h-4" />
+                  <LineIcon name={icon} size="sm" />
                   <span>{label}</span>
                 </button>
               ))}
@@ -58,11 +58,11 @@ const NavigationHeader = () => {
             {/* Action Buttons */}
             <div className="flex items-center space-x-2 md:space-x-4">
               <button className="btn-cultural-secondary hidden sm:flex">
-                <Share2 className="w-4 h-4 mr-2" />
+                <LineIcon name="share" size="sm" className="mr-2" />
                 <span className="hidden lg:inline">Share</span>
               </button>
               <button className="btn-cultural">
-                <Download className="w-4 h-4 mr-2" />
+                <LineIcon name="download" size="sm" className="mr-2" />
                 <span className="hidden sm:inline">Export</span>
                 <span className="sm:hidden">Export</span>
               </button>
