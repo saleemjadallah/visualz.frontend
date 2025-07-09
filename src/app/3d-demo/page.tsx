@@ -22,15 +22,15 @@ const DesignVisualization = dynamic(() =>
 // Sample data for testing
 const sampleDesign = {
   id: 'design-1',
-  name: 'Kids Birthday Party Layout',
+  name: 'Modern Event Space Layout',
   furniture_items: [
     {
-      id: 'table-1',
-      name: 'Main Table',
-      category: 'table',
+      id: 'dining-table-1',
+      name: 'Main Dining Table',
+      category: 'dining-table',
       x: 8,
       y: 6,
-      width: 4,
+      width: 6,
       height: 2.5,
       rotation: 0,
       color: '#8B4513'
@@ -42,7 +42,7 @@ const sampleDesign = {
       x: 6,
       y: 5,
       width: 1.5,
-      height: 1.5,
+      height: 3,
       rotation: 0
     },
     {
@@ -52,7 +52,7 @@ const sampleDesign = {
       x: 10,
       y: 5,
       width: 1.5,
-      height: 1.5,
+      height: 3,
       rotation: 0
     },
     {
@@ -62,7 +62,7 @@ const sampleDesign = {
       x: 6,
       y: 8.5,
       width: 1.5,
-      height: 1.5,
+      height: 3,
       rotation: 180
     },
     {
@@ -72,19 +72,119 @@ const sampleDesign = {
       x: 10,
       y: 8.5,
       width: 1.5,
-      height: 1.5,
+      height: 3,
       rotation: 180
     },
     {
       id: 'sofa-1',
-      name: 'Activity Sofa',
+      name: 'Lounge Sofa',
       category: 'sofa',
       x: 2,
       y: 2,
-      width: 3,
-      height: 1.5,
+      width: 4,
+      height: 2.8,
       rotation: 0,
       color: '#4A5568'
+    },
+    {
+      id: 'coffee-table-1',
+      name: 'Coffee Table',
+      category: 'coffee-table',
+      x: 2,
+      y: 4,
+      width: 2.5,
+      height: 1.5,
+      rotation: 0
+    },
+    {
+      id: 'bookshelf-1',
+      name: 'Display Bookshelf',
+      category: 'bookshelf',
+      x: 15,
+      y: 2,
+      width: 2,
+      height: 6,
+      rotation: 0
+    },
+    {
+      id: 'plant-1',
+      name: 'Decorative Plant',
+      category: 'plant',
+      x: 16,
+      y: 10,
+      width: 1,
+      height: 4,
+      rotation: 0
+    },
+    {
+      id: 'bar-1',
+      name: 'Bar Counter',
+      category: 'bar',
+      x: 12,
+      y: 12,
+      width: 4,
+      height: 3.5,
+      rotation: 0
+    },
+    {
+      id: 'bar-stool-1',
+      name: 'Bar Stool 1',
+      category: 'bar-stool',
+      x: 11,
+      y: 11,
+      width: 1,
+      height: 3,
+      rotation: 0
+    },
+    {
+      id: 'bar-stool-2',
+      name: 'Bar Stool 2',
+      category: 'bar-stool',
+      x: 13,
+      y: 11,
+      width: 1,
+      height: 3,
+      rotation: 0
+    },
+    {
+      id: 'armchair-1',
+      name: 'Lounge Armchair',
+      category: 'armchair',
+      x: 4,
+      y: 8,
+      width: 2,
+      height: 3,
+      rotation: 45
+    },
+    {
+      id: 'ottoman-1',
+      name: 'Ottoman',
+      category: 'ottoman',
+      x: 4,
+      y: 6,
+      width: 1.5,
+      height: 1.5,
+      rotation: 0
+    },
+    {
+      id: 'stage-1',
+      name: 'Performance Stage',
+      category: 'stage',
+      x: 18,
+      y: 7,
+      width: 3,
+      height: 0.8,
+      rotation: 0
+    },
+    {
+      id: 'rug-1',
+      name: 'Area Rug',
+      category: 'rug',
+      x: 8,
+      y: 6,
+      width: 8,
+      height: 0.1,
+      rotation: 0
     }
   ],
   color_palette: {
