@@ -17,17 +17,19 @@
     "test:ci": "jest --ci --coverage --watchAll=false"
   },
   "dependencies": {
+    "@react-three/cannon": "^6.6.0",
+    "@react-three/drei": "^9.92.7",
+    "@react-three/fiber": "^8.15.12",
     "axios": "^1.10.0",
     "clsx": "^2.1.1",
     "framer-motion": "^10.18.0",
-    "konva": "^9.2.0",
     "lucide-react": "^0.294.0",
     "next": "14.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.60.0",
-    "react-konva": "^18.2.10",
     "tailwind-merge": "^2.6.0",
+    "three": "^0.159.0",
     "zustand": "^4.5.7"
   },
   "devDependencies": {

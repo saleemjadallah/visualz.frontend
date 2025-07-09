@@ -30,6 +30,16 @@ const nextConfig = {
   
   // Bundle analyzer configuration
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    // Handle canvas dependency for Konva
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        canvas: false,
+        fs: false,
+        path: false,
+      };
+    }
+
     // Bundle analyzer (only in production)
     if (!dev && process.env.ANALYZE === 'true') {
       const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
