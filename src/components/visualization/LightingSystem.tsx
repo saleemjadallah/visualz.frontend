@@ -16,32 +16,64 @@ interface LightingSystemProps {
     width: number;
     height: number;
   };
+  culturalTheme?: string;
 }
 
-export function LightingSystem({ lightingPlan, roomDimensions }: LightingSystemProps) {
+export function LightingSystem({ lightingPlan, roomDimensions, culturalTheme = 'modern' }: LightingSystemProps) {
   const ambientRef = useRef<THREE.AmbientLight>(null);
   const directionalRef = useRef<THREE.DirectionalLight>(null);
 
-  // Convert color temperature to RGB
+  // Convert color temperature to RGB with cultural adjustments
   function colorTemperatureToRGB(kelvin: string): THREE.Color {
     const temp = parseInt(kelvin.replace('K', ''));
     
+    let baseColor: THREE.Color;
     if (temp <= 3000) {
-      return new THREE.Color(1.0, 0.9, 0.7); // Warm white
+      baseColor = new THREE.Color(1.0, 0.9, 0.7); // Warm white
     } else if (temp <= 4000) {
-      return new THREE.Color(1.0, 0.95, 0.8); // Neutral warm
+      baseColor = new THREE.Color(1.0, 0.95, 0.8); // Neutral warm
     } else if (temp <= 5000) {
-      return new THREE.Color(1.0, 1.0, 0.9); // Neutral
+      baseColor = new THREE.Color(1.0, 1.0, 0.9); // Neutral
     } else {
-      return new THREE.Color(0.9, 0.95, 1.0); // Cool white
+      baseColor = new THREE.Color(0.9, 0.95, 1.0); // Cool white
+    }
+
+    // Apply cultural theme adjustments
+    switch (culturalTheme) {
+      case 'wabi-sabi':
+        return baseColor.multiplyScalar(0.8).lerp(new THREE.Color(0xFFF4E6), 0.3);
+      case 'hygge':
+        return baseColor.lerp(new THREE.Color(0xFFE4B5), 0.2);
+      case 'bella-figura':
+        return baseColor.lerp(new THREE.Color(0xF0F8FF), 0.1);
+      case 'savoir-vivre':
+        return baseColor.lerp(new THREE.Color(0xFFF8DC), 0.15);
+      default:
+        return baseColor;
     }
   }
 
   const lightColor = colorTemperatureToRGB(lightingPlan.color_temperature);
 
-  // Calculate lighting intensity based on room size
+  // Calculate lighting intensity based on room size and cultural theme
   const roomVolume = roomDimensions.length * roomDimensions.width * roomDimensions.height;
-  const baseIntensity = Math.min(1.0, roomVolume / 1000 + 0.3);
+  let baseIntensity = Math.min(1.0, roomVolume / 1000 + 0.3);
+  
+  // Cultural theme intensity adjustments
+  switch (culturalTheme) {
+    case 'wabi-sabi':
+      baseIntensity *= 0.7; // Softer, more subdued
+      break;
+    case 'hygge':
+      baseIntensity *= 0.8; // Cozy, warm
+      break;
+    case 'bella-figura':
+      baseIntensity *= 1.1; // Brighter, more dramatic
+      break;
+    case 'savoir-vivre':
+      baseIntensity *= 0.9; // Refined, balanced
+      break;
+  }
 
   return (
     <>

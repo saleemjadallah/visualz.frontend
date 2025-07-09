@@ -4,6 +4,8 @@ import { useRef, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 // import { useDrag } from '@react-three/cannon'; // Not available in current version
 import * as THREE from 'three';
+import { useTextureManager } from './TextureManager';
+import { FurnitureModel } from './FurnitureModels';
 
 interface FurnitureItem3DProps {
   furniture: {
@@ -21,17 +23,20 @@ interface FurnitureItem3DProps {
   isSelected: boolean;
   onClick: () => void;
   onMove: (position: { x: number; y: number }) => void;
+  culturalTheme?: string;
 }
 
 export function FurnitureItem3D({ 
   furniture, 
   isSelected, 
   onClick, 
-  onMove 
+  onMove,
+  culturalTheme = 'modern'
 }: FurnitureItem3DProps) {
   const meshRef = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const { getMaterial } = useTextureManager();
 
   // Convert 2D position to 3D (y becomes z, add appropriate height)
   const position: [number, number, number] = [
@@ -107,12 +112,14 @@ export function FurnitureItem3D({
     switch (category) {
       case 'table':
       case 'desk':
+        const tableMaterial = getMaterial('oak');
+        const tableLegMaterial = getMaterial('walnut');
         return (
           <>
             {/* Table top */}
-            <mesh position={[0, height - 0.1, 0]}>
+            <mesh position={[0, height - 0.1, 0]} castShadow receiveShadow>
               <boxGeometry args={[width, 0.2, depth]} />
-              <meshLambertMaterial color={furnitureColor} />
+              <primitive object={tableMaterial} />
             </mesh>
             {/* Table legs */}
             {[
@@ -121,9 +128,9 @@ export function FurnitureItem3D({
               [-width/2 + 0.1, height/2 - 0.1, depth/2 - 0.1],
               [width/2 - 0.1, height/2 - 0.1, depth/2 - 0.1]
             ].map((pos, i) => (
-              <mesh key={i} position={pos as [number, number, number]}>
+              <mesh key={i} position={pos as [number, number, number]} castShadow receiveShadow>
                 <boxGeometry args={[0.2, height - 0.2, 0.2]} />
-                <meshLambertMaterial color={furnitureColor.clone().multiplyScalar(0.8)} />
+                <primitive object={tableLegMaterial.clone()} />
               </mesh>
             ))}
           </>
@@ -131,17 +138,19 @@ export function FurnitureItem3D({
       
       case 'chair':
       case 'seating':
+        const chairFrameMaterial = getMaterial('walnut');
+        const chairCushionMaterial = getMaterial('linen');
         return (
           <>
-            {/* Seat */}
-            <mesh position={[0, 1.5, 0]}>
+            {/* Seat cushion */}
+            <mesh position={[0, 1.5, 0]} castShadow receiveShadow>
               <boxGeometry args={[width, 0.2, depth]} />
-              <meshLambertMaterial color={furnitureColor} />
+              <primitive object={chairCushionMaterial} />
             </mesh>
             {/* Backrest */}
-            <mesh position={[0, height - 0.5, -depth/2 + 0.1]}>
+            <mesh position={[0, height - 0.5, -depth/2 + 0.1]} castShadow receiveShadow>
               <boxGeometry args={[width, height - 1.5, 0.2]} />
-              <meshLambertMaterial color={furnitureColor.clone().multiplyScalar(0.9)} />
+              <primitive object={chairFrameMaterial} />
             </mesh>
             {/* Legs */}
             {[
@@ -150,9 +159,9 @@ export function FurnitureItem3D({
               [-width/2 + 0.1, 0.75, depth/2 - 0.1],
               [width/2 - 0.1, 0.75, depth/2 - 0.1]
             ].map((pos, i) => (
-              <mesh key={i} position={pos as [number, number, number]}>
+              <mesh key={i} position={pos as [number, number, number]} castShadow receiveShadow>
                 <boxGeometry args={[0.15, 1.5, 0.15]} />
-                <meshLambertMaterial color={furnitureColor.clone().multiplyScalar(0.7)} />
+                <primitive object={chairFrameMaterial.clone()} />
               </mesh>
             ))}
           </>
@@ -160,30 +169,33 @@ export function FurnitureItem3D({
       
       case 'sofa':
       case 'couch':
+        const sofaFrameMaterial = getMaterial('pine');
+        const sofaCushionMaterial = getMaterial('velvet');
         return (
           <>
             {/* Main body */}
-            <mesh position={[0, height/2, 0]}>
+            <mesh position={[0, height/2, 0]} castShadow receiveShadow>
               <boxGeometry args={[width, height, depth]} />
-              <meshLambertMaterial color={furnitureColor} />
+              <primitive object={sofaCushionMaterial} />
             </mesh>
             {/* Armrests */}
-            <mesh position={[-width/2 - 0.15, height/2 + 0.2, 0]}>
+            <mesh position={[-width/2 - 0.15, height/2 + 0.2, 0]} castShadow receiveShadow>
               <boxGeometry args={[0.3, height + 0.4, depth]} />
-              <meshLambertMaterial color={furnitureColor.clone().multiplyScalar(0.9)} />
+              <primitive object={sofaFrameMaterial} />
             </mesh>
-            <mesh position={[width/2 + 0.15, height/2 + 0.2, 0]}>
+            <mesh position={[width/2 + 0.15, height/2 + 0.2, 0]} castShadow receiveShadow>
               <boxGeometry args={[0.3, height + 0.4, depth]} />
-              <meshLambertMaterial color={furnitureColor.clone().multiplyScalar(0.9)} />
+              <primitive object={sofaFrameMaterial.clone()} />
             </mesh>
           </>
         );
       
       default:
+        const defaultMaterial = getMaterial('oak');
         return (
-          <mesh>
+          <mesh castShadow receiveShadow>
             <boxGeometry args={[width, height, depth]} />
-            <meshLambertMaterial color={furnitureColor} />
+            <primitive object={defaultMaterial} />
           </mesh>
         );
     }
@@ -233,10 +245,14 @@ export function FurnitureItem3D({
         </mesh>
       )}
 
-      {/* Furniture geometry */}
-      <group castShadow receiveShadow>
-        {getFurnitureGeometry(furniture.category, dimensions)}
-      </group>
+      {/* Enhanced Furniture Model */}
+      <FurnitureModel
+        category={furniture.category}
+        dimensions={dimensions}
+        culturalTheme={culturalTheme}
+        position={[0, 0, 0]}
+        rotation={[0, 0, 0]}
+      />
 
       {/* Furniture label */}
       {(isSelected || hovered) && (

@@ -174,6 +174,7 @@ export function Scene3D({
           <LightingSystem 
             lightingPlan={lightingPlan}
             roomDimensions={roomDimensions}
+            culturalTheme={culturalTheme}
           />
 
           {/* Environment */}
@@ -211,6 +212,7 @@ export function Scene3D({
               isSelected={selectedFurniture === item.id}
               onClick={() => handleFurnitureClick(item.id)}
               onMove={(position) => handleFurnitureMove(item.id, position)}
+              culturalTheme={culturalTheme}
             />
           ))}
 

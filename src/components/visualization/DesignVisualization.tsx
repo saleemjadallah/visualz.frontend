@@ -343,6 +343,7 @@ export function DesignVisualization({
                 lightingPlan={design.lighting_plan}
                 onFurnitureSelect={handleFurnitureSelect}
                 onFurnitureMove={handleFurnitureMove}
+                culturalTheme={culturalTheme}
               />
             </div>
           </div>
