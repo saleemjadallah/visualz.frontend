@@ -1,6 +1,23 @@
 'use client';
 
-import { DesignVisualization } from '@/components/visualization';
+import dynamic from 'next/dynamic';
+import { ClientOnly } from '@/components/ui/ClientOnly';
+
+// Dynamically import the 3D visualization component to prevent SSR issues
+const DesignVisualization = dynamic(() => 
+  import('@/components/visualization').then(mod => ({ default: mod.DesignVisualization })),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center h-full">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading 3D visualization...</p>
+        </div>
+      </div>
+    )
+  }
+);
 
 // Sample data for testing
 const sampleDesign = {
@@ -117,12 +134,21 @@ export default function ThreeDDemoPage() {
         </div>
 
         <div className="bg-white rounded-lg shadow-lg overflow-hidden" style={{ height: '700px' }}>
-          <DesignVisualization
-            design={sampleDesign}
-            project={sampleProject}
-            onFurnitureUpdate={handleFurnitureUpdate}
-            onDesignUpdate={handleDesignUpdate}
-          />
+          <ClientOnly fallback={
+            <div className="flex items-center justify-center h-full">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <p className="text-gray-600">Initializing 3D visualization...</p>
+              </div>
+            </div>
+          }>
+            <DesignVisualization
+              design={sampleDesign}
+              project={sampleProject}
+              onFurnitureUpdate={handleFurnitureUpdate}
+              onDesignUpdate={handleDesignUpdate}
+            />
+          </ClientOnly>
         </div>
 
         {/* Info Panel */}

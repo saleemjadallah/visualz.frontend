@@ -30,13 +30,14 @@ const nextConfig = {
   
   // Bundle analyzer configuration
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-    // Handle canvas dependency for Konva
+    // Handle Three.js and WebGL dependencies
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
         canvas: false,
         fs: false,
         path: false,
+        'webgl-sdf-generator': false,
       };
     }
 

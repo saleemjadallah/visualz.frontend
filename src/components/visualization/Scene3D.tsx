@@ -110,6 +110,22 @@ export function Scene3D({
   const [cameraPreset, setCameraPreset] = useState<string>('overview');
   const [isDragging, setIsDragging] = useState(false);
   const [dragObject, setDragObject] = useState<string | null>(null);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return (
+      <div className="flex items-center justify-center h-full bg-gradient-to-b from-sky-100 to-white">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading 3D visualization...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleFurnitureClick = (furnitureId: string) => {
     setSelectedFurniture(furnitureId);

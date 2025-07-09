@@ -1,9 +1,31 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Scene3D } from './Scene3D';
-import { ThemeSelector, useCulturalTheme } from './CulturalThemeManager';
-import { FurnitureLibrary, useFurnitureLibrary } from './FurnitureLoader';
+import dynamic from 'next/dynamic';
+
+// Dynamically import Three.js components to prevent SSR issues
+const Scene3D = dynamic(() => import('./Scene3D').then(mod => ({ default: mod.Scene3D })), {
+  ssr: false,
+  loading: () => (
+    <div className="flex items-center justify-center h-full">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+        <p className="text-gray-600 text-sm">Loading 3D scene...</p>
+      </div>
+    </div>
+  )
+});
+
+const ThemeSelector = dynamic(() => import('./CulturalThemeManager').then(mod => ({ default: mod.ThemeSelector })), {
+  ssr: false
+});
+
+const FurnitureLibrary = dynamic(() => import('./FurnitureLoader').then(mod => ({ default: mod.FurnitureLibrary })), {
+  ssr: false
+});
+
+import { useCulturalTheme } from './CulturalThemeManager';
+import { useFurnitureLibrary } from './FurnitureLoader';
 
 // Placeholder component for 2D view
 const Canvas2DPlaceholder = () => (
