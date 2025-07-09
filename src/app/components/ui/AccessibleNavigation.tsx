@@ -67,7 +67,7 @@ export const AccessibleNavItem: React.FC<AccessibleNavItemProps> = ({
     onKeyDown: handleKeyDown,
     onFocus: () => setIsFocused(true),
     onBlur: () => setIsFocused(false),
-    'aria-current': isActive ? 'page' : undefined,
+    'aria-current': isActive ? 'page' as const : undefined,
     role: 'menuitem',
     tabIndex: 0,
   };

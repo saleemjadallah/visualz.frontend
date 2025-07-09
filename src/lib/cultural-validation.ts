@@ -64,7 +64,7 @@ const CULTURAL_GUIDELINES = {
   },
   american: {
     respectfulColors: ['#B22234', '#FFFFFF', '#3C3B6E', '#FFD700'],
-    avoidColors: [], // Generally more flexible
+    avoidColors: [] as string[], // Generally more flexible
     appropriatePatterns: ['stars', 'stripes', 'geometric'],
     restrictedSymbols: ['eagle'], // Context-sensitive
     materials: ['wood', 'metal', 'fabric', 'leather'],
@@ -150,7 +150,7 @@ export class CulturalValidator {
     
     // Check for avoided colors
     colors.forEach(color => {
-      if (guidelines.avoidColors.includes(color)) {
+      if (guidelines.avoidColors.length > 0 && guidelines.avoidColors.includes(color)) {
         warnings.push(`Color ${color} may be inappropriate in ${culturalContext} cultural context`);
         penalty += 10;
       }

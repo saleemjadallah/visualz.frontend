@@ -146,11 +146,11 @@ export const AccessibleButton = forwardRef<HTMLButtonElement, AccessibleButtonPr
 
     // ARIA attributes
     const ariaAttributes = {
-      'aria-pressed': isPressed.toString(),
-      'aria-disabled': (disabled || loading).toString(),
+      'aria-pressed': isPressed ? 'true' as const : 'false' as const,
+      'aria-disabled': disabled || loading,
       'aria-describedby': describedBy,
       'aria-label': loading ? loadingText : undefined,
-      'role': 'button',
+      'role': 'button' as const,
       'tabIndex': disabled ? -1 : 0,
     };
 

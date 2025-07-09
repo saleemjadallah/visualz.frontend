@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Palette, 
   Sparkles, 
@@ -9,13 +9,13 @@ import {
   Pause,
   RotateCcw
 } from 'lucide-react';
-import { CultureType, LoadingState as LoadingStateType, EmptyState, CulturalSensitivityReview } from '@/lib/types';
+import { CultureType, LoadingState as LoadingStateType, EmptyState as EmptyStateType, CulturalSensitivityReview } from '@/lib/types';
 import LoadingState from './LoadingState';
 import EmptyState from './EmptyState';
 import ErrorBoundary from './ErrorBoundary';
 import CulturalSensitivityReviewComponent from '../cultural/CulturalSensitivityReview';
 import { NotificationProvider, useNotifications } from './NotificationSystem';
-import Button from './Button';
+import Button from '../../app/components/ui/Button';
 
 interface UXEnhancementShowcaseProps {
   culturalContext?: CultureType;
@@ -36,7 +36,7 @@ const UXEnhancementShowcase: React.FC<UXEnhancementShowcaseProps> = ({
     stage: 'analyzing'
   });
 
-  const emptyStates: Record<string, EmptyState> = {
+  const emptyStates: Record<string, EmptyStateType> = {
     'no-data': {
       title: 'No Designs Yet',
       description: 'Start creating your first culturally-respectful event design',
@@ -179,17 +179,17 @@ const UXEnhancementShowcase: React.FC<UXEnhancementShowcaseProps> = ({
         variant="primary"
         size="sm"
         onClick={() => setIsPlaying(!isPlaying)}
-        icon={isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
         disabled={activeDemo !== 'loading'}
       >
+        {isPlaying ? <Pause className="w-4 h-4 mr-2" /> : <Play className="w-4 h-4 mr-2" />}
         {isPlaying ? 'Pause' : 'Play'} Demo
       </Button>
       <Button
         variant="secondary"
         size="sm"
         onClick={resetDemo}
-        icon={<RotateCcw className="w-4 h-4" />}
       >
+        <RotateCcw className="w-4 h-4 mr-2" />
         Reset
       </Button>
     </div>
@@ -238,32 +238,32 @@ const UXEnhancementShowcase: React.FC<UXEnhancementShowcaseProps> = ({
             variant="primary"
             size="sm"
             onClick={() => showNotification('success')}
-            icon={<CheckCircle className="w-4 h-4" />}
           >
+            <CheckCircle className="w-4 h-4 mr-2" />
             Success
           </Button>
           <Button
             variant="secondary"
             size="sm"
             onClick={() => showNotification('error')}
-            icon={<Shield className="w-4 h-4" />}
           >
+            <Shield className="w-4 h-4 mr-2" />
             Error
           </Button>
           <Button
             variant="cultural"
             size="sm"
             onClick={() => showNotification('warning')}
-            icon={<Sparkles className="w-4 h-4" />}
           >
+            <Sparkles className="w-4 h-4 mr-2" />
             Warning
           </Button>
           <Button
             variant="ghost"
             size="sm"
             onClick={() => showNotification('info')}
-            icon={<Palette className="w-4 h-4" />}
           >
+            <Palette className="w-4 h-4 mr-2" />
             Info
           </Button>
         </div>

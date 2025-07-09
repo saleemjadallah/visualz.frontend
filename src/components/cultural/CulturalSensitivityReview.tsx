@@ -13,8 +13,8 @@ import {
   Eye,
   MessageCircle
 } from 'lucide-react';
-import { CulturalSensitivityReview, CultureType } from '@/lib/types';
-import Button from '../ui/Button';
+import type { CulturalSensitivityReview, CultureType } from '@/lib/types';
+import Button from '../../app/components/ui/Button';
 
 interface CulturalSensitivityReviewProps {
   review: CulturalSensitivityReview;
@@ -294,24 +294,24 @@ const CulturalSensitivityReview: React.FC<CulturalSensitivityReviewProps> = ({
               variant="primary"
               size="sm"
               onClick={() => handleAction('approve')}
-              icon={<CheckCircle className="w-4 h-4" />}
             >
+              <CheckCircle className="w-4 h-4 mr-2" />
               Approve
             </Button>
             <Button
               variant="secondary"
               size="sm"
               onClick={() => handleAction('revise')}
-              icon={<AlertTriangle className="w-4 h-4" />}
             >
+              <AlertTriangle className="w-4 h-4 mr-2" />
               Request Revision
             </Button>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => handleAction('reject')}
-              icon={<X className="w-4 h-4" />}
             >
+              <X className="w-4 h-4 mr-2" />
               Reject
             </Button>
           </div>

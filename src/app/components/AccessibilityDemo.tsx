@@ -13,6 +13,9 @@ interface ContrastTestResult {
   passesAAA: boolean;
   passesAALarge: boolean;
   passesAAALarge: boolean;
+  bg: string;
+  fg: string;
+  name: string;
 }
 
 const AccessibilityDemo: React.FC = () => {
@@ -65,7 +68,7 @@ const AccessibilityDemo: React.FC = () => {
     }
   };
 
-  const ContrastTestCard: React.FC<{ test: ContrastTestResult & { bg: string; fg: string; name: string } }> = ({ test }) => (
+  const ContrastTestCard: React.FC<{ test: ContrastTestResult }> = ({ test }) => (
     <div className="border border-gray-200 rounded-lg p-4 space-y-3">
       <div className="flex items-center justify-between">
         <h4 className="font-medium">{test.name}</h4>

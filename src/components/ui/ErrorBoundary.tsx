@@ -2,7 +2,7 @@ import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { AlertTriangle, RefreshCw, Home, Mail } from 'lucide-react';
 import { CultureType } from '@/lib/types';
-import Button from './Button';
+import Button from '../../app/components/ui/Button';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -206,9 +206,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                 onClick={this.handleRefresh}
                 variant="primary"
                 size="lg"
-                icon={<RefreshCw className="w-4 h-4" />}
                 className="w-full"
               >
+                <RefreshCw className="w-4 h-4 mr-2" />
                 Try Again
               </Button>
               
@@ -217,9 +217,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                   onClick={this.handleGoHome}
                   variant="secondary"
                   size="md"
-                  icon={<Home className="w-4 h-4" />}
                   className="flex-1"
                 >
+                  <Home className="w-4 h-4 mr-2" />
                   Go Home
                 </Button>
                 
@@ -227,9 +227,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                   onClick={this.sendErrorReport}
                   variant="ghost"
                   size="md"
-                  icon={<Mail className="w-4 h-4" />}
                   className="flex-1"
                 >
+                  <Mail className="w-4 h-4 mr-2" />
                   Report Issue
                 </Button>
               </div>

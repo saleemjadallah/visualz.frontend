@@ -11,7 +11,7 @@ import {
   Globe
 } from 'lucide-react';
 import { EmptyState as EmptyStateType, CultureType } from '@/lib/types';
-import Button from './Button';
+import Button from '../../app/components/ui/Button';
 
 interface EmptyStateProps {
   state: EmptyStateType;
@@ -184,10 +184,10 @@ const EmptyState: React.FC<EmptyStateProps> = ({
             onClick={state.actionCallback}
             variant={state.type === 'error' ? 'secondary' : 'primary'}
             size="lg"
-            icon={getActionIcon(state.type)}
             className="shadow-md hover:shadow-lg transition-shadow"
           >
-            {state.actionLabel}
+            {getActionIcon(state.type)}
+            <span className="ml-2">{state.actionLabel}</span>
           </Button>
         </motion.div>
       )}
