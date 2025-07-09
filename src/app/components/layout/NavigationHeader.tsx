@@ -24,7 +24,7 @@ const NavigationHeader = () => {
                   border: '1px solid var(--cultural-secondary)'
                 }}
               >
-                <LineIcon name="sparkles" size="lg" style={{ color: 'var(--cultural-text)' }} />
+                <LineIcon name="star-filled" size={24} style={{ color: 'var(--cultural-text)' }} />
               </div>
               <div>
                 <h1 className="text-lg md:text-xl font-display font-bold text-cultural-heading">
@@ -49,7 +49,7 @@ const NavigationHeader = () => {
                   onClick={() => setActiveTab(id)}
                   className={`nav-item ${activeTab === id ? 'nav-item-active' : ''}`}
                 >
-                  <LineIcon name={icon} size="sm" />
+                  <LineIcon name={icon} size={16} />
                   <span>{label}</span>
                 </button>
               ))}
@@ -58,11 +58,11 @@ const NavigationHeader = () => {
             {/* Action Buttons */}
             <div className="flex items-center space-x-2 md:space-x-4">
               <button className="btn-cultural-secondary hidden sm:flex">
-                <LineIcon name="share" size="sm" className="mr-2" />
+                <LineIcon name="share-alt" size={16} className="mr-2" />
                 <span className="hidden lg:inline">Share</span>
               </button>
               <button className="btn-cultural">
-                <LineIcon name="download" size="sm" className="mr-2" />
+                <LineIcon name="download" size={16} className="mr-2" />
                 <span className="hidden sm:inline">Export</span>
                 <span className="sm:hidden">Export</span>
               </button>

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Globe, Heart, Lightbulb, Palette, BookOpen, Users } from 'lucide-react';
+import { LineIcon } from '@/lib/icons/lineicons';
 
 const CulturalGuide = () => {
   const [selectedCulture, setSelectedCulture] = useState('japanese');
@@ -17,7 +17,7 @@ const CulturalGuide = () => {
         {
           name: 'Wabi-Sabi',
           description: 'Finding beauty in imperfection and impermanence',
-          icon: Heart,
+          icon: 'heart-filled',
           application: 'Use natural materials, embrace asymmetry, celebrate aging',
           colors: ['#8B4513', '#F5E6D3', '#2F4F4F'],
           examples: [
@@ -29,7 +29,7 @@ const CulturalGuide = () => {
         {
           name: 'Ma (Negative Space)',
           description: 'The power of emptiness and pause in design',
-          icon: Lightbulb,
+          icon: 'star-filled',
           application: 'Create breathing room, strategic emptiness, mindful spacing',
           colors: ['#FFFFFF', '#F8F8F8', '#E8E8E8'],
           examples: [
@@ -41,7 +41,7 @@ const CulturalGuide = () => {
         {
           name: 'Kanso (Simplicity)',
           description: 'Eliminating clutter and expressing more with less',
-          icon: BookOpen,
+          icon: 'pencil-alt',
           application: 'Clean lines, essential elements only, functional beauty',
           colors: ['#2c3e50', '#8b7355', '#fafaf9'],
           examples: [
@@ -62,7 +62,7 @@ const CulturalGuide = () => {
         {
           name: 'Hygge',
           description: 'Creating cozy, comfortable, and content atmosphere',
-          icon: Heart,
+          icon: 'heart-filled',
           application: 'Warm lighting, soft textures, intimate gathering spaces',
           colors: ['#F7F7F7', '#E8E8E8', '#D4AF37'],
           examples: [
@@ -74,7 +74,7 @@ const CulturalGuide = () => {
         {
           name: 'Lagom',
           description: 'The perfect balance - not too little, not too much',
-          icon: Lightbulb,
+          icon: 'star-filled',
           application: 'Balanced proportions, moderate luxury, sustainable choices',
           colors: ['#5b9bd5', '#fafafa', '#d2b48c'],
           examples: [
@@ -86,7 +86,7 @@ const CulturalGuide = () => {
         {
           name: 'Funktionalism',
           description: 'Form follows function in beautiful, practical design',
-          icon: BookOpen,
+          icon: 'pencil-alt',
           application: 'Multi-purpose furniture, clean lines, practical beauty',
           colors: ['#4299e1', '#ffffff', '#718096'],
           examples: [
@@ -107,7 +107,7 @@ const CulturalGuide = () => {
         {
           name: 'Bella Figura',
           description: 'Making a beautiful impression through style and presentation',
-          icon: Heart,
+          icon: 'heart-filled',
           application: 'Elegant presentations, refined details, visual sophistication',
           colors: ['#c53030', '#fffaf0', '#d69e2e'],
           examples: [
@@ -119,7 +119,7 @@ const CulturalGuide = () => {
         {
           name: 'Sprezzatura',
           description: 'Studied carelessness - effortless elegance',
-          icon: Lightbulb,
+          icon: 'star-filled',
           application: 'Relaxed sophistication, natural flow, effortless beauty',
           colors: ['#8B4513', '#F5E6D3', '#DEB887'],
           examples: [
@@ -131,7 +131,7 @@ const CulturalGuide = () => {
         {
           name: 'Convivialità',
           description: 'Creating warmth and togetherness through gathering',
-          icon: Users,
+          icon: 'users',
           application: 'Communal spaces, family-style arrangements, shared experiences',
           colors: ['#FF6B35', '#FFF8DC', '#CD853F'],
           examples: [
@@ -152,7 +152,7 @@ const CulturalGuide = () => {
         {
           name: 'Savoir-Vivre',
           description: 'The art of living well with grace and sophistication',
-          icon: Heart,
+          icon: 'heart-filled',
           application: 'Refined details, quality materials, sophisticated arrangements',
           colors: ['#2563eb', '#f8fafc', '#d4af37'],
           examples: [
@@ -164,7 +164,7 @@ const CulturalGuide = () => {
         {
           name: 'Joie de Vivre',
           description: 'Joy of living expressed through celebration and beauty',
-          icon: Lightbulb,
+          icon: 'star-filled',
           application: 'Vibrant celebrations, artistic expressions, joyful gatherings',
           colors: ['#ec4899', '#fef3c7', '#8b5cf6'],
           examples: [
@@ -176,7 +176,7 @@ const CulturalGuide = () => {
         {
           name: 'L\'Art de Recevoir',
           description: 'The art of receiving and hosting with elegance',
-          icon: Users,
+          icon: 'users',
           application: 'Gracious hospitality, thoughtful details, memorable experiences',
           colors: ['#1e40af', '#f1f5f9', '#f59e0b'],
           examples: [
@@ -198,7 +198,7 @@ const CulturalGuide = () => {
         <div className="text-center mb-16">
           <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 animate-gentle-float"
                style={{ backgroundColor: 'var(--cultural-accent)' }}>
-            <Globe className="w-8 h-8" style={{ color: 'var(--cultural-text)' }} />
+            <LineIcon name="world" size={32} style={{ color: 'var(--cultural-text)' }} />
           </div>
           <h2 className="hero-title" style={{ color: 'var(--cultural-text)' }}>
             Cultural Design Intelligence
@@ -296,7 +296,7 @@ const CulturalGuide = () => {
                       className="w-16 h-16 rounded-2xl flex items-center justify-center text-white"
                       style={{ backgroundColor: 'var(--cultural-accent)' }}
                     >
-                      <principle.icon className="w-8 h-8" />
+                      <LineIcon name={principle.icon} size={32} />
                     </div>
                     <div className="flex-1">
                       <h4 className="text-xl font-display font-semibold mb-2" style={{ color: 'var(--cultural-text)' }}>
@@ -349,7 +349,7 @@ const CulturalGuide = () => {
             <div className="card-cultural p-6 mt-8 border-2" style={{ borderColor: 'var(--cultural-accent)' }}>
               <div className="flex items-start space-x-3">
                 <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--cultural-accent)' }}>
-                  <Heart className="w-4 h-4" style={{ color: 'var(--cultural-text)' }} />
+                  <LineIcon name="heart-filled" size={16} style={{ color: 'var(--cultural-text)' }} />
                 </div>
                 <div>
                   <h4 className="font-semibold mb-2" style={{ color: 'var(--cultural-text)' }}>Cultural Sensitivity Reminder</h4>

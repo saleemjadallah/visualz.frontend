@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Palette, Camera, Globe, Home, Share, Download, ChevronRight, User, Settings, Eye, ShoppingBag } from 'lucide-react';
+import { LineIcon } from '@/lib/icons/lineicons';
 import { useCulturalTheme } from '../../../lib/hooks/useCulturalTheme';
 
 interface MobileNavigationProps {
@@ -28,10 +28,10 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({ isOpen, onClose, on
   }, [isOpen]);
 
   const navigationItems = [
-    { id: 'design', label: 'Design Studio', icon: Palette, description: 'Create your vision' },
-    { id: 'gallery', label: 'Gallery', icon: Eye, description: 'Explore designs' },
-    { id: 'cultural', label: 'Cultural Guide', icon: Globe, description: 'Learn traditions' },
-    { id: 'marketplace', label: 'Marketplace', icon: ShoppingBag, description: 'Find vendors' },
+    { id: 'design', label: 'Design Studio', icon: 'palette', description: 'Create your vision' },
+    { id: 'gallery', label: 'Gallery', icon: 'eye', description: 'Explore designs' },
+    { id: 'cultural', label: 'Cultural Guide', icon: 'world', description: 'Learn traditions' },
+    { id: 'marketplace', label: 'Marketplace', icon: 'shopping-basket', description: 'Find vendors' },
   ];
 
   const themeOptions = [
@@ -62,7 +62,7 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({ isOpen, onClose, on
           borderColor: 'var(--cultural-secondary)',
         }}
       >
-        <Menu className="w-6 h-6" style={{ color: 'var(--cultural-primary)' }} />
+        <LineIcon name="menu" size={24} style={{ color: 'var(--cultural-primary)' }} />
       </button>
 
       {/* Backdrop */}
@@ -92,7 +92,7 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({ isOpen, onClose, on
                 className="w-10 h-10 rounded-xl flex items-center justify-center"
                 style={{ background: 'var(--cultural-accent)' }}
               >
-                <Palette className="w-5 h-5" style={{ color: 'var(--cultural-primary)' }} />
+                <LineIcon name="palette" size={20} style={{ color: 'var(--cultural-primary)' }} />
               </div>
               <div>
                 <h2 className="text-lg font-semibold text-cultural-heading">DesignVisualz</h2>
@@ -103,14 +103,13 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({ isOpen, onClose, on
               onClick={onClose}
               className="p-2 rounded-lg hover:bg-gray-100 transition-colors touch:bg-gray-100 ios-optimized"
             >
-              <X className="w-6 h-6" style={{ color: 'var(--cultural-primary)' }} />
+              <LineIcon name="close" size={24} style={{ color: 'var(--cultural-primary)' }} />
             </button>
           </div>
 
           {/* Navigation Items */}
           <nav className="flex-1 px-4 py-6 space-y-2">
             {navigationItems.map((item) => {
-              const IconComponent = item.icon;
               return (
                 <button
                   key={item.id}
@@ -137,7 +136,7 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({ isOpen, onClose, on
                       background: activeSection === item.id ? 'var(--cultural-primary)' : 'var(--cultural-soft)',
                     }}
                   >
-                    <IconComponent className="w-6 h-6" style={{ 
+                    <LineIcon name={item.icon} size={24} style={{ 
                       color: activeSection === item.id ? 'var(--cultural-neutral)' : 'var(--cultural-primary)' 
                     }} />
                   </div>
@@ -145,7 +144,7 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({ isOpen, onClose, on
                     <h3 className="font-medium text-base">{item.label}</h3>
                     <p className="text-sm opacity-75">{item.description}</p>
                   </div>
-                  <ChevronRight className="w-5 h-5 opacity-50" />
+                  <LineIcon name="chevron-right" size={20} className="opacity-50" />
                 </button>
               );
             })}
@@ -192,11 +191,11 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({ isOpen, onClose, on
           <div className="p-4 border-t" style={{ borderColor: 'var(--cultural-secondary)' }}>
             <div className="flex items-center space-x-4">
               <button className="flex items-center space-x-2 text-sm text-cultural-text hover:text-cultural-accent transition-colors">
-                <User className="w-4 h-4" />
+                <LineIcon name="user" size={16} />
                 <span>Profile</span>
               </button>
               <button className="flex items-center space-x-2 text-sm text-cultural-text hover:text-cultural-accent transition-colors">
-                <Settings className="w-4 h-4" />
+                <LineIcon name="settings" size={16} />
                 <span>Settings</span>
               </button>
             </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Upload, Camera, Sparkles, Image, CheckCircle } from 'lucide-react';
+import { LineIcon } from '@/lib/icons/lineicons';
 
 const SpaceUploadInterface = () => {
   const [uploadState, setUploadState] = useState<'idle' | 'uploading' | 'success'>('idle');
@@ -18,17 +18,17 @@ const SpaceUploadInterface = () => {
 
   const features = [
     {
-      icon: Sparkles,
+      icon: 'star-filled',
       title: 'AI Space Analysis',
       description: 'Our AI analyzes dimensions, lighting, and architectural features'
     },
     {
-      icon: Image,
+      icon: 'image',
       title: 'Multi-Angle Capture',
       description: 'Upload multiple photos for comprehensive space understanding'
     },
     {
-      icon: CheckCircle,
+      icon: 'checkmark-circle',
       title: 'Instant Results',
       description: 'Get immediate feedback on your space potential and recommendations'
     }
@@ -41,7 +41,7 @@ const SpaceUploadInterface = () => {
         <div className="text-center mb-12">
           <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 animate-gentle-float"
                style={{ backgroundColor: 'var(--cultural-accent)' }}>
-            <Camera className="w-8 h-8" style={{ color: 'var(--cultural-text)' }} />
+            <LineIcon name="camera" size={32} style={{ color: 'var(--cultural-text)' }} />
           </div>
           <h2 className="hero-title" style={{ color: 'var(--cultural-text)' }}>
             Capture Your Space
@@ -57,7 +57,7 @@ const SpaceUploadInterface = () => {
             <div key={index} className="card-cultural p-6 text-center hover:transform hover:-translate-y-1 transition-all duration-300">
               <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4"
                    style={{ backgroundColor: 'var(--cultural-soft)' }}>
-                <feature.icon className="w-6 h-6" style={{ color: 'var(--cultural-accent)' }} />
+                <LineIcon name={feature.icon} size={24} style={{ color: 'var(--cultural-accent)' }} />
               </div>
               <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--cultural-text)' }}>
                 {feature.title}
@@ -81,7 +81,7 @@ const SpaceUploadInterface = () => {
           >
             {uploadState === 'idle' && (
               <>
-                <Upload className="w-16 h-16 mx-auto mb-4" style={{ color: 'var(--cultural-text-light)' }} />
+                <LineIcon name="upload" size={64} style={{ color: 'var(--cultural-text-light)' }} />
                 <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--cultural-text)' }}>
                   Drop photos here or click to upload
                 </h3>
@@ -109,7 +109,7 @@ const SpaceUploadInterface = () => {
             
             {uploadState === 'success' && (
               <>
-                <CheckCircle className="w-16 h-16 mx-auto mb-4" style={{ color: 'var(--cultural-accent)' }} />
+                <LineIcon name="checkmark-circle" size={64} style={{ color: 'var(--cultural-accent)' }} />
                 <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--cultural-text)' }}>
                   Analysis Complete!
                 </h3>
@@ -140,14 +140,14 @@ const SpaceUploadInterface = () => {
                 className="btn-cultural flex items-center"
                 onClick={handleFileUpload}
               >
-                <Upload className="w-4 h-4 mr-2" />
+                <LineIcon name="upload" size={16} className="mr-2" />
                 Choose Files
               </button>
               <button 
                 className="btn-cultural-secondary flex items-center"
                 onClick={handleFileUpload}
               >
-                <Camera className="w-4 h-4 mr-2" />
+                <LineIcon name="camera" size={16} className="mr-2" />
                 Take Photo
               </button>
             </div>

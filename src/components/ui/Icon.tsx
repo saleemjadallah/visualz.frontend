@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { ComponentSize } from '@/lib/types';
-import { LineIcons, StyledLineIcons, LineIconName } from '@/lib/icons';
+import { LineIcon as LineIconComponent } from '@/lib/icons/lineicons';
 
 // Core icon props
 export interface IconProps {
@@ -15,7 +15,7 @@ export interface IconProps {
 
 // LineIcon component props
 export interface LineIconProps extends Omit<IconProps, 'children'> {
-  name: LineIconName;
+  name: string;
   title?: string;
 }
 
@@ -91,16 +91,9 @@ const Icon = React.forwardRef<HTMLSpanElement, IconProps>(
 
 Icon.displayName = 'Icon';
 
-// LineIcon component - A bridge between Icon wrapper and LineIcons
+// LineIcon component - Use the LineIcon component from lineicons.tsx
 const LineIcon = React.forwardRef<HTMLSpanElement, LineIconProps>(
   ({ name, title, size = 'md', color = 'current', className, ...props }, ref) => {
-    const IconComponent = LineIcons[name];
-    
-    if (!IconComponent) {
-      console.warn(`LineIcon: Icon "${name}" not found in LineIcons mapping`);
-      return null;
-    }
-    
     const getSizeValue = () => {
       if (typeof size === 'number') return size;
       
@@ -122,11 +115,10 @@ const LineIcon = React.forwardRef<HTMLSpanElement, LineIconProps>(
         className={className}
         {...props}
       >
-        <IconComponent 
-          title={title}
+        <LineIconComponent 
+          name={name}
+          size={getSizeValue()}
           style={{
-            width: getSizeValue(),
-            height: getSizeValue(),
             display: 'block'
           }}
         />
@@ -326,5 +318,5 @@ IconBadge.displayName = 'IconBadge';
 
 export { Icon, LineIcon, CulturalIcon, IconButton, IconBadge };
 
-// Re-export LineIcons for direct usage
-export { LineIcons, StyledLineIcons } from '@/lib/icons';
+// Re-export LineIcon for direct usage
+export { LineIcon as LineIconComponent } from '@/lib/icons/lineicons';

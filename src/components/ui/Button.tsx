@@ -84,7 +84,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {loading && (
-          <LineIcon name="Refresh" className={cn(
+          <LineIcon name="reload" className={cn(
             'animate-spin',
             size === 'sm' ? 'w-3 h-3' : 
             size === 'md' ? 'w-4 h-4' :

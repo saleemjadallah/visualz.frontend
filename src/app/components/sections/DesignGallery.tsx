@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Search, LayoutGrid, Sparkles, Filter, Heart } from 'lucide-react';
+import { LineIcon } from '@/lib/icons/lineicons';
 
 const DesignGallery = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -94,7 +94,7 @@ const DesignGallery = () => {
         <div className="text-center mb-12">
           <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 animate-gentle-float"
                style={{ backgroundColor: 'var(--cultural-accent)' }}>
-            <Sparkles className="w-8 h-8" style={{ color: 'var(--cultural-text)' }} />
+            <LineIcon name="star-filled" size={32} style={{ color: 'var(--cultural-text)' }} />
           </div>
           <h2 className="hero-title" style={{ color: 'var(--cultural-text)' }}>
             Design Gallery
@@ -108,8 +108,8 @@ const DesignGallery = () => {
         <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-12 gap-6">
           <div className="flex items-center space-x-4">
             <div className="relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2" 
-                     style={{ color: 'var(--cultural-text-light)' }} />
+              <LineIcon name="search-alt" size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2" 
+                        style={{ color: 'var(--cultural-text-light)' }} />
               <input
                 type="text"
                 placeholder="Search designs..."
@@ -119,13 +119,14 @@ const DesignGallery = () => {
                 style={{ 
                   borderColor: 'var(--cultural-secondary)',
                   backgroundColor: 'var(--cultural-soft)',
-                  color: 'var(--cultural-text)',
-                  focusBorderColor: 'var(--cultural-accent)'
+                  color: 'var(--cultural-text)'
                 }}
+                onFocus={(e) => e.target.style.borderColor = 'var(--cultural-accent)'}
+                onBlur={(e) => e.target.style.borderColor = 'var(--cultural-secondary)'}
               />
             </div>
             <div className="flex items-center">
-              <Filter className="w-5 h-5 mr-2" style={{ color: 'var(--cultural-text-light)' }} />
+              <LineIcon name="funnel" size={20} className="mr-2" style={{ color: 'var(--cultural-text-light)' }} />
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
@@ -156,7 +157,7 @@ const DesignGallery = () => {
             <div key={design.id} className="card-cultural overflow-hidden group cursor-pointer transition-all duration-300 hover:transform hover:-translate-y-2">
               <div className="aspect-[4/3] flex items-center justify-center relative overflow-hidden"
                    style={{ backgroundColor: 'var(--cultural-soft)' }}>
-                <LayoutGrid className="w-12 h-12" style={{ color: 'var(--cultural-text-light)' }} />
+                <LineIcon name="grid-alt" size={48} style={{ color: 'var(--cultural-text-light)' }} />
                 
                 {/* Overlay with culture badge */}
                 <div className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-medium"
@@ -170,7 +171,7 @@ const DesignGallery = () => {
                 {/* Heart icon for favorites */}
                 <div className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100"
                      style={{ backgroundColor: 'var(--cultural-soft)' }}>
-                  <Heart className="w-4 h-4" style={{ color: 'var(--cultural-text)' }} />
+                  <LineIcon name="heart-filled" size={16} style={{ color: 'var(--cultural-text)' }} />
                 </div>
               </div>
               
@@ -224,7 +225,7 @@ const DesignGallery = () => {
           <div className="text-center py-12">
             <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
                  style={{ backgroundColor: 'var(--cultural-soft)' }}>
-              <Search className="w-8 h-8" style={{ color: 'var(--cultural-text-light)' }} />
+              <LineIcon name="search-alt" size={32} style={{ color: 'var(--cultural-text-light)' }} />
             </div>
             <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--cultural-text)' }}>
               No designs found
