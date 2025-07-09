@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   CheckCircle, 
@@ -12,7 +12,9 @@ import {
   DollarSign,
   Palette,
   Globe,
-  Sparkles
+  Sparkles,
+  Camera,
+  Home
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -20,6 +22,7 @@ import { Container } from '@/components/layout/Container';
 import { useTheme } from '@/components/cultural/ThemeProvider';
 import { cn } from '@/lib/utils';
 import { EventRequirementsForm as FormData, EventType, CultureType, BudgetTier } from '@/lib/types';
+import { SpaceImageUpload } from './SpaceImageUpload';
 
 interface EventRequirementsFormProps {
   onComplete?: (data: FormData) => void;
@@ -29,10 +32,11 @@ interface EventRequirementsFormProps {
 
 const steps = [
   { id: 1, title: 'Event Type', subtitle: 'What are you celebrating?', icon: <Calendar /> },
-  { id: 2, title: 'Cultural Style', subtitle: 'Choose your aesthetic', icon: <Globe /> },
-  { id: 3, title: 'Budget', subtitle: 'Investment level', icon: <DollarSign /> },
-  { id: 4, title: 'Guest Details', subtitle: 'Who\'s coming?', icon: <Users /> },
-  { id: 5, title: 'Style Preferences', subtitle: 'Finalize your vision', icon: <Palette /> }
+  { id: 2, title: 'Space Upload', subtitle: 'Upload your venue photos', icon: <Camera /> },
+  { id: 3, title: 'Cultural Style', subtitle: 'Choose your aesthetic', icon: <Globe /> },
+  { id: 4, title: 'Budget', subtitle: 'Investment level', icon: <DollarSign /> },
+  { id: 5, title: 'Guest Details', subtitle: 'Who\'s coming?', icon: <Users /> },
+  { id: 6, title: 'Style Preferences', subtitle: 'Finalize your vision', icon: <Palette /> }
 ];
 
 const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
@@ -46,6 +50,18 @@ const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
     step: 1,
     culturalPreferences: [],
     specialNeeds: [],
+    spaceData: {
+      hasPhotos: false,
+      manualEntry: {
+        length: 0,
+        width: 0,
+        height: 0,
+        roomType: '',
+        features: [],
+        limitations: []
+      },
+      aiAnalysis: null
+    },
     stylePreferences: {
       colors: [],
       materials: [],
@@ -64,15 +80,25 @@ const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
         setIsStepValid(!!formData.eventType);
         break;
       case 2:
-        setIsStepValid(!!formData.culturalPreferences && formData.culturalPreferences.length > 0);
+        // Space upload: valid if has photos OR manual entry is complete
+        setIsStepValid(Boolean(
+          (formData.spaceData?.hasPhotos === true) || 
+          (formData.spaceData?.manualEntry?.length && formData.spaceData.manualEntry.length > 0 && 
+           formData.spaceData?.manualEntry?.width && formData.spaceData.manualEntry.width > 0 && 
+           formData.spaceData?.manualEntry?.height && formData.spaceData.manualEntry.height > 0 &&
+           formData.spaceData?.manualEntry?.roomType && formData.spaceData.manualEntry.roomType.length > 0)
+        ));
         break;
       case 3:
-        setIsStepValid(!!formData.budgetTier);
+        setIsStepValid(!!formData.culturalPreferences && formData.culturalPreferences.length > 0);
         break;
       case 4:
-        setIsStepValid(!!formData.guestCount && formData.guestCount > 0);
+        setIsStepValid(!!formData.budgetTier);
         break;
       case 5:
+        setIsStepValid(!!formData.guestCount && formData.guestCount > 0);
+        break;
+      case 6:
         setIsStepValid(true); // Style preferences are optional
         break;
       default:
@@ -231,18 +257,24 @@ const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
                     />
                   )}
                   {currentStep === 2 && (
+                    <SpaceUploadStep 
+                      value={formData.spaceData}
+                      onChange={(spaceData) => updateFormData({ spaceData })}
+                    />
+                  )}
+                  {currentStep === 3 && (
                     <CulturalPreferencesStep 
                       value={formData.culturalPreferences || []}
                       onChange={(culturalPreferences) => updateFormData({ culturalPreferences })}
                     />
                   )}
-                  {currentStep === 3 && (
+                  {currentStep === 4 && (
                     <BudgetTierStep 
                       value={formData.budgetTier}
                       onChange={(budgetTier) => updateFormData({ budgetTier })}
                     />
                   )}
-                  {currentStep === 4 && (
+                  {currentStep === 5 && (
                     <GuestDetailsStep 
                       guestCount={formData.guestCount}
                       ageRange={formData.ageRange}
@@ -250,7 +282,7 @@ const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
                       onChange={(updates) => updateFormData(updates)}
                     />
                   )}
-                  {currentStep === 5 && (
+                  {currentStep === 6 && (
                     <StylePreferencesStep 
                       value={formData.stylePreferences}
                       onChange={(stylePreferences) => updateFormData({ stylePreferences })}
@@ -1212,6 +1244,247 @@ const StylePreferencesStep: React.FC<{
               <div>
                 <span className="font-medium text-primary-700">Styles: </span>
                 <span className="text-primary-600">{value.styles.length} selected</span>
+              </div>
+            )}
+          </div>
+        </motion.div>
+      )}
+    </motion.div>
+  );
+};
+
+// Space Upload Step Component
+interface SpaceUploadStepProps {
+  value: any;
+  onChange: (value: any) => void;
+}
+
+const SpaceUploadStep: React.FC<SpaceUploadStepProps> = ({ value, onChange }) => {
+  const [uploadMode, setUploadMode] = useState<'photo' | 'manual'>('photo');
+  const [manualData, setManualData] = useState({
+    length: value?.manualEntry?.length || '',
+    width: value?.manualEntry?.width || '',
+    height: value?.manualEntry?.height || '',
+    roomType: value?.manualEntry?.roomType || '',
+    features: value?.manualEntry?.features || [],
+    limitations: value?.manualEntry?.limitations || []
+  });
+
+  const handleAnalysisComplete = useCallback((analysis: any) => {
+    onChange({
+      ...value,
+      hasPhotos: true,
+      aiAnalysis: analysis
+    });
+  }, [value, onChange]);
+
+  const handleDimensionsExtracted = useCallback((dimensions: any) => {
+    setManualData(prev => ({
+      ...prev,
+      length: dimensions.length,
+      width: dimensions.width,
+      height: dimensions.height
+    }));
+  }, []);
+
+  const handleManualSubmit = useCallback(() => {
+    onChange({
+      ...value,
+      hasPhotos: false,
+      manualEntry: {
+        length: parseFloat(manualData.length) || 0,
+        width: parseFloat(manualData.width) || 0,
+        height: parseFloat(manualData.height) || 0,
+        roomType: manualData.roomType,
+        features: manualData.features,
+        limitations: manualData.limitations
+      }
+    });
+  }, [value, onChange, manualData]);
+
+  useEffect(() => {
+    if (uploadMode === 'manual') {
+      handleManualSubmit();
+    }
+  }, [manualData, uploadMode, handleManualSubmit]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      className="space-y-6"
+    >
+      <div className="text-center mb-8">
+        <h3 className="text-2xl font-bold text-gray-800 mb-2">
+          Tell us about your space
+        </h3>
+        <p className="text-gray-600">
+          Upload photos for AI analysis or enter dimensions manually
+        </p>
+      </div>
+
+      {/* Upload Mode Toggle */}
+      <div className="flex justify-center mb-6">
+        <div className="bg-gray-100 p-1 rounded-lg">
+          <button
+            type="button"
+            onClick={() => setUploadMode('photo')}
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              uploadMode === 'photo'
+                ? 'bg-white text-gray-900 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            <Camera className="w-4 h-4 mr-2 inline" />
+            Upload Photos
+          </button>
+          <button
+            type="button"
+            onClick={() => setUploadMode('manual')}
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              uploadMode === 'manual'
+                ? 'bg-white text-gray-900 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            <Home className="w-4 h-4 mr-2 inline" />
+            Manual Entry
+          </button>
+        </div>
+      </div>
+
+      {/* Photo Upload Mode */}
+      {uploadMode === 'photo' && (
+        <SpaceImageUpload
+          onAnalysisComplete={handleAnalysisComplete}
+          onDimensionsExtracted={handleDimensionsExtracted}
+        />
+      )}
+
+      {/* Manual Entry Mode */}
+      {uploadMode === 'manual' && (
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Length (feet)
+              </label>
+              <input
+                type="number"
+                value={manualData.length}
+                onChange={(e) => setManualData(prev => ({ ...prev, length: e.target.value }))}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                placeholder="20"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Width (feet)
+              </label>
+              <input
+                type="number"
+                value={manualData.width}
+                onChange={(e) => setManualData(prev => ({ ...prev, width: e.target.value }))}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                placeholder="15"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Height (feet)
+              </label>
+              <input
+                type="number"
+                value={manualData.height}
+                onChange={(e) => setManualData(prev => ({ ...prev, height: e.target.value }))}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                placeholder="9"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Room Type
+            </label>
+            <select
+              value={manualData.roomType}
+              onChange={(e) => setManualData(prev => ({ ...prev, roomType: e.target.value }))}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+            >
+              <option value="">Select room type</option>
+              <option value="ballroom">Ballroom</option>
+              <option value="conference-room">Conference Room</option>
+              <option value="banquet-hall">Banquet Hall</option>
+              <option value="outdoor-pavilion">Outdoor Pavilion</option>
+              <option value="hotel-suite">Hotel Suite</option>
+              <option value="restaurant">Restaurant</option>
+              <option value="community-center">Community Center</option>
+              <option value="home-living-room">Home Living Room</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Features (comma-separated)
+            </label>
+            <input
+              type="text"
+              value={manualData.features.join(', ')}
+              onChange={(e) => setManualData(prev => ({ 
+                ...prev, 
+                features: e.target.value.split(',').map(f => f.trim()).filter(Boolean) 
+              }))}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+              placeholder="Large windows, hardwood floors, high ceilings"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Limitations (comma-separated)
+            </label>
+            <input
+              type="text"
+              value={manualData.limitations.join(', ')}
+              onChange={(e) => setManualData(prev => ({ 
+                ...prev, 
+                limitations: e.target.value.split(',').map(l => l.trim()).filter(Boolean) 
+              }))}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+              placeholder="No nails in walls, limited electrical outlets"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Summary */}
+      {((value?.hasPhotos && value?.aiAnalysis) || (value?.manualEntry?.length > 0)) && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-6 bg-green-50 border border-green-200 rounded-xl"
+        >
+          <h4 className="font-medium text-green-800 mb-3">
+            Space Information Captured
+          </h4>
+          <div className="grid md:grid-cols-2 gap-4 text-sm">
+            {value?.hasPhotos && value?.aiAnalysis && (
+              <div>
+                <span className="font-medium text-green-700">AI Analysis: </span>
+                <span className="text-green-600">
+                  {Math.round(value.aiAnalysis.dimensions?.estimatedLength || 0)}' × {Math.round(value.aiAnalysis.dimensions?.estimatedWidth || 0)}' × {Math.round(value.aiAnalysis.dimensions?.estimatedHeight || 0)}'
+                </span>
+              </div>
+            )}
+            {value?.manualEntry?.length > 0 && (
+              <div>
+                <span className="font-medium text-green-700">Manual Entry: </span>
+                <span className="text-green-600">
+                  {value.manualEntry.length}' × {value.manualEntry.width}' × {value.manualEntry.height}' {value.manualEntry.roomType}
+                </span>
               </div>
             )}
           </div>

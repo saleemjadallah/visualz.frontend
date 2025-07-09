@@ -170,6 +170,18 @@ export interface EventRequirementsForm {
   guestCount: number;
   ageRange: string;
   specialNeeds: string[];
+  spaceData: {
+    hasPhotos: boolean;
+    manualEntry: {
+      length: number;
+      width: number;
+      height: number;
+      roomType: string;
+      features: string[];
+      limitations: string[];
+    };
+    aiAnalysis: any;
+  };
   stylePreferences: {
     colors: string[];
     materials: string[];

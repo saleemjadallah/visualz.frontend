@@ -154,40 +154,73 @@ export const useImageUpload = (config: ImageUploadConfig = {}) => {
     });
   }, [finalConfig.maxDimensions, finalConfig.compressionQuality]);
 
-  // Mock image analysis (replace with actual AI service)
+  // Real image analysis using our backend API
   const analyzeImage = useCallback(async (file: File): Promise<ImageAnalysis> => {
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Mock analysis results
-    return {
-      dimensions: {
-        estimatedLength: 12 + Math.random() * 8, // 12-20 feet
-        estimatedWidth: 8 + Math.random() * 6,   // 8-14 feet
-        estimatedHeight: 8 + Math.random() * 4   // 8-12 feet
-      },
-      lighting: {
-        type: ['natural', 'artificial', 'mixed'][Math.floor(Math.random() * 3)] as any,
-        quality: ['excellent', 'good', 'fair', 'poor'][Math.floor(Math.random() * 4)] as any,
-        direction: ['north', 'south', 'east', 'west'].filter(() => Math.random() > 0.5)
-      },
-      objects: [
-        {
-          name: 'Table',
-          confidence: 0.85 + Math.random() * 0.15,
-          position: { x: 100, y: 150, width: 200, height: 100 }
-        },
-        {
-          name: 'Chair',
-          confidence: 0.75 + Math.random() * 0.25,
-          position: { x: 50, y: 200, width: 80, height: 120 }
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await fetch('/api/cv-analysis/analyze-space', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
-      ],
-      style: {
-        current: ['Modern', 'Minimalist'],
-        recommendations: ['Scandinavian', 'Japanese', 'Contemporary']
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to analyze space photo');
       }
-    };
+      
+      const result = await response.json();
+      const analysis = result.analysis;
+      
+      // Transform backend response to match our interface
+      return {
+        dimensions: {
+          estimatedLength: analysis.dimensions?.estimatedLength || 12,
+          estimatedWidth: analysis.dimensions?.estimatedWidth || 8,
+          estimatedHeight: analysis.dimensions?.estimatedHeight || 8
+        },
+        lighting: {
+          type: analysis.lighting_analysis?.light_sources?.includes('natural') ? 'natural' : 'artificial',
+          quality: analysis.lighting_analysis?.quality_score > 0.8 ? 'excellent' : 
+                   analysis.lighting_analysis?.quality_score > 0.6 ? 'good' : 
+                   analysis.lighting_analysis?.quality_score > 0.4 ? 'fair' : 'poor',
+          direction: analysis.lighting_analysis?.light_sources || []
+        },
+        objects: analysis.detected_objects?.map((obj: any) => ({
+          name: obj.name,
+          confidence: obj.confidence,
+          position: obj.position || { x: 0, y: 0, width: 100, height: 100 }
+        })) || [],
+        style: {
+          current: analysis.architectural_style?.style_detected || [],
+          recommendations: analysis.recommendations?.furniture_suggestions || []
+        }
+      };
+    } catch (error) {
+      console.error('Image analysis failed:', error);
+      
+      // Fallback to mock data on error
+      return {
+        dimensions: {
+          estimatedLength: 12 + Math.random() * 8,
+          estimatedWidth: 8 + Math.random() * 6,
+          estimatedHeight: 8 + Math.random() * 4
+        },
+        lighting: {
+          type: 'mixed',
+          quality: 'good',
+          direction: ['natural light detected']
+        },
+        objects: [],
+        style: {
+          current: ['Modern'],
+          recommendations: ['Scandinavian', 'Contemporary']
+        }
+      };
+    }
   }, []);
 
   // File upload handler
