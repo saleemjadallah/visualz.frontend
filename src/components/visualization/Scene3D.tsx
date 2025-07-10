@@ -18,7 +18,7 @@ import { LightingSystem } from './LightingSystem';
 import { PostProcessing, EnhancedLighting } from './PostProcessing';
 import { PhysicsWorld, PhysicsRoom, PhysicsPerformanceMonitor } from './PhysicsSystem';
 import { PhysicsFurnitureItem } from './PhysicsFurnitureItem';
-import { LODFurniture, PerformanceStats, usePerformanceOptimization } from './LODSystem';
+import { LODFurniture } from './LODSystem';
 import { HDRIEnvironment, EnvironmentControls, EnvironmentEffects, HDRI_PRESETS } from './HDRIEnvironment';
 import { 
   WebGLEngineManager, 
@@ -163,7 +163,7 @@ export function Scene3D({
   const [showEnvironmentControls, setShowEnvironmentControls] = useState(false);
   const [currentTheme, setCurrentTheme] = useState(culturalTheme);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const { recommendedLODDistance } = usePerformanceOptimization();
+  const recommendedLODDistance = 30; // Default LOD distance
   
   // WebGL optimization state - will be initialized in onCreated
   const [webglOptimization, setWebglOptimization] = useState<any>(null);
@@ -483,8 +483,7 @@ export function Scene3D({
         </div>
       )}
 
-      {/* Performance Stats (Development) */}
-      {enablePerformanceOptimization && <PerformanceStats />}
+      {/* Performance Stats removed to avoid R3F hook conflicts */}
 
       {/* Environment Controls */}
       {showEnvironmentControls && (
