@@ -483,9 +483,15 @@ export class GLTFModelManager {
     
     try {
       await loadPromise;
-      console.log(`Successfully preloaded model ${category}`);
+      // Only log success in development to reduce production console noise
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`✅ Successfully preloaded model ${category}`);
+      }
     } catch (error) {
-      console.warn(`Failed to preload model ${category}:`, error);
+      // Reduce noise in production - these 404s are expected in deployed environments
+      if (process.env.NODE_ENV === 'development') {
+        console.warn(`⚠️ Failed to preload model ${category}:`, error);
+      }
     } finally {
       this.loadingPromises.delete(category);
       this.currentLoads--;

@@ -61,14 +61,6 @@ const EventRequirementsForm = () => {
     <section className="section-padding bg-white">
       <div className="container-custom">
         <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-12 animate-fade-in">
-            <h2 className="text-4xl lg:text-5xl font-display font-bold text-gray-900 mb-6">
-              Tell Us About Your Vision
-            </h2>
-            <p className="text-xl text-gray-600 mb-8">
-              Help our AI understand your cultural preferences and design dreams
-            </p>
             
             {/* Progress Bar */}
             <div className="relative max-w-md mx-auto">
