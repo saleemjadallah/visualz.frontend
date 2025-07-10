@@ -26,6 +26,8 @@ const FurnitureLibrary = dynamic(() => import('./FurnitureLoader').then(mod => (
 
 import { useCulturalTheme } from './CulturalThemeManager';
 import { useFurnitureLibrary } from './FurnitureLoader';
+import { ModelValidationPanel } from './ModelValidator';
+import { ModelInstallationGuide, ModelPreloader } from './GLTFModels';
 
 // Placeholder component for 2D view
 const Canvas2DPlaceholder = () => (
@@ -105,6 +107,8 @@ export function DesignVisualization({
   const [culturalTheme, setCulturalTheme] = useState<string>('modern');
   const [showThemeSelector, setShowThemeSelector] = useState(false);
   const [showFurnitureLibrary, setShowFurnitureLibrary] = useState(false);
+  const [showModelValidator, setShowModelValidator] = useState(false);
+  const [showModelGuide, setShowModelGuide] = useState(false);
   
   // Cultural theme management
   const { applyTheme, currentTheme } = useCulturalTheme(culturalTheme);
@@ -201,6 +205,9 @@ export function DesignVisualization({
 
   return (
     <div className="w-full h-full bg-gray-50 rounded-lg overflow-hidden">
+      {/* Model Preloader */}
+      <ModelPreloader preloadAll={false} />
+      
       {/* Enhanced View Mode Controls */}
       <div className="bg-white border-b border-gray-200 p-4">
         <div className="flex items-center justify-between">
@@ -254,6 +261,14 @@ export function DesignVisualization({
               className="px-4 py-2 rounded-lg text-sm font-medium bg-green-100 text-green-700 hover:bg-green-200 transition-colors"
             >
               Add Furniture
+            </button>
+            
+            {/* Model Tools Button */}
+            <button
+              onClick={() => setShowModelGuide(!showModelGuide)}
+              className="px-4 py-2 rounded-lg text-sm font-medium bg-orange-100 text-orange-700 hover:bg-orange-200 transition-colors"
+            >
+              3D Models
             </button>
           </div>
         </div>
@@ -325,6 +340,37 @@ export function DesignVisualization({
                   culturalTheme={culturalTheme}
                   onModelSelect={handleAddFurnitureFromLibrary}
                 />
+              </div>
+            )}
+            
+            {/* Model Guide Panel */}
+            {showModelGuide && (
+              <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg max-w-lg z-10">
+                <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                  <h3 className="font-semibold text-gray-800">3D Model Management</h3>
+                  <button
+                    onClick={() => setShowModelGuide(false)}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    ×
+                  </button>
+                </div>
+                <div className="p-4 space-y-4">
+                  <ModelInstallationGuide />
+                  <div className="border-t border-gray-200 pt-4">
+                    <button
+                      onClick={() => setShowModelValidator(!showModelValidator)}
+                      className="w-full px-4 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-sm"
+                    >
+                      {showModelValidator ? 'Hide' : 'Show'} Validation Details
+                    </button>
+                    {showModelValidator && (
+                      <div className="mt-3">
+                        <ModelValidationPanel />
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             )}
           </div>
