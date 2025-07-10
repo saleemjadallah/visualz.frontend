@@ -6,6 +6,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useTextureManager } from './TextureManager';
 import { FurnitureModel } from './FurnitureModels';
+import { GLTFModel } from './GLTFModels';
 
 interface FurnitureItem3DProps {
   furniture: {
@@ -245,13 +246,16 @@ export function FurnitureItem3D({
         </mesh>
       )}
 
-      {/* Enhanced Furniture Model */}
-      <FurnitureModel
+      {/* Realistic GLTF Model with PBR fallback */}
+      <GLTFModel
         category={furniture.category}
-        dimensions={dimensions}
-        culturalTheme={culturalTheme}
         position={[0, 0, 0]}
         rotation={[0, 0, 0]}
+        scale={[dimensions.width / 2, dimensions.height / 2, dimensions.depth / 2]}
+        culturalTheme={culturalTheme}
+        onPointerOver={handlePointerOver}
+        onPointerOut={handlePointerOut}
+        onClick={(event) => handleClick(event)}
       />
 
       {/* Furniture label */}

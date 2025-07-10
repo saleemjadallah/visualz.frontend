@@ -15,6 +15,11 @@ import { Room3D } from './Room3D';
 import { EventRoom } from './EventRoom';
 import { FurnitureItem3D } from './FurnitureItem3D';
 import { LightingSystem } from './LightingSystem';
+import { PostProcessing, EnhancedLighting } from './PostProcessing';
+import { PhysicsWorld, PhysicsRoom, PhysicsPerformanceMonitor } from './PhysicsSystem';
+import { PhysicsFurnitureItem } from './PhysicsFurnitureItem';
+import { LODFurniture, PerformanceStats, usePerformanceOptimization } from './LODSystem';
+import { HDRIEnvironment, EnvironmentControls, EnvironmentEffects, HDRI_PRESETS } from './HDRIEnvironment';
 
 interface Scene3DProps {
   roomDimensions: {
@@ -51,6 +56,11 @@ interface Scene3DProps {
   onFurnitureSelect?: (furnitureId: string) => void;
   onFurnitureMove?: (furnitureId: string, position: { x: number; y: number }) => void;
   culturalTheme?: string;
+  enablePhysics?: boolean;
+  enableSnapping?: boolean;
+  enableLOD?: boolean;
+  hdriPreset?: keyof typeof HDRI_PRESETS;
+  enablePerformanceOptimization?: boolean;
 }
 
 // Enhanced Camera Controller with preset views
@@ -104,13 +114,23 @@ export function Scene3D({
   lightingPlan,
   onFurnitureSelect,
   onFurnitureMove,
-  culturalTheme = 'modern'
+  culturalTheme = 'modern',
+  enablePhysics = true,
+  enableSnapping = true,
+  enableLOD = true,
+  hdriPreset = 'studio',
+  enablePerformanceOptimization = true
 }: Scene3DProps) {
   const [selectedFurniture, setSelectedFurniture] = useState<string | null>(null);
   const [cameraPreset, setCameraPreset] = useState<string>('overview');
   const [isDragging, setIsDragging] = useState(false);
   const [dragObject, setDragObject] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
+  const [currentHDRIPreset, setCurrentHDRIPreset] = useState<keyof typeof HDRI_PRESETS>(hdriPreset);
+  const [hdriIntensity, setHdriIntensity] = useState(1.0);
+  const [hdriRotation, setHdriRotation] = useState(0);
+  const [showEnvironmentControls, setShowEnvironmentControls] = useState(false);
+  const { recommendedLODDistance } = usePerformanceOptimization();
 
   useEffect(() => {
     setIsClient(true);
@@ -147,11 +167,18 @@ export function Scene3D({
           position: [15, 12, 15]
         }}
         gl={{ 
-          antialias: true
+          antialias: true,
+          powerPreference: "high-performance",
+          alpha: false,
+          stencil: false,
+          depth: true
         }}
         onCreated={({ gl }) => {
           gl.shadowMap.enabled = true;
           gl.shadowMap.type = THREE.PCFSoftShadowMap;
+          gl.outputColorSpace = THREE.SRGBColorSpace;
+          gl.toneMapping = THREE.ACESFilmicToneMapping;
+          gl.toneMappingExposure = 1.0;
         }}
       >
         <Suspense fallback={<LoadingFallback />}>
@@ -170,15 +197,78 @@ export function Scene3D({
             target={[roomDimensions.length / 2, 0, roomDimensions.width / 2]}
           />
 
-          {/* Lighting System */}
+          {/* Physics World Wrapper */}
+          {enablePhysics ? (
+            <PhysicsWorld gravity={[0, -9.81, 0]} iterations={5}>
+              <PhysicsSceneContent 
+                roomDimensions={roomDimensions}
+                furnitureItems={furnitureItems}
+                colorPalette={colorPalette}
+                lightingPlan={lightingPlan}
+                selectedFurniture={selectedFurniture}
+                culturalTheme={culturalTheme}
+                enableSnapping={enableSnapping}
+                enableLOD={enableLOD}
+                recommendedLODDistance={recommendedLODDistance}
+                onFurnitureClick={handleFurnitureClick}
+                onFurnitureMove={handleFurnitureMove}
+              />
+              <PhysicsPerformanceMonitor />
+            </PhysicsWorld>
+          ) : (
+            <StandardSceneContent 
+              roomDimensions={roomDimensions}
+              furnitureItems={furnitureItems}
+              colorPalette={colorPalette}
+              lightingPlan={lightingPlan}
+              selectedFurniture={selectedFurniture}
+              culturalTheme={culturalTheme}
+              enableLOD={enableLOD}
+              recommendedLODDistance={recommendedLODDistance}
+              onFurnitureClick={handleFurnitureClick}
+              onFurnitureMove={handleFurnitureMove}
+            />
+          )}
+
+          {/* HDRI Environment System */}
+          <HDRIEnvironment 
+            preset={currentHDRIPreset}
+            culturalTheme={culturalTheme}
+            intensity={hdriIntensity}
+            rotation={hdriRotation}
+            background={true}
+            enableReflections={true}
+            enableRefraction={false}
+          />
+          
+          {/* Environment Effects */}
+          <EnvironmentEffects 
+            preset={currentHDRIPreset}
+            enableVolumetricLighting={true}
+            enableGodRays={false}
+            fogDensity={0.01}
+          />
+
+          {/* Enhanced Lighting System with Post-Processing */}
+          <EnhancedLighting />
           <LightingSystem 
             lightingPlan={lightingPlan}
             roomDimensions={roomDimensions}
             culturalTheme={culturalTheme}
           />
-
-          {/* Environment */}
-          <Environment preset="studio" />
+          
+          {/* Ultra-Realistic Post-Processing Pipeline */}
+          <PostProcessing
+            enableSSAO={true}
+            enableBloom={true}
+            enableAntialiasing={true}
+            enableToneMapping={true}
+            bloomStrength={0.3}
+            bloomRadius={0.4}
+            bloomThreshold={0.85}
+            ssaoRadius={0.1}
+            ssaoIntensity={0.5}
+          />
           
           {/* Grid for reference */}
           <Grid
@@ -195,26 +285,6 @@ export function Scene3D({
             infiniteGrid={false}
           />
 
-          {/* Enhanced Room with Cultural Theme */}
-          <EventRoom
-            width={roomDimensions.length}
-            height={roomDimensions.height}
-            depth={roomDimensions.width}
-            colorPalette={colorPalette}
-            culturalTheme={culturalTheme}
-          />
-
-          {/* Furniture Items */}
-          {furnitureItems.map((item) => (
-            <FurnitureItem3D
-              key={item.id}
-              furniture={item}
-              isSelected={selectedFurniture === item.id}
-              onClick={() => handleFurnitureClick(item.id)}
-              onMove={(position) => handleFurnitureMove(item.id, position)}
-              culturalTheme={culturalTheme}
-            />
-          ))}
 
           {/* Room Dimensions Labels */}
           <Text
@@ -296,6 +366,184 @@ export function Scene3D({
           </button>
         </div>
       )}
+
+      {/* Performance Stats (Development) */}
+      {enablePerformanceOptimization && <PerformanceStats />}
+
+      {/* Environment Controls */}
+      {showEnvironmentControls && (
+        <div className="absolute top-4 right-4">
+          <EnvironmentControls
+            currentPreset={currentHDRIPreset}
+            onPresetChange={setCurrentHDRIPreset}
+            intensity={hdriIntensity}
+            onIntensityChange={setHdriIntensity}
+            rotation={hdriRotation}
+            onRotationChange={setHdriRotation}
+            background={true}
+            onBackgroundChange={() => {}}
+          />
+        </div>
+      )}
+
+      {/* Environment Toggle Button */}
+      <button
+        onClick={() => setShowEnvironmentControls(!showEnvironmentControls)}
+        className="absolute bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-lg transition-colors"
+      >
+        Environment Settings
+      </button>
     </div>
+  );
+}
+
+// Physics-enabled scene content
+function PhysicsSceneContent({
+  roomDimensions,
+  furnitureItems,
+  colorPalette,
+  lightingPlan,
+  selectedFurniture,
+  culturalTheme,
+  enableSnapping,
+  enableLOD,
+  recommendedLODDistance,
+  onFurnitureClick,
+  onFurnitureMove
+}: any) {
+  return (
+    <>
+      {/* Physics Room Boundaries */}
+      <PhysicsRoom 
+        width={roomDimensions.length}
+        height={roomDimensions.height}
+        depth={roomDimensions.width}
+      />
+
+      {/* Enhanced Room with Cultural Theme */}
+      <EventRoom
+        width={roomDimensions.length}
+        height={roomDimensions.height}
+        depth={roomDimensions.width}
+        colorPalette={colorPalette}
+        culturalTheme={culturalTheme}
+      />
+
+      {/* Physics-enabled Furniture Items with LOD */}
+      {furnitureItems.map((item: any) => (
+        enableLOD ? (
+          <LODFurniture
+            key={item.id}
+            category={item.category}
+            position={[item.x, 0, item.y]}
+            rotation={[0, (item.rotation * Math.PI) / 180, 0]}
+            scale={[
+              item.width / 2,
+              getFurnitureHeight(item.category) / 2,
+              item.height / 2
+            ]}
+            culturalTheme={culturalTheme}
+            maxDistance={recommendedLODDistance}
+            onPointerOver={() => {}}
+            onPointerOut={() => {}}
+            onClick={() => onFurnitureClick(item.id)}
+          />
+        ) : (
+          <PhysicsFurnitureItem
+            key={item.id}
+            furniture={item}
+            isSelected={selectedFurniture === item.id}
+            onClick={() => onFurnitureClick(item.id)}
+            onMove={(position) => onFurnitureMove(item.id, position)}
+            culturalTheme={culturalTheme}
+            enablePhysics={true}
+            enableSnapping={enableSnapping}
+            gridSize={0.5}
+          />
+        )
+      ))}
+    </>
+  );
+}
+
+// Standard scene content (fallback without physics)
+// Helper function for furniture height
+function getFurnitureHeight(category: string): number {
+  switch (category) {
+    case 'table':
+    case 'desk':
+      return 2.5;
+    case 'chair':
+    case 'seating':
+      return 3;
+    case 'sofa':
+    case 'couch':
+      return 2.8;
+    case 'bed':
+      return 2;
+    case 'cabinet':
+    case 'dresser':
+      return 3.5;
+    case 'bookshelf':
+      return 6;
+    default:
+      return 2.5;
+  }
+}
+
+function StandardSceneContent({
+  roomDimensions,
+  furnitureItems,
+  colorPalette,
+  lightingPlan,
+  selectedFurniture,
+  culturalTheme,
+  enableLOD,
+  recommendedLODDistance,
+  onFurnitureClick,
+  onFurnitureMove
+}: any) {
+  return (
+    <>
+      {/* Enhanced Room with Cultural Theme */}
+      <EventRoom
+        width={roomDimensions.length}
+        height={roomDimensions.height}
+        depth={roomDimensions.width}
+        colorPalette={colorPalette}
+        culturalTheme={culturalTheme}
+      />
+
+      {/* Standard Furniture Items with Optional LOD */}
+      {furnitureItems.map((item: any) => (
+        enableLOD ? (
+          <LODFurniture
+            key={item.id}
+            category={item.category}
+            position={[item.x, 0, item.y]}
+            rotation={[0, (item.rotation * Math.PI) / 180, 0]}
+            scale={[
+              item.width / 2,
+              getFurnitureHeight(item.category) / 2,
+              item.height / 2
+            ]}
+            culturalTheme={culturalTheme}
+            maxDistance={recommendedLODDistance}
+            onPointerOver={() => {}}
+            onPointerOut={() => {}}
+            onClick={() => onFurnitureClick(item.id)}
+          />
+        ) : (
+          <FurnitureItem3D
+            key={item.id}
+            furniture={item}
+            isSelected={selectedFurniture === item.id}
+            onClick={() => onFurnitureClick(item.id)}
+            onMove={(position) => onFurnitureMove(item.id, position)}
+            culturalTheme={culturalTheme}
+          />
+        )
+      ))}
+    </>
   );
 }
