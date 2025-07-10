@@ -20,6 +20,31 @@ import { PhysicsWorld, PhysicsRoom, PhysicsPerformanceMonitor } from './PhysicsS
 import { PhysicsFurnitureItem } from './PhysicsFurnitureItem';
 import { LODFurniture, PerformanceStats, usePerformanceOptimization } from './LODSystem';
 import { HDRIEnvironment, EnvironmentControls, EnvironmentEffects, HDRI_PRESETS } from './HDRIEnvironment';
+import { 
+  WebGLEngineManager, 
+  WebGLCapabilities, 
+  PerformanceMonitor, 
+  WebGLErrorHandler,
+  useWebGLEngine 
+} from './WebGLEngine';
+import { 
+  MobileWebGLOptimizer, 
+  VenueRenderer, 
+  FurnitureRenderer,
+  useWebGLOptimization 
+} from './WebGLOptimization';
+import { 
+  CulturalThemeRenderer,
+  CulturalThemeSelector,
+  useCulturalThemeRenderer,
+  ThemeTransitionManager
+} from './WebGLCulturalThemes';
+import { 
+  WebGLDebugger, 
+  RealTimePerformanceMonitor,
+  WebGLDebugPanel,
+  useWebGLDebugger 
+} from './WebGLDebugger';
 
 interface Scene3DProps {
   roomDimensions: {
@@ -61,17 +86,33 @@ interface Scene3DProps {
   enableLOD?: boolean;
   hdriPreset?: keyof typeof HDRI_PRESETS;
   enablePerformanceOptimization?: boolean;
+  enableWebGLOptimization?: boolean;
+  enableCulturalThemeOptimization?: boolean;
+  enableWebGLDebugging?: boolean;
 }
 
-// Enhanced Camera Controller with preset views
+// Enhanced WebGL-Optimized Camera Controller
 function CameraController({ preset = 'overview' }: { preset?: string }) {
-  const { camera, controls } = useThree();
+  const { camera, controls, gl } = useThree();
+  const engineManager = useWebGLEngine();
   
   useEffect(() => {
     if (controls) {
       setViewPreset(preset);
     }
-  }, [preset, controls]);
+    
+    // Initialize WebGL optimizations
+    if (engineManager) {
+      const performanceMonitor = engineManager.getPerformanceMonitor();
+      performanceMonitor.addCallback((stats) => {
+        // Handle performance optimization based on stats
+        if (stats.fps < 30) {
+          // Auto-adjust quality for better performance
+          gl.setPixelRatio(Math.min(window.devicePixelRatio, 1));
+        }
+      });
+    }
+  }, [preset, controls, engineManager, gl]);
   
   const setViewPreset = (preset: string) => {
     switch (preset) {
@@ -119,7 +160,10 @@ export function Scene3D({
   enableSnapping = true,
   enableLOD = true,
   hdriPreset = 'studio',
-  enablePerformanceOptimization = true
+  enablePerformanceOptimization = true,
+  enableWebGLOptimization = true,
+  enableCulturalThemeOptimization = true,
+  enableWebGLDebugging = false
 }: Scene3DProps) {
   const [selectedFurniture, setSelectedFurniture] = useState<string | null>(null);
   const [cameraPreset, setCameraPreset] = useState<string>('overview');
@@ -130,7 +174,14 @@ export function Scene3D({
   const [hdriIntensity, setHdriIntensity] = useState(1.0);
   const [hdriRotation, setHdriRotation] = useState(0);
   const [showEnvironmentControls, setShowEnvironmentControls] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState(culturalTheme);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const { recommendedLODDistance } = usePerformanceOptimization();
+  
+  // WebGL optimization hooks
+  const webglOptimization = useWebGLOptimization(null); // Will be set after Canvas is created
+  const culturalThemeRenderer = useCulturalThemeRenderer(null);
+  const webglDebugger = useWebGLDebugger(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -156,9 +207,30 @@ export function Scene3D({
     onFurnitureMove?.(furnitureId, position);
   };
 
+  const handleThemeChange = async (newTheme: string) => {
+    if (!culturalThemeRenderer || isTransitioning) return;
+    
+    setIsTransitioning(true);
+    const transitionManager = new ThemeTransitionManager(culturalThemeRenderer.renderer);
+    
+    await transitionManager.transitionToTheme(
+      scene, // This would need to be passed from Canvas context
+      currentTheme,
+      newTheme,
+      culturalThemeRenderer,
+      (progress) => {
+        // Optional: Show transition progress
+      }
+    );
+    
+    setCurrentTheme(newTheme);
+    setIsTransitioning(false);
+  };
+
   return (
-    <div className="w-full h-full min-h-[500px] bg-gradient-to-b from-sky-100 to-white rounded-lg overflow-hidden">
-      <Canvas
+    <WebGLErrorHandler>
+      <div className="w-full h-full min-h-[500px] bg-gradient-to-b from-sky-100 to-white rounded-lg overflow-hidden">
+        <Canvas
         shadows
         camera={{ 
           fov: 60, 
@@ -173,12 +245,51 @@ export function Scene3D({
           stencil: false,
           depth: true
         }}
-        onCreated={({ gl }) => {
-          gl.shadowMap.enabled = true;
-          gl.shadowMap.type = THREE.PCFSoftShadowMap;
-          gl.outputColorSpace = THREE.SRGBColorSpace;
-          gl.toneMapping = THREE.ACESFilmicToneMapping;
-          gl.toneMappingExposure = 1.0;
+        onCreated={({ gl, scene }) => {
+          // Initialize WebGL Engine Manager for advanced optimization
+          if (enableWebGLOptimization) {
+            try {
+              const engineManager = new WebGLEngineManager(gl.domElement);
+              
+              // Apply cultural theme optimizations
+              if (enableCulturalThemeOptimization && culturalThemeRenderer) {
+                culturalThemeRenderer.applyTheme(currentTheme);
+                culturalThemeRenderer.applyThemeLighting(scene, currentTheme);
+              }
+              
+              // Setup venue-specific rendering
+              const venueRenderer = new VenueRenderer(gl);
+              
+              // Initialize mobile optimizations
+              const mobileOptimizer = new MobileWebGLOptimizer(gl);
+              
+              // Setup furniture renderer optimizations
+              const furnitureRenderer = new FurnitureRenderer(gl);
+              
+              // Debug setup in development
+              if (enableWebGLDebugging && process.env.NODE_ENV === 'development') {
+                const debugger = new WebGLDebugger(gl);
+                debugger.startDebugging();
+                debugger.logCapabilities();
+              }
+              
+            } catch (error) {
+              console.warn('WebGL optimization initialization failed:', error);
+              // Fallback to basic WebGL setup
+              gl.shadowMap.enabled = true;
+              gl.shadowMap.type = THREE.PCFSoftShadowMap;
+              gl.outputColorSpace = THREE.SRGBColorSpace;
+              gl.toneMapping = THREE.ACESFilmicToneMapping;
+              gl.toneMappingExposure = 1.0;
+            }
+          } else {
+            // Basic WebGL setup
+            gl.shadowMap.enabled = true;
+            gl.shadowMap.type = THREE.PCFSoftShadowMap;
+            gl.outputColorSpace = THREE.SRGBColorSpace;
+            gl.toneMapping = THREE.ACESFilmicToneMapping;
+            gl.toneMappingExposure = 1.0;
+          }
         }}
       >
         <Suspense fallback={<LoadingFallback />}>
@@ -206,12 +317,13 @@ export function Scene3D({
                 colorPalette={colorPalette}
                 lightingPlan={lightingPlan}
                 selectedFurniture={selectedFurniture}
-                culturalTheme={culturalTheme}
+                culturalTheme={currentTheme}
                 enableSnapping={enableSnapping}
                 enableLOD={enableLOD}
                 recommendedLODDistance={recommendedLODDistance}
                 onFurnitureClick={handleFurnitureClick}
                 onFurnitureMove={handleFurnitureMove}
+                enableWebGLOptimization={enableWebGLOptimization}
               />
               <PhysicsPerformanceMonitor />
             </PhysicsWorld>
@@ -222,18 +334,19 @@ export function Scene3D({
               colorPalette={colorPalette}
               lightingPlan={lightingPlan}
               selectedFurniture={selectedFurniture}
-              culturalTheme={culturalTheme}
+              culturalTheme={currentTheme}
               enableLOD={enableLOD}
               recommendedLODDistance={recommendedLODDistance}
               onFurnitureClick={handleFurnitureClick}
               onFurnitureMove={handleFurnitureMove}
+              enableWebGLOptimization={enableWebGLOptimization}
             />
           )}
 
           {/* HDRI Environment System */}
           <HDRIEnvironment 
             preset={currentHDRIPreset}
-            culturalTheme={culturalTheme}
+            culturalTheme={currentTheme}
             intensity={hdriIntensity}
             rotation={hdriRotation}
             background={true}
@@ -254,7 +367,7 @@ export function Scene3D({
           <LightingSystem 
             lightingPlan={lightingPlan}
             roomDimensions={roomDimensions}
-            culturalTheme={culturalTheme}
+            culturalTheme={currentTheme}
           />
           
           {/* Ultra-Realistic Post-Processing Pipeline */}
@@ -320,7 +433,26 @@ export function Scene3D({
             {roomDimensions.height}ft
           </Text>
         </Suspense>
-      </Canvas>
+        </Canvas>
+
+        {/* Cultural Theme Selector */}
+        {enableCulturalThemeOptimization && culturalThemeRenderer && (
+          <div className="absolute top-4 right-4">
+            <CulturalThemeSelector
+              themeRenderer={culturalThemeRenderer}
+              currentTheme={currentTheme}
+              onThemeChange={handleThemeChange}
+            />
+          </div>
+        )}
+
+        {/* WebGL Debug Panel (Development Only) */}
+        {enableWebGLDebugging && webglDebugger.debugger && webglDebugger.performanceMonitor && (
+          <WebGLDebugPanel
+            debugger={webglDebugger.debugger}
+            performanceMonitor={webglDebugger.performanceMonitor}
+          />
+        )}
 
       {/* Enhanced UI Overlay with Camera Presets */}
       <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg">
@@ -393,7 +525,8 @@ export function Scene3D({
       >
         Environment Settings
       </button>
-    </div>
+      </div>
+    </WebGLErrorHandler>
   );
 }
 
@@ -409,7 +542,8 @@ function PhysicsSceneContent({
   enableLOD,
   recommendedLODDistance,
   onFurnitureClick,
-  onFurnitureMove
+  onFurnitureMove,
+  enableWebGLOptimization
 }: any) {
   return (
     <>
@@ -501,7 +635,8 @@ function StandardSceneContent({
   enableLOD,
   recommendedLODDistance,
   onFurnitureClick,
-  onFurnitureMove
+  onFurnitureMove,
+  enableWebGLOptimization
 }: any) {
   return (
     <>
