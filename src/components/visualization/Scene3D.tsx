@@ -211,17 +211,10 @@ export function Scene3D({
     if (!culturalThemeRenderer || isTransitioning) return;
     
     setIsTransitioning(true);
-    const transitionManager = new ThemeTransitionManager(culturalThemeRenderer.renderer);
     
-    await transitionManager.transitionToTheme(
-      scene, // This would need to be passed from Canvas context
-      currentTheme,
-      newTheme,
-      culturalThemeRenderer,
-      (progress) => {
-        // Optional: Show transition progress
-      }
-    );
+    // Apply theme immediately without transition for now
+    // TODO: Implement scene access for smooth transitions
+    culturalThemeRenderer.applyTheme(newTheme);
     
     setCurrentTheme(newTheme);
     setIsTransitioning(false);
@@ -231,20 +224,20 @@ export function Scene3D({
     <WebGLErrorHandler>
       <div className="w-full h-full min-h-[500px] bg-gradient-to-b from-sky-100 to-white rounded-lg overflow-hidden">
         <Canvas
-        shadows
-        camera={{ 
-          fov: 60, 
-          near: 0.1, 
-          far: 1000,
-          position: [15, 12, 15]
-        }}
-        gl={{ 
-          antialias: true,
-          powerPreference: "high-performance",
-          alpha: false,
-          stencil: false,
-          depth: true
-        }}
+          shadows
+          camera={{ 
+            fov: 60, 
+            near: 0.1, 
+            far: 1000,
+            position: [15, 12, 15]
+          }}
+          gl={{ 
+            antialias: true,
+            powerPreference: "high-performance",
+            alpha: false,
+            stencil: false,
+            depth: true
+          }}
         onCreated={({ gl, scene }) => {
           // Initialize WebGL Engine Manager for advanced optimization
           if (enableWebGLOptimization) {
@@ -268,9 +261,9 @@ export function Scene3D({
               
               // Debug setup in development
               if (enableWebGLDebugging && process.env.NODE_ENV === 'development') {
-                const debugger = new WebGLDebugger(gl);
-                debugger.startDebugging();
-                debugger.logCapabilities();
+                const debuggerInstance = new WebGLDebugger(gl);
+                debuggerInstance.startDebugging();
+                debuggerInstance.logCapabilities();
               }
               
             } catch (error) {
@@ -447,9 +440,9 @@ export function Scene3D({
         )}
 
         {/* WebGL Debug Panel (Development Only) */}
-        {enableWebGLDebugging && webglDebugger.debugger && webglDebugger.performanceMonitor && (
+        {enableWebGLDebugging && webglDebugger.webglDebugger && webglDebugger.performanceMonitor && (
           <WebGLDebugPanel
-            debugger={webglDebugger.debugger}
+            webglDebugger={webglDebugger.webglDebugger}
             performanceMonitor={webglDebugger.performanceMonitor}
           />
         )}

@@ -30,7 +30,7 @@ export class WebGLDebugger {
   }
 
   // Log comprehensive WebGL capabilities
-  logCapabilities(): void {
+  logCapabilities(): any {
     const caps = this.capabilities;
     const gl = this.gl;
     
@@ -429,14 +429,14 @@ export class WebGLDebugger {
 
 // Performance monitoring with real-time feedback
 export class RealTimePerformanceMonitor {
-  private debugger: WebGLDebugger;
+  private webglDebugger: WebGLDebugger;
   private performanceHistory: PerformanceReport[] = [];
   private maxHistorySize: number = 100;
   private thresholds: PerformanceThresholds;
   private callbacks: Map<string, Function[]> = new Map();
 
-  constructor(debugger: WebGLDebugger, thresholds?: Partial<PerformanceThresholds>) {
-    this.debugger = debugger;
+  constructor(webglDebugger: WebGLDebugger, thresholds?: Partial<PerformanceThresholds>) {
+    this.webglDebugger = webglDebugger;
     this.thresholds = {
       maxFrameTime: 16.67, // 60 FPS
       maxDrawCalls: 100,
@@ -456,7 +456,7 @@ export class RealTimePerformanceMonitor {
   }
 
   private checkPerformance(): void {
-    const memoryUsage = this.debugger.estimateGPUMemoryUsage();
+    const memoryUsage = this.webglDebugger.estimateGPUMemoryUsage();
     const memoryMB = memoryUsage.totalEstimate / (1024 * 1024);
     
     // Check thresholds
@@ -654,10 +654,10 @@ interface PerformanceStats {
 
 // React component for debug UI
 export function WebGLDebugPanel({
-  debugger,
+  webglDebugger,
   performanceMonitor
 }: {
-  debugger: WebGLDebugger | null;
+  webglDebugger: WebGLDebugger | null;
   performanceMonitor: RealTimePerformanceMonitor | null;
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -675,19 +675,19 @@ export function WebGLDebugPanel({
   }, [performanceMonitor]);
 
   const handleGenerateReport = () => {
-    if (debugger) {
-      const report = debugger.generateDebugReport();
+    if (webglDebugger) {
+      const report = webglDebugger.generateDebugReport();
       setDebugReport(report);
     }
   };
 
   const handleCaptureFrame = () => {
-    if (debugger) {
-      debugger.captureFrame('debug-capture');
+    if (webglDebugger) {
+      webglDebugger.captureFrame('debug-capture');
     }
   };
 
-  if (!debugger || process.env.NODE_ENV !== 'development') {
+  if (!webglDebugger || process.env.NODE_ENV !== 'development') {
     return null;
   }
 
@@ -737,7 +737,7 @@ export function WebGLDebugPanel({
             </button>
             
             <button
-              onClick={() => debugger.logCapabilities()}
+              onClick={() => webglDebugger.logCapabilities()}
               className="w-full bg-yellow-600 hover:bg-yellow-700 px-3 py-2 rounded text-sm"
             >
               Log Capabilities
@@ -764,27 +764,27 @@ export function WebGLDebugPanel({
 
 // React hook for WebGL debugging
 export function useWebGLDebugger(renderer: THREE.WebGLRenderer | null) {
-  const [debugger, setDebugger] = useState<WebGLDebugger | null>(null);
+  const [webglDebugger, setWebglDebugger] = useState<WebGLDebugger | null>(null);
   const [performanceMonitor, setPerformanceMonitor] = useState<RealTimePerformanceMonitor | null>(null);
 
   useEffect(() => {
     if (!renderer) return;
 
-    const webglDebugger = new WebGLDebugger(renderer);
-    const perfMonitor = new RealTimePerformanceMonitor(webglDebugger);
+    const debuggerInstance = new WebGLDebugger(renderer);
+    const perfMonitor = new RealTimePerformanceMonitor(debuggerInstance);
 
-    setDebugger(webglDebugger);
+    setWebglDebugger(debuggerInstance);
     setPerformanceMonitor(perfMonitor);
 
     if (process.env.NODE_ENV === 'development') {
-      webglDebugger.startDebugging();
+      debuggerInstance.startDebugging();
       perfMonitor.startMonitoring();
     }
 
     return () => {
-      webglDebugger.stopDebugging();
+      debuggerInstance.stopDebugging();
     };
   }, [renderer]);
 
-  return { debugger, performanceMonitor };
+  return { webglDebugger, performanceMonitor };
 }
