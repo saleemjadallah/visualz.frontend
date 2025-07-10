@@ -61,15 +61,15 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     }
   }
 
-  getCulturalColors = (culture: CultureType = 'american') => {
+  getCulturalColors = (culture: CultureType = 'modern') => {
     const colors = {
       japanese: 'from-red-500 to-pink-500',
       scandinavian: 'from-blue-500 to-cyan-500',
       italian: 'from-green-500 to-yellow-500',
       french: 'from-purple-500 to-blue-500',
-      american: 'from-blue-600 to-red-600'
+      modern: 'from-gray-500 to-blue-500'
     };
-    return colors[culture] || colors.american;
+    return colors[culture] || colors.modern;
   };
 
   handleRefresh = () => {

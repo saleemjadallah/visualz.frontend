@@ -39,14 +39,30 @@ const NavigationHeader = () => {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-4">
               {[
-                { id: 'design', label: 'Design Studio', icon: 'palette' as const },
-                { id: 'gallery', label: 'Gallery', icon: 'camera' as const },
-                { id: 'cultural', label: 'Cultural Guide', icon: 'globe' as const },
-                { id: 'vendors', label: 'Marketplace', icon: 'home' as const }
-              ].map(({ id, label, icon }) => (
+                { id: 'design', label: 'Design Studio', icon: 'palette' as const, action: 'scroll-to-vision' },
+                { id: 'gallery', label: 'Gallery', icon: 'camera' as const, action: 'scroll-to-gallery' },
+                { id: 'cultural', label: 'Cultural Guide', icon: 'globe' as const, action: 'scroll-to-cultural' },
+                { id: 'vendors', label: 'Marketplace', icon: 'home' as const, action: 'external' }
+              ].map(({ id, label, icon, action }) => (
                 <button
                   key={id}
-                  onClick={() => setActiveTab(id)}
+                  onClick={() => {
+                    setActiveTab(id);
+                    if (action === 'scroll-to-vision') {
+                      // Scroll to EventVisionSteps section
+                      const visionSection = document.querySelector('[data-section="vision-steps"]') 
+                        || document.querySelector('.section-cultural');
+                      visionSection?.scrollIntoView({ behavior: 'smooth' });
+                    } else if (action === 'scroll-to-gallery') {
+                      // Scroll to DesignGallery section
+                      const gallerySection = document.querySelector('[data-section="design-gallery"]');
+                      gallerySection?.scrollIntoView({ behavior: 'smooth' });
+                    } else if (action === 'scroll-to-cultural') {
+                      // Scroll to CulturalIntelligencePanel section
+                      const culturalSection = document.querySelector('[data-section="cultural-intelligence"]');
+                      culturalSection?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
                   className={`nav-item ${activeTab === id ? 'nav-item-active' : ''}`}
                 >
                   <LineIcon name={icon} size={16} />

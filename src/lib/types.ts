@@ -1,6 +1,6 @@
 // Core Application Types for DesignVisualz
 
-export type CultureType = 'japanese' | 'scandinavian' | 'italian' | 'french' | 'american';
+export type CultureType = 'japanese' | 'scandinavian' | 'italian' | 'french' | 'modern';
 
 export type EventType = 'birthday' | 'wedding' | 'corporate' | 'cultural' | 'holiday';
 
@@ -545,3 +545,85 @@ export type FormEventHandler = EventHandler<React.FormEvent>;
 export type ChangeEventHandler = EventHandler<React.ChangeEvent>;
 
 export type ClickEventHandler = EventHandler<React.MouseEvent>;
+
+// AI Parametric System Types
+export type FormalityLevel = 'casual' | 'semi-formal' | 'formal' | 'ceremonial';
+
+export interface UserFurnitureRequest {
+  eventType: string;
+  culture: CultureType;
+  guestCount: number;
+  spaceDimensions: {
+    width: number;
+    height: number;
+    depth: number;
+  };
+  budgetRange: 'low' | 'medium' | 'high' | 'luxury';
+  formalityLevel: FormalityLevel;
+  specialRequirements: string;
+}
+
+export interface LightingParameters {
+  culture: CultureType;
+  eventType: 'intimate-dinner' | 'celebration' | 'ceremony' | 'reception' | 'corporate';
+  timeOfDay: 'morning' | 'afternoon' | 'evening' | 'night';
+  season: 'spring' | 'summer' | 'autumn' | 'winter';
+  spaceType: 'indoor' | 'outdoor' | 'mixed';
+  spaceDimensions: {
+    width: number;
+    height: number;
+    depth: number;
+  };
+  ambiance: 'romantic' | 'energetic' | 'serene' | 'dramatic' | 'professional';
+  functionality: 'ambient' | 'task' | 'accent' | 'balanced';
+  powerBudget: number;
+  installationComplexity: 'simple' | 'moderate' | 'professional' | 'complex';
+  weatherResistance: boolean;
+  traditionalElements: string[];
+  colorTemperature: 'warm' | 'neutral' | 'cool';
+  brightness: 'dim' | 'moderate' | 'bright';
+}
+
+export interface FloralParameters {
+  culture: CultureType;
+  eventType: 'wedding' | 'birthday' | 'corporate' | 'memorial' | 'celebration';
+  formality: FormalityLevel;
+  season: 'spring' | 'summer' | 'autumn' | 'winter';
+  arrangementStyle: 'centerpiece' | 'garland' | 'backdrop' | 'mixed';
+  scale: 'intimate' | 'medium' | 'grand' | 'monumental';
+  colorScheme: 'monochromatic' | 'complementary' | 'analogous' | 'natural';
+  budget: number;
+  venue: 'indoor' | 'outdoor' | 'mixed';
+  duration: number;
+  maintenance: 'low' | 'medium' | 'high';
+  symbolism: string[];
+  traditionalFlowers: string[];
+  avoidFlowers: string[];
+  localSourcing: boolean;
+  sustainablePractices: boolean;
+  reusability: boolean;
+}
+
+export interface StageParameters {
+  performanceType: 'live-music' | 'dj-set' | 'speaker' | 'ceremony' | 'presentation';
+  audienceSize: number;
+  interactionLevel: 'performance-only' | 'some-interaction' | 'highly-interactive';
+  audioRequirements: 'basic' | 'professional' | 'audiophile';
+  visualRequirements: 'minimal' | 'standard' | 'spectacular';
+  lightingIntegration: boolean;
+  culture: CultureType;
+  ceremony: boolean;
+  traditionalElements: string[];
+  spaceDimensions: {
+    width: number;
+    depth: number;
+    maxHeight: number;
+  };
+  budget: number;
+  setupTime: number;
+  weatherProtection: boolean;
+  accessibilityRequired: boolean;
+  multilingual: boolean;
+  hearingAssistance: boolean;
+  visualAssistance: boolean;
+}

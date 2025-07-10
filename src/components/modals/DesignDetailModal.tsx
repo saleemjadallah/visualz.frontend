@@ -361,7 +361,7 @@ const DesignDetailModal: React.FC<DesignDetailModalProps> = ({
                                       <span>{principle}</span>
                                     </div>
                                   ))}
-                                  {culture === 'american' && ['Innovation', 'Bold expression', 'Individual style', 'Modern comfort'].map((principle, i) => (
+                                  {culture === 'modern' && ['Innovation', 'Bold expression', 'Individual style', 'Modern comfort'].map((principle, i) => (
                                     <div key={i} className="flex items-center space-x-2 text-sm text-primary-700">
                                       <CheckCircle className="w-4 h-4 text-green-600" />
                                       <span>{principle}</span>

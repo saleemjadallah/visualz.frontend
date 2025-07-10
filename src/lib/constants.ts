@@ -190,9 +190,9 @@ export const CULTURAL_THEMES: Record<CultureType, CulturalTheme> = {
     patterns: ['romantic', 'elegant', 'sophisticated', 'timeless', 'refined']
   },
 
-  american: {
-    culture: 'american',
-    name: 'American Design Philosophy',
+  modern: {
+    culture: 'modern',
+    name: 'Modern Design Philosophy',
     principles: [
       {
         name: 'Bold Expression',
@@ -390,7 +390,7 @@ export const CULTURAL_COLOR_PALETTES = {
     neutral: ['#ffffff', '#faf9f7', '#f5f4f1', '#efebe6'],
     romantic: ['#ffb6c1', '#ffc0cb', '#ffe4e1', '#f0f8ff']
   },
-  american: {
+  modern: {
     primary: ['#1e40af', '#3b82f6', '#60a5fa'],
     bold: ['#f59e0b', '#fbbf24', '#fcd34d'],
     accent: ['#dc2626', '#ef4444', '#f87171'],
@@ -429,7 +429,7 @@ export const CULTURAL_MATERIALS = {
     { name: 'Porcelain', significance: 'Refinement', sustainability: 'high' },
     { name: 'Velvet', significance: 'Comfort and luxury', sustainability: 'medium' }
   ],
-  american: [
+  modern: [
     { name: 'Reclaimed Wood', significance: 'Sustainability and character', sustainability: 'high' },
     { name: 'Steel', significance: 'Strength and innovation', sustainability: 'high' },
     { name: 'Cotton', significance: 'Comfort and versatility', sustainability: 'medium' },

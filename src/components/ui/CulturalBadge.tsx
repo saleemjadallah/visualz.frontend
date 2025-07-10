@@ -1,9 +1,10 @@
 import React from 'react';
 import { Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { CultureType } from '@/lib/types';
 
 export interface CulturalBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  culture: 'japanese' | 'scandinavian' | 'italian' | 'french' | 'american';
+  culture: CultureType;
 }
 
 const CulturalBadge = React.forwardRef<HTMLSpanElement, CulturalBadgeProps>(
@@ -13,7 +14,7 @@ const CulturalBadge = React.forwardRef<HTMLSpanElement, CulturalBadgeProps>(
       scandinavian: 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-blue-200',
       italian: 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border-green-200',
       french: 'bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 border-purple-200',
-      american: 'bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-800 border-amber-200'
+      modern: 'bg-gradient-to-r from-gray-100 to-slate-100 text-gray-800 border-gray-200'
     };
     
     return (

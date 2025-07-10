@@ -192,7 +192,7 @@ const CulturalGuide = () => {
   const selectedCultureData = cultures.find(c => c.id === selectedCulture) || cultures[0];
 
   return (
-    <section className="section-cultural pattern-japanese">
+    <section className="section-cultural pattern-japanese" data-section="cultural-intelligence">
       <div className="container-cultural">
         {/* Header */}
         <div className="text-center mb-16">

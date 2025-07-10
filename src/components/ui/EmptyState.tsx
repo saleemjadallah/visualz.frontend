@@ -21,7 +21,7 @@ interface EmptyStateProps {
 
 const EmptyState: React.FC<EmptyStateProps> = ({
   state,
-  culturalContext = 'american',
+  culturalContext = 'modern',
   className = ''
 }) => {
   const getIcon = (type: EmptyStateType['type']) => {
@@ -75,17 +75,17 @@ const EmptyState: React.FC<EmptyStateProps> = ({
           </div>
         </div>
       ),
-      american: (
+      modern: (
         <div className="w-24 h-24 mx-auto mb-4 relative">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-red-100 rounded-full" />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-gray-100 rounded-full" />
           <div className="absolute inset-2 bg-white rounded-full flex items-center justify-center">
-            <Sparkles className="w-8 h-8 text-blue-600" />
+            <Sparkles className="w-8 h-8 text-gray-600" />
           </div>
         </div>
       )
     };
     
-    return illustrations[culture] || illustrations.american;
+    return illustrations[culture] || illustrations.modern;
   };
 
   const getActionIcon = (type: EmptyStateType['type']) => {

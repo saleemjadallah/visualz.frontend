@@ -12,7 +12,7 @@ interface LoadingStateProps {
 
 const LoadingState: React.FC<LoadingStateProps> = ({
   state,
-  culturalContext = 'american',
+  culturalContext = 'modern',
   variant = 'default',
   size = 'md'
 }) => {
@@ -53,9 +53,9 @@ const LoadingState: React.FC<LoadingStateProps> = ({
       scandinavian: 'from-blue-500 to-cyan-500',
       italian: 'from-green-500 to-yellow-500',
       french: 'from-purple-500 to-blue-500',
-      american: 'from-blue-600 to-red-600'
+      modern: 'from-gray-500 to-blue-500'
     };
-    return colors[culture] || colors.american;
+    return colors[culture] || colors.modern;
   };
 
   if (variant === 'minimal') {

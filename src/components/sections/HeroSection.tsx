@@ -77,7 +77,7 @@ const culturalPhrases = [
   { text: "Hygge Warmth", culture: 'scandinavian' as const },
   { text: "Bella Figura", culture: 'italian' as const },
   { text: "Savoir-Vivre", culture: 'french' as const },
-  { text: "Bold Innovation", culture: 'american' as const }
+  { text: "Bold Innovation", culture: 'modern' as const }
 ];
 
 const HeroSection: React.FC = () => {

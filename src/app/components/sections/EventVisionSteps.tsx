@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Palette, Home, Heart, Upload, Camera, Calendar, Users } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Palette, Home, Heart, Upload, Camera, Calendar, Users, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
+import { useParametricIntegration } from '../../../lib/hooks/useParametricIntegration';
+import type { VisionFormData } from '../../../lib/utils/parameterMapping';
 
 const EventVisionSteps = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<VisionFormData>({
     eventType: '',
     guestCount: '',
     culturalStyle: '',
@@ -18,6 +20,18 @@ const EventVisionSteps = () => {
     accessibility: [] as string[],
     seasonalElements: ''
   });
+
+  // AI Parametric Integration
+  const {
+    isGenerating,
+    generationProgress,
+    currentPhase,
+    result,
+    error,
+    progressPhases,
+    generateCompleteEvent,
+    resetGeneration
+  } = useParametricIntegration();
 
   const handleNext = () => {
     if (currentStep < 5) setCurrentStep(currentStep + 1);
@@ -768,13 +782,22 @@ const EventVisionSteps = () => {
     </div>
   );
 
-  const generateDesign = () => {
-    console.log('Generating design with:', formData);
-    alert('Design generation would start here! Check console for form data.');
+  const generateDesign = async () => {
+    try {
+      console.log('Starting AI Parametric Generation with:', formData);
+      const result = await generateCompleteEvent(formData);
+      
+      if (result) {
+        console.log('Generation completed successfully:', result);
+        // Could navigate to results page or show results modal
+      }
+    } catch (error) {
+      console.error('Generation failed:', error);
+    }
   };
 
   return (
-    <section className="section-cultural pattern-japanese">
+    <section className="section-cultural pattern-japanese" data-section="vision-steps">
       <div className="container-cultural">
         {/* Header */}
         <div className="text-center mb-8">
@@ -837,12 +860,154 @@ const EventVisionSteps = () => {
           ) : (
             <button
               onClick={generateDesign}
-              className="btn-cultural bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105 hover:-translate-y-1"
+              disabled={isGenerating}
+              className={`
+                btn-cultural bg-gradient-to-r from-purple-600 to-pink-600 text-white 
+                hover:from-purple-700 hover:to-pink-700 transition-all transform 
+                ${isGenerating 
+                  ? 'opacity-50 cursor-not-allowed' 
+                  : 'hover:scale-105 hover:-translate-y-1'}
+              `}
             >
-              ✨ Generate My Design
+              {isGenerating ? (
+                <>
+                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                  {currentPhase === 'validating' && 'Validating...'}
+                  {currentPhase === 'converting' && 'Converting Parameters...'}
+                  {currentPhase === 'generating' && 'Generating Design...'}
+                  {currentPhase === 'rendering' && 'Creating Preview...'}
+                  {currentPhase === 'complete' && 'Finalizing...'}
+                </>
+              ) : (
+                <>✨ Generate My Design</>
+              )}
             </button>
           )}
         </div>
+
+        {/* AI Generation Progress */}
+        {isGenerating && (
+          <div className="mt-8 max-w-4xl mx-auto">
+            <div className="card-cultural p-6 bg-gradient-to-r from-purple-50 to-pink-50">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-semibold text-purple-800">
+                  AI Parametric Generation in Progress
+                </h3>
+                <span className="text-sm font-medium text-purple-600">
+                  {generationProgress}%
+                </span>
+              </div>
+              
+              {/* Progress Bar */}
+              <div className="w-full bg-purple-100 rounded-full h-2 mb-6">
+                <div 
+                  className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${generationProgress}%` }}
+                />
+              </div>
+              
+              {/* Phase Indicators */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                {[
+                  { key: 'validation', label: 'Validation', icon: CheckCircle },
+                  { key: 'parameterConversion', label: 'Parameters', icon: CheckCircle },
+                  { key: 'furnitureGeneration', label: 'Furniture', icon: CheckCircle },
+                  { key: 'lightingGeneration', label: 'Lighting', icon: CheckCircle },
+                  { key: 'floralGeneration', label: 'Florals', icon: CheckCircle },
+                  { key: 'stageGeneration', label: 'Stage', icon: CheckCircle },
+                  { key: 'rendering', label: 'Rendering', icon: CheckCircle },
+                  { key: 'finalization', label: 'Final', icon: CheckCircle }
+                ].map(({ key, label, icon: Icon }) => (
+                  <div key={key} className="flex items-center space-x-2">
+                    <Icon 
+                      className={`w-4 h-4 ${
+                        progressPhases[key as keyof typeof progressPhases] 
+                          ? 'text-green-500' 
+                          : 'text-gray-300'
+                      }`} 
+                    />
+                    <span className={
+                      progressPhases[key as keyof typeof progressPhases] 
+                        ? 'text-green-700' 
+                        : 'text-gray-500'
+                    }>
+                      {label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Error Display */}
+        {error && (
+          <div className="mt-8 max-w-4xl mx-auto">
+            <div className="card-cultural p-6 bg-red-50 border border-red-200">
+              <div className="flex items-center space-x-3">
+                <AlertCircle className="w-6 h-6 text-red-500 flex-shrink-0" />
+                <div>
+                  <h3 className="font-semibold text-red-800 mb-2">Generation Error</h3>
+                  <p className="text-red-700">{error}</p>
+                  <button
+                    onClick={resetGeneration}
+                    className="mt-3 text-sm bg-red-100 hover:bg-red-200 text-red-800 px-3 py-1 rounded transition-colors"
+                  >
+                    Try Again
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Success Result */}
+        {result && !isGenerating && (
+          <div className="mt-8 max-w-4xl mx-auto">
+            <div className="card-cultural p-6 bg-green-50 border border-green-200">
+              <div className="flex items-center space-x-3 mb-4">
+                <CheckCircle className="w-6 h-6 text-green-500" />
+                <h3 className="font-semibold text-green-800">
+                  Design Generated Successfully!
+                </h3>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div>
+                  <span className="font-medium text-green-800">Cultural Authenticity:</span>
+                  <span className="ml-2 text-green-700">
+                    {result.summary.culturalAuthenticity}%
+                  </span>
+                </div>
+                <div>
+                  <span className="font-medium text-green-800">Sustainability:</span>
+                  <span className="ml-2 text-green-700">
+                    {result.summary.sustainabilityScore}%
+                  </span>
+                </div>
+                <div>
+                  <span className="font-medium text-green-800">Design ID:</span>
+                  <span className="ml-2 text-green-700 font-mono text-xs">
+                    {result.designId}
+                  </span>
+                </div>
+              </div>
+              
+              {result.previewUrl && (
+                <div className="mt-4">
+                  <a
+                    href={result.previewUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition-colors"
+                  >
+                    View 3D Preview
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Progress Summary */}
         <div className="mt-8 max-w-4xl mx-auto">

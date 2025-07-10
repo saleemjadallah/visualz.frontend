@@ -90,11 +90,11 @@ export const useCulturalTheme = (config: CulturalThemeConfig = {}) => {
         inspiration: 'Lavender fields, aged brass',
         flag: '🇫🇷'
       },
-      american: {
-        name: 'American Modern',
+      modern: {
+        name: 'Modern Contemporary',
         description: 'Bold & contemporary',
         inspiration: 'Urban loft, industrial chic',
-        flag: '🇺🇸'
+        flag: '🌐'
       }
     };
     return themeInfo[currentTheme] || themeInfo.japanese;

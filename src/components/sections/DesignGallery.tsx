@@ -112,7 +112,7 @@ const mockDesigns: Design[] = [
     projectId: 'p5',
     title: 'Innovation Hub Launch',
     description: 'Bold American-style tech company launch with modern design and innovative elements',
-    culturalInfluences: ['american'],
+    culturalInfluences: ['modern'],
     designElements: [],
     colorPalette: ['#1a202c', '#4299e1', '#e53e3e', '#f7fafc'],
     materials: ['steel', 'glass', 'LED panels', 'tech fabrics'],
@@ -249,7 +249,7 @@ const DesignGallery: React.FC<DesignGalleryProps> = ({
     { type: 'scandinavian', name: 'Scandinavian', flag: '🇸🇪' },
     { type: 'italian', name: 'Italian', flag: '🇮🇹' },
     { type: 'french', name: 'French', flag: '🇫🇷' },
-    { type: 'american', name: 'American', flag: '🇺🇸' }
+    { type: 'modern', name: 'Modern', flag: '🌐' }
   ];
 
   const budgetTiers = [

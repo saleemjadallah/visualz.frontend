@@ -22,7 +22,7 @@ interface UXEnhancementShowcaseProps {
 }
 
 const UXEnhancementShowcase: React.FC<UXEnhancementShowcaseProps> = ({
-  culturalContext = 'american'
+  culturalContext = 'modern'
 }) => {
   const [activeDemo, setActiveDemo] = useState<string>('loading');
   const [isPlaying, setIsPlaying] = useState(false);
@@ -73,7 +73,7 @@ const UXEnhancementShowcase: React.FC<UXEnhancementShowcaseProps> = ({
       id: 'reviewer-1',
       name: 'Dr. Sarah Chen',
       credentials: ['Cultural Anthropologist', 'Design Consultant'],
-      culturalBackground: [culturalContext, 'american']
+      culturalBackground: [culturalContext, 'modern']
     },
     status: 'approved',
     score: 87,

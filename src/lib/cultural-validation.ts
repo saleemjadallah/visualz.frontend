@@ -62,17 +62,17 @@ const CULTURAL_GUIDELINES = {
       'Avoid cultural appropriation'
     ]
   },
-  american: {
-    respectfulColors: ['#B22234', '#FFFFFF', '#3C3B6E', '#FFD700'],
-    avoidColors: [] as string[], // Generally more flexible
-    appropriatePatterns: ['stars', 'stripes', 'geometric'],
-    restrictedSymbols: ['eagle'], // Context-sensitive
-    materials: ['wood', 'metal', 'fabric', 'leather'],
-    principles: ['diversity', 'innovation', 'accessibility'],
+  modern: {
+    respectfulColors: ['#000000', '#FFFFFF', '#808080', '#0066CC'],
+    avoidColors: [] as string[], // Generally flexible
+    appropriatePatterns: ['geometric', 'minimal', 'clean-lines'],
+    restrictedSymbols: [] as string[], // Less cultural restrictions
+    materials: ['steel', 'glass', 'concrete', 'synthetic'],
+    principles: ['innovation', 'simplicity', 'functionality'],
     restrictions: [
-      'Ensure inclusivity',
-      'Respect diversity',
-      'Avoid stereotypes'
+      'Ensure accessibility',
+      'Focus on usability',
+      'Avoid overly complex designs'
     ]
   }
 };
@@ -335,8 +335,8 @@ export class CulturalValidator {
     const conflicts: string[] = [];
     
     // Example conflicts
-    if (culture1 === 'japanese' && culture2 === 'american') {
-      conflicts.push('minimalism vs. maximalism');
+    if (culture1 === 'japanese' && culture2 === 'modern') {
+      conflicts.push('minimalism vs. functionality');
     }
     
     if (culture1 === 'scandinavian' && culture2 === 'italian') {
@@ -368,7 +368,7 @@ export class CulturalValidator {
       italian: ['gondola', 'pizza', 'pasta'],
       french: ['beret', 'baguette', 'wine'],
       scandinavian: ['viking', 'ikea'],
-      american: ['cowboy', 'eagle', 'flag']
+      modern: ['tech', 'minimal', 'glass']
     };
 
     const culturalStereotypes = stereotypicalElements[culture] || [];
@@ -401,10 +401,10 @@ export class CulturalValidator {
         score -= 15;
       }
       
-      if (culture === 'american' && !design.colorPalette.some(color => 
+      if (culture === 'modern' && !design.colorPalette.some(color => 
         ['#FFFFFF', '#F5F5F5', '#FFF'].includes(color)
       )) {
-        suggestions.push('Consider incorporating white for American wedding traditions');
+        suggestions.push('Consider incorporating white for modern, clean aesthetics');
         score -= 5;
       }
     }

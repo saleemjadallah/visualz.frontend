@@ -188,7 +188,7 @@ export const useCulturalValidation = () => {
       scandinavian: ['japanese'], // Both value functionality
       italian: ['french'], // Both European, warm traditions
       french: ['italian'], // Both appreciate refinement
-      american: ['scandinavian'] // Both value functionality
+      modern: ['scandinavian'] // Both value functionality
     };
 
     return culturalCompatibility[primary] || [];
@@ -228,7 +228,7 @@ export const useCulturalValidation = () => {
         'Create balanced, symmetrical compositions',
         'Emphasize quality over quantity'
       ],
-      american: [
+      modern: [
         'Embrace bold, contemporary design',
         'Use modern materials and technology',
         'Create open, flexible spaces',
@@ -275,7 +275,7 @@ export const useCulturalValidation = () => {
         scandinavian: 'Scandinavian design emphasizes functionality, natural materials, and creating cozy, livable spaces',
         italian: 'Italian design celebrates warmth, family gathering, and the beauty of aged, crafted materials',
         french: 'French design focuses on elegance, sophistication, and timeless beauty with attention to detail',
-        american: 'American design embraces bold innovation, mixing styles, and creating flexible, efficient spaces'
+        modern: 'Modern design embraces bold innovation, mixing styles, and creating flexible, efficient spaces'
       };
       return insights[culture] || '';
     }, [])

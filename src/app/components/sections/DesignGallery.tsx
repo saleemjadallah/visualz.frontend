@@ -88,7 +88,7 @@ const DesignGallery = () => {
   );
 
   return (
-    <section className="section-cultural pattern-japanese">
+    <section className="section-cultural pattern-japanese" data-section="design-gallery">
       <div className="container-cultural">
         {/* Header */}
         <div className="text-center mb-12">

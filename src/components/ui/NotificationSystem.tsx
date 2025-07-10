@@ -34,7 +34,7 @@ export const useNotifications = () => {
 };
 
 const NotificationSystem: React.FC<NotificationSystemProps> = ({
-  culturalContext = 'american',
+  culturalContext = 'modern',
   position = 'top-right',
   maxNotifications = 5
 }) => {
@@ -171,9 +171,9 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
       scandinavian: 'border-l-blue-500',
       italian: 'border-l-green-500',
       french: 'border-l-purple-500',
-      american: 'border-l-blue-600'
+      modern: 'border-l-gray-600'
     };
-    return accents[culture] || accents.american;
+    return accents[culture] || accents.modern;
   };
 
   const handleRemove = () => {
