@@ -91,28 +91,15 @@ interface Scene3DProps {
   enableWebGLDebugging?: boolean;
 }
 
-// Enhanced WebGL-Optimized Camera Controller
+// Enhanced Camera Controller with preset views
 function CameraController({ preset = 'overview' }: { preset?: string }) {
-  const { camera, controls, gl } = useThree();
-  const engineManager = useWebGLEngine();
+  const { camera, controls } = useThree();
   
   useEffect(() => {
     if (controls) {
       setViewPreset(preset);
     }
-    
-    // Initialize WebGL optimizations
-    if (engineManager) {
-      const performanceMonitor = engineManager.getPerformanceMonitor();
-      performanceMonitor.addCallback((stats) => {
-        // Handle performance optimization based on stats
-        if (stats.fps < 30) {
-          // Auto-adjust quality for better performance
-          gl.setPixelRatio(Math.min(window.devicePixelRatio, 1));
-        }
-      });
-    }
-  }, [preset, controls, engineManager, gl]);
+  }, [preset, controls]);
   
   const setViewPreset = (preset: string) => {
     switch (preset) {
@@ -178,10 +165,10 @@ export function Scene3D({
   const [isTransitioning, setIsTransitioning] = useState(false);
   const { recommendedLODDistance } = usePerformanceOptimization();
   
-  // WebGL optimization hooks
-  const webglOptimization = useWebGLOptimization(null); // Will be set after Canvas is created
-  const culturalThemeRenderer = useCulturalThemeRenderer(null);
-  const webglDebugger = useWebGLDebugger(null);
+  // WebGL optimization state - will be initialized in onCreated
+  const [webglOptimization, setWebglOptimization] = useState<any>(null);
+  const [culturalThemeRenderer, setCulturalThemeRenderer] = useState<any>(null);
+  const [webglDebugger, setWebglDebugger] = useState<any>(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -244,12 +231,6 @@ export function Scene3D({
             try {
               const engineManager = new WebGLEngineManager(gl.domElement);
               
-              // Apply cultural theme optimizations
-              if (enableCulturalThemeOptimization && culturalThemeRenderer) {
-                culturalThemeRenderer.applyTheme(currentTheme);
-                culturalThemeRenderer.applyThemeLighting(scene, currentTheme);
-              }
-              
               // Setup venue-specific rendering
               const venueRenderer = new VenueRenderer(gl);
               
@@ -259,12 +240,22 @@ export function Scene3D({
               // Setup furniture renderer optimizations
               const furnitureRenderer = new FurnitureRenderer(gl);
               
+              // Initialize cultural theme renderer
+              if (enableCulturalThemeOptimization) {
+                const themeRenderer = new CulturalThemeRenderer(gl);
+                themeRenderer.applyTheme(currentTheme);
+                setCulturalThemeRenderer(themeRenderer);
+              }
+              
               // Debug setup in development
               if (enableWebGLDebugging && process.env.NODE_ENV === 'development') {
                 const debuggerInstance = new WebGLDebugger(gl);
                 debuggerInstance.startDebugging();
                 debuggerInstance.logCapabilities();
+                setWebglDebugger({ webglDebugger: debuggerInstance, performanceMonitor: null });
               }
+              
+              setWebglOptimization({ optimizer: mobileOptimizer, venueRenderer, furnitureRenderer });
               
             } catch (error) {
               console.warn('WebGL optimization initialization failed:', error);
@@ -440,7 +431,7 @@ export function Scene3D({
         )}
 
         {/* WebGL Debug Panel (Development Only) */}
-        {enableWebGLDebugging && webglDebugger.webglDebugger && webglDebugger.performanceMonitor && (
+        {enableWebGLDebugging && webglDebugger?.webglDebugger && (
           <WebGLDebugPanel
             webglDebugger={webglDebugger.webglDebugger}
             performanceMonitor={webglDebugger.performanceMonitor}
