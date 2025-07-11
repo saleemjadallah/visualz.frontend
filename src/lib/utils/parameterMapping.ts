@@ -104,6 +104,18 @@ export const mapSpaceSizeToDimensions = (spaceSize: string, venueType: string) =
   return base;
 };
 
+// Convert budget range to backend format
+export const mapBudgetRangeToBackend = (budgetRange: string): 'low' | 'medium' | 'high' | 'luxury' => {
+  const mapping: Record<string, 'low' | 'medium' | 'high' | 'luxury'> = {
+    'essential': 'low',    // Under $1K
+    'elevated': 'medium',  // $1K - $5K
+    'luxury': 'luxury',    // $5K - $15K (already matches)
+    'premium': 'high'      // $15K+
+  };
+  
+  return mapping[budgetRange] || 'medium';
+};
+
 // Convert budget range to actual budget numbers
 export const mapBudgetRangeToNumber = (budgetRange: string): number => {
   const mapping: Record<string, number> = {
@@ -128,7 +140,7 @@ export const convertFormToFurnitureParams = (formData: VisionFormData): UserFurn
     culture,
     guestCount,
     spaceDimensions,
-    budgetRange: formData.budgetRange as 'low' | 'medium' | 'high' | 'luxury',
+    budgetRange: mapBudgetRangeToBackend(formData.budgetRange),
     formalityLevel: formality,
     specialRequirements: [
       ...formData.specialElements,
