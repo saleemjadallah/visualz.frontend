@@ -63,7 +63,11 @@ export function useCollaboration(projectId: string) {
   const connect = useCallback(() => {
     if (!user || !token || !projectId) return;
 
-    const wsUrl = `ws://localhost:8000/api/ws/collaborate/${projectId}?token=${token}`;
+    // Use environment variable with proper fallback
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://visualz.xyz';
+    const wsProtocol = backendUrl.startsWith('https') ? 'wss' : 'ws';
+    const wsHost = backendUrl.replace(/^https?:\/\//, '');
+    const wsUrl = `${wsProtocol}://${wsHost}/api/ws/collaborate/${projectId}?token=${token}`;
     
     try {
       wsRef.current = new WebSocket(wsUrl);

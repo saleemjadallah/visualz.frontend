@@ -16,7 +16,7 @@ import {
 } from '../types';
 
 // Backend integration endpoint configuration
-const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://visualz.xyz';
 
 interface ParametricGenerationResult {
   furniture: {
