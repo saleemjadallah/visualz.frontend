@@ -9,7 +9,10 @@ import {
   ApiResponse,
   CultureType,
   BudgetTier,
-  EventType
+  EventType,
+  CelebrationType,
+  CelebrationAmenity,
+  EventRequirementsForm
 } from './types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:9847';
@@ -299,6 +302,42 @@ export const aiApi = {
     event_type?: EventType;
   }): Promise<Design> => {
     const response = await api.post<Design>('/api/ai/generate-design', request);
+    return response.data;
+  },
+
+  generateCelebrationDesign: async (formData: EventRequirementsForm): Promise<Design> => {
+    const response = await api.post<Design>('/api/ai/generate-3d-scene', {
+      event_type: formData.eventType,
+      celebration_type: formData.celebrationType,
+      cultural_preferences: formData.culturalPreferences,
+      budget_tier: formData.budgetTier,
+      guest_count: formData.guestCount,
+      age_range: formData.ageRange,
+      space_data: formData.spaceData,
+      celebration_amenities: formData.celebrationAmenities,
+      style_preferences: formData.stylePreferences,
+      special_needs: formData.specialNeeds
+    });
+    return response.data;
+  },
+
+  getCelebrationAmenities: async (celebrationType: CelebrationType): Promise<CelebrationAmenity[]> => {
+    const response = await api.get<CelebrationAmenity[]>(`/api/ai/celebration-amenities/${celebrationType}`);
+    return response.data;
+  },
+
+  getCelebrationSuggestions: async (celebrationType: CelebrationType, culturalContext: CultureType): Promise<{
+    suggestedAmenities: string[];
+    traditionalElements: string[];
+    culturalRequirements: string[];
+    ceremonialAspects: string[];
+  }> => {
+    const response = await api.get(`/api/ai/celebration-suggestions`, {
+      params: { 
+        celebration_type: celebrationType, 
+        cultural_context: culturalContext 
+      }
+    });
     return response.data;
   },
 

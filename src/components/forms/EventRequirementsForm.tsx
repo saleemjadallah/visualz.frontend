@@ -21,7 +21,7 @@ import { Card } from '@/components/ui/Card';
 import { Container } from '@/components/layout/Container';
 import { useTheme } from '@/components/cultural/ThemeProvider';
 import { cn } from '@/lib/utils';
-import { EventRequirementsForm as FormData, EventType, CultureType, BudgetTier } from '@/lib/types';
+import { EventRequirementsForm as FormData, EventType, CultureType, BudgetTier, CelebrationType, CelebrationAmenity, CelebrationContextMapping } from '@/lib/types';
 import { SpaceImageUpload } from './SpaceImageUpload';
 
 interface EventRequirementsFormProps {
@@ -35,8 +35,53 @@ const steps = [
   { id: 2, title: 'Space Upload', subtitle: 'Upload your venue photos', icon: <Camera /> },
   { id: 3, title: 'Cultural Style', subtitle: 'Choose your aesthetic', icon: <Globe /> },
   { id: 4, title: 'Budget', subtitle: 'Investment level', icon: <DollarSign /> },
+  { id: 4.5, title: 'Celebration Elements', subtitle: 'Special celebration features', icon: <Sparkles />, conditional: true },
   { id: 5, title: 'Guest Details', subtitle: 'Who\'s coming?', icon: <Users /> },
   { id: 6, title: 'Style Preferences', subtitle: 'Finalize your vision', icon: <Palette /> }
+];
+
+// Celebration types data (shared across components)
+const celebrationTypes = [
+  {
+    type: 'american-birthday' as CelebrationType,
+    title: 'American Birthday Party',
+    description: 'Classic American birthday celebration with cake, balloons, and fun',
+    flag: '🇺🇸',
+    culturalContext: 'american' as CultureType,
+    features: ['Birthday cake', 'Balloon decorations', 'Party games', 'Gift opening ceremony']
+  },
+  {
+    type: 'mexican-quinceanera' as CelebrationType,
+    title: 'Mexican Quinceañera',
+    description: 'Traditional coming-of-age celebration for a young woman\'s 15th birthday',
+    flag: '🇲🇽',
+    culturalContext: 'mexican' as CultureType,
+    features: ['Ceremonial mass', 'Waltz dance', 'Court of honor', 'Traditional music']
+  },
+  {
+    type: 'korean-doljanchi' as CelebrationType,
+    title: 'Korean Doljanchi',
+    description: 'First birthday celebration with traditional ceremonies and symbolism',
+    flag: '🇰🇷',
+    culturalContext: 'korean' as CultureType,
+    features: ['Doljabi ceremony', 'Traditional hanbok', 'Rainbow rice cakes', 'Ancestral blessings']
+  },
+  {
+    type: 'jewish-bar-mitzvah' as CelebrationType,
+    title: 'Jewish Bar Mitzvah',
+    description: 'Coming-of-age ceremony for a 13-year-old boy in Jewish tradition',
+    flag: '✡️',
+    culturalContext: 'jewish' as CultureType,
+    features: ['Torah reading', 'Traditional blessings', 'Celebratory meal', 'Family gathering']
+  },
+  {
+    type: 'jewish-bat-mitzvah' as CelebrationType,
+    title: 'Jewish Bat Mitzvah',
+    description: 'Coming-of-age ceremony for a 12-year-old girl in Jewish tradition',
+    flag: '✡️',
+    culturalContext: 'jewish' as CultureType,
+    features: ['Torah reading', 'Traditional blessings', 'Celebratory meal', 'Family gathering']
+  }
 ];
 
 const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
@@ -77,7 +122,12 @@ const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
   useEffect(() => {
     switch (currentStep) {
       case 1:
-        setIsStepValid(!!formData.eventType);
+        // For birthday events, also require celebration type selection
+        if (formData.eventType === 'birthday') {
+          setIsStepValid(!!formData.eventType && !!formData.celebrationType);
+        } else {
+          setIsStepValid(!!formData.eventType);
+        }
         break;
       case 2:
         // Space upload: valid if has photos OR manual entry is complete
@@ -95,6 +145,18 @@ const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
       case 4:
         setIsStepValid(!!formData.budgetTier);
         break;
+      case 4.5:
+        // Celebration amenities step - validate if this step should be shown
+        if (shouldShowCelebrationStep()) {
+          // At least one amenity selected or some custom requests
+          setIsStepValid(
+            (formData.celebrationAmenities?.selectedAmenities?.length || 0) > 0 ||
+            (formData.celebrationAmenities?.customRequests?.length || 0) > 0
+          );
+        } else {
+          setIsStepValid(true); // Skip this step if not needed
+        }
+        break;
       case 5:
         setIsStepValid(!!formData.guestCount && formData.guestCount > 0);
         break;
@@ -107,8 +169,20 @@ const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
   }, [currentStep, formData]);
 
   const nextStep = () => {
-    if (currentStep < steps.length && isStepValid) {
-      const newStep = currentStep + 1;
+    if (isStepValid) {
+      let newStep: number;
+      
+      // Handle step progression including conditional steps
+      if (currentStep === 4 && shouldShowCelebrationStep()) {
+        newStep = 4.5;
+      } else if (currentStep === 4.5) {
+        newStep = 5;
+      } else if (currentStep < 6) {
+        newStep = currentStep + 1;
+      } else {
+        return; // Already at last step
+      }
+      
       setCurrentStep(newStep);
       onStepChange?.(newStep);
       
@@ -119,7 +193,17 @@ const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
 
   const prevStep = () => {
     if (currentStep > 1) {
-      const newStep = currentStep - 1;
+      let newStep: number;
+      
+      // Handle step regression including conditional steps
+      if (currentStep === 5 && shouldShowCelebrationStep()) {
+        newStep = 4.5;
+      } else if (currentStep === 4.5) {
+        newStep = 4;
+      } else {
+        newStep = currentStep - 1;
+      }
+      
       setCurrentStep(newStep);
       onStepChange?.(newStep);
       
@@ -130,7 +214,22 @@ const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
 
   const handleComplete = () => {
     if (isStepValid) {
-      onComplete?.(formData as FormData);
+      // Add cultural context mapping when completing form with celebration type
+      if (formData.celebrationType) {
+        const celebrationMapping = celebrationTypes.find(c => c.type === formData.celebrationType);
+        if (celebrationMapping && !formData.culturalPreferences?.includes(celebrationMapping.culturalContext)) {
+          // Auto-add the cultural context for the celebration
+          const updatedFormData = {
+            ...formData,
+            culturalPreferences: [...(formData.culturalPreferences || []), celebrationMapping.culturalContext]
+          };
+          onComplete?.(updatedFormData as FormData);
+        } else {
+          onComplete?.(formData as FormData);
+        }
+      } else {
+        onComplete?.(formData as FormData);
+      }
     }
   };
 
@@ -138,7 +237,18 @@ const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
     setFormData(prev => ({ ...prev, ...updates }));
   };
 
-  const progressPercentage = (currentStep / steps.length) * 100;
+  // Check if we should show the celebration amenities step
+  const shouldShowCelebrationStep = () => {
+    return formData.eventType === 'birthday' && formData.celebrationType;
+  };
+
+  // Get visible steps based on form state
+  const getVisibleSteps = () => {
+    return steps.filter(step => !step.conditional || shouldShowCelebrationStep());
+  };
+
+  const visibleSteps = getVisibleSteps();
+  const progressPercentage = (currentStep / visibleSteps.length) * 100;
 
   return (
     <div className={cn("min-h-screen bg-gradient-to-br from-primary-50 to-cultural-primary/5", className)}>
@@ -165,7 +275,7 @@ const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
           {/* Progress Bar */}
           <div className="relative">
             <div className="flex justify-between items-center mb-4">
-              {steps.map((step, index) => (
+              {visibleSteps.map((step, index) => (
                 <div key={step.id} className="flex flex-col items-center flex-1">
                   <div className="relative">
                     <motion.div
@@ -182,17 +292,17 @@ const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
                       {currentStep > step.id ? (
                         <CheckCircle className="w-5 h-5" />
                       ) : (
-                        <span className="text-sm font-semibold">{step.id}</span>
+                        <span className="text-sm font-semibold">{step.id === 4.5 ? '4.5' : step.id}</span>
                       )}
                     </motion.div>
                     
-                    {index < steps.length - 1 && (
+                    {index < visibleSteps.length - 1 && (
                       <div 
                         className={cn(
                           "absolute top-5 left-10 h-0.5 transition-all duration-300",
                           currentStep > step.id ? "bg-cultural-primary" : "bg-primary-200"
                         )}
-                        style={{ width: 'calc(100vw / 5 - 2.5rem)' }}
+                        style={{ width: `calc(100vw / ${visibleSteps.length} - 2.5rem)` }}
                       />
                     )}
                   </div>
@@ -253,7 +363,8 @@ const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
                   {currentStep === 1 && (
                     <EventTypeStep 
                       value={formData.eventType}
-                      onChange={(eventType) => updateFormData({ eventType })}
+                      celebrationType={formData.celebrationType}
+                      onChange={(eventType, celebrationType) => updateFormData({ eventType, celebrationType })}
                     />
                   )}
                   {currentStep === 2 && (
@@ -272,6 +383,13 @@ const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
                     <BudgetTierStep 
                       value={formData.budgetTier}
                       onChange={(budgetTier) => updateFormData({ budgetTier })}
+                    />
+                  )}
+                  {currentStep === 4.5 && shouldShowCelebrationStep() && (
+                    <CelebrationAmenitiesStep 
+                      celebrationType={formData.celebrationType}
+                      value={formData.celebrationAmenities}
+                      onChange={(celebrationAmenities) => updateFormData({ celebrationAmenities })}
                     />
                   )}
                   {currentStep === 5 && (
@@ -305,10 +423,10 @@ const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
                 </Button>
 
                 <div className="text-sm text-primary-500">
-                  Step {currentStep} of {steps.length}
+                  Step {visibleSteps.findIndex(s => s.id === currentStep) + 1} of {visibleSteps.length}
                 </div>
 
-                {currentStep === steps.length ? (
+                {currentStep === 6 ? (
                   <Button
                     variant="cultural"
                     size="lg"
@@ -343,8 +461,9 @@ const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
 // Step 1: Event Type Selection
 const EventTypeStep: React.FC<{
   value?: EventType;
-  onChange: (value: EventType) => void;
-}> = ({ value, onChange }) => {
+  celebrationType?: CelebrationType;
+  onChange: (value: EventType, celebrationType?: CelebrationType) => void;
+}> = ({ value, celebrationType, onChange }) => {
   const { currentTheme } = useTheme();
   
   const eventTypes = [
@@ -354,7 +473,8 @@ const EventTypeStep: React.FC<{
       description: 'Celebrate another year of life with joy and style',
       icon: '🎂',
       color: 'from-pink-500 to-purple-600',
-      features: ['Personal touches', 'Age-appropriate themes', 'Memory making']
+      features: ['Personal touches', 'Age-appropriate themes', 'Memory making'],
+      hasSpecialCelebrations: true
     },
     {
       type: 'wedding' as EventType,
@@ -390,6 +510,7 @@ const EventTypeStep: React.FC<{
     }
   ];
 
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -420,6 +541,7 @@ const EventTypeStep: React.FC<{
                   : "border-primary-200 hover:border-cultural-primary/50"
               )}
               onClick={() => onChange(eventType.type)}
+              data-has-celebrations={eventType.hasSpecialCelebrations}
             >
               <div className="text-center">
                 {/* Icon */}
@@ -465,6 +587,78 @@ const EventTypeStep: React.FC<{
         ))}
       </div>
 
+      {/* Celebration Type Selection (only for birthday events) */}
+      {value === 'birthday' && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-8"
+        >
+          <div className="text-center mb-6">
+            <h3 className="text-xl font-bold text-primary-900 mb-2">
+              Choose Your Celebration Style
+            </h3>
+            <p className="text-primary-600">
+              Select a specific cultural celebration for authentic design elements
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {celebrationTypes.map((celebration, index) => (
+              <motion.div
+                key={celebration.type}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Card
+                  className={cn(
+                    "p-4 cursor-pointer border-2 transition-all duration-300 hover:shadow-lg",
+                    celebrationType === celebration.type
+                      ? "border-cultural-primary bg-gradient-to-br from-cultural-primary/5 to-cultural-secondary/5 shadow-lg"
+                      : "border-primary-200 hover:border-cultural-primary/50"
+                  )}
+                  onClick={() => onChange(value, celebration.type)}
+                >
+                  <div className="flex items-start space-x-4">
+                    <div className="text-3xl">{celebration.flag}</div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-primary-900 mb-1">
+                        {celebration.title}
+                      </h4>
+                      <p className="text-sm text-primary-600 mb-3">
+                        {celebration.description}
+                      </p>
+                      <div className="space-y-1">
+                        {celebration.features.map((feature, featureIndex) => (
+                          <div key={featureIndex} className="flex items-center space-x-2 text-xs text-primary-500">
+                            <CheckCircle className="w-3 h-3 text-cultural-primary" />
+                            <span>{feature}</span>
+                          </div>
+                        ))}
+                      </div>
+                      
+                      {celebrationType === celebration.type && (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          className="mt-3 flex items-center space-x-2 text-cultural-primary"
+                        >
+                          <CheckCircle className="w-4 h-4" />
+                          <span className="text-sm font-medium">Selected</span>
+                        </motion.div>
+                      )}
+                    </div>
+                  </div>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
       {value && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -472,7 +666,10 @@ const EventTypeStep: React.FC<{
           className="mt-8 p-4 bg-cultural-primary/10 rounded-xl text-center"
         >
           <p className="text-cultural-primary font-medium">
-            Perfect choice! Our AI will design with {eventTypes.find(t => t.type === value)?.title.toLowerCase()} traditions in mind.
+            {celebrationType 
+              ? `Perfect! Our AI will design your ${celebrationTypes.find(c => c.type === celebrationType)?.title} with authentic cultural elements.`
+              : `Perfect choice! Our AI will design with ${eventTypes.find(t => t.type === value)?.title.toLowerCase()} traditions in mind.`
+            }
           </p>
         </motion.div>
       )}
@@ -480,7 +677,388 @@ const EventTypeStep: React.FC<{
   );
 };
 
-// Step 2: Cultural Preferences Selection
+// Step 4.5: Celebration Amenities Selection (Conditional)
+const CelebrationAmenitiesStep: React.FC<{
+  celebrationType?: CelebrationType;
+  value?: FormData['celebrationAmenities'];
+  onChange: (value: FormData['celebrationAmenities']) => void;
+}> = ({ celebrationType, value, onChange }) => {
+  
+  // Celebration amenities data with smart suggestions
+  const amenitiesData: Record<CelebrationType, CelebrationAmenity[]> = {
+    'american-birthday': [
+      {
+        id: 'birthday-cake',
+        name: 'Birthday Cake Display',
+        description: 'Elegant cake table with decorative backdrop',
+        category: 'decor',
+        defaultForCelebrations: ['american-birthday'],
+      },
+      {
+        id: 'balloon-arch',
+        name: 'Balloon Arch',
+        description: 'Colorful balloon archway entrance',
+        category: 'decor',
+        defaultForCelebrations: ['american-birthday'],
+      },
+      {
+        id: 'party-games-area',
+        name: 'Party Games Area',
+        description: 'Dedicated space for birthday party activities',
+        category: 'entertainment',
+        defaultForCelebrations: ['american-birthday'],
+      },
+      {
+        id: 'gift-table',
+        name: 'Gift Display Table',
+        description: 'Special table for presenting birthday gifts',
+        category: 'props',
+        defaultForCelebrations: ['american-birthday'],
+      },
+      {
+        id: 'photo-booth',
+        name: 'Birthday Photo Booth',
+        description: 'Fun photo area with birthday-themed props',
+        category: 'entertainment',
+        defaultForCelebrations: ['american-birthday'],
+      }
+    ],
+    'mexican-quinceanera': [
+      {
+        id: 'altar-setup',
+        name: 'Religious Altar',
+        description: 'Traditional altar for the blessing ceremony',
+        category: 'ceremonial',
+        culturalSignificance: 'Sacred space for religious blessing',
+        defaultForCelebrations: ['mexican-quinceanera'],
+      },
+      {
+        id: 'dance-floor',
+        name: 'Traditional Dance Floor',
+        description: 'Space for the waltz and traditional dances',
+        category: 'entertainment',
+        defaultForCelebrations: ['mexican-quinceanera'],
+      },
+      {
+        id: 'court-seating',
+        name: 'Court of Honor Seating',
+        description: 'Special seating arrangement for the court',
+        category: 'seating',
+        defaultForCelebrations: ['mexican-quinceanera'],
+      },
+      {
+        id: 'mariachi-stage',
+        name: 'Mariachi Performance Area',
+        description: 'Dedicated space for live mariachi music',
+        category: 'entertainment',
+        culturalSignificance: 'Traditional Mexican music',
+        defaultForCelebrations: ['mexican-quinceanera'],
+      },
+      {
+        id: 'floral-arrangements',
+        name: 'Traditional Floral Displays',
+        description: 'Mexican-inspired floral arrangements',
+        category: 'decor',
+        defaultForCelebrations: ['mexican-quinceanera'],
+      }
+    ],
+    'korean-doljanchi': [
+      {
+        id: 'doljabi-table',
+        name: 'Doljabi Ceremony Table',
+        description: 'Traditional table with symbolic objects for the baby to choose',
+        category: 'ceremonial',
+        culturalSignificance: 'Predicts the child\'s future path',
+        defaultForCelebrations: ['korean-doljanchi'],
+      },
+      {
+        id: 'rainbow-decorations',
+        name: 'Rainbow Decorations',
+        description: 'Traditional rainbow-colored decorative elements',
+        category: 'decor',
+        culturalSignificance: 'Symbolizes good luck and prosperity',
+        defaultForCelebrations: ['korean-doljanchi'],
+      },
+      {
+        id: 'hanbok-display',
+        name: 'Hanbok Display Area',
+        description: 'Special area to showcase traditional Korean clothing',
+        category: 'props',
+        defaultForCelebrations: ['korean-doljanchi'],
+      },
+      {
+        id: 'rice-cake-table',
+        name: 'Traditional Rice Cake Display',
+        description: 'Table featuring colorful Korean rice cakes (tteok)',
+        category: 'props',
+        culturalSignificance: 'Traditional celebratory food',
+        defaultForCelebrations: ['korean-doljanchi'],
+      },
+      {
+        id: 'family-blessing-area',
+        name: 'Family Blessing Area',
+        description: 'Sacred space for family members to give blessings',
+        category: 'ceremonial',
+        defaultForCelebrations: ['korean-doljanchi'],
+      }
+    ],
+    'jewish-bar-mitzvah': [
+      {
+        id: 'torah-reading-area',
+        name: 'Torah Reading Station',
+        description: 'Sacred area for the Torah reading ceremony',
+        category: 'ceremonial',
+        culturalSignificance: 'Central to the Bar Mitzvah ceremony',
+        defaultForCelebrations: ['jewish-bar-mitzvah', 'jewish-bat-mitzvah'],
+      },
+      {
+        id: 'kiddush-table',
+        name: 'Kiddush Table',
+        description: 'Traditional table for the blessing over wine',
+        category: 'ceremonial',
+        defaultForCelebrations: ['jewish-bar-mitzvah', 'jewish-bat-mitzvah'],
+      },
+      {
+        id: 'challah-display',
+        name: 'Challah Bread Display',
+        description: 'Special presentation for traditional braided bread',
+        category: 'props',
+        culturalSignificance: 'Traditional Jewish bread for celebrations',
+        defaultForCelebrations: ['jewish-bar-mitzvah', 'jewish-bat-mitzvah'],
+      },
+      {
+        id: 'family-seating',
+        name: 'Extended Family Seating',
+        description: 'Special arrangement for large family gatherings',
+        category: 'seating',
+        defaultForCelebrations: ['jewish-bar-mitzvah', 'jewish-bat-mitzvah'],
+      },
+      {
+        id: 'memory-display',
+        name: 'Family Heritage Display',
+        description: 'Area to showcase family history and traditions',
+        category: 'props',
+        defaultForCelebrations: ['jewish-bar-mitzvah', 'jewish-bat-mitzvah'],
+      }
+    ],
+    'jewish-bat-mitzvah': [
+      {
+        id: 'torah-reading-area',
+        name: 'Torah Reading Station',
+        description: 'Sacred area for the Torah reading ceremony',
+        category: 'ceremonial',
+        culturalSignificance: 'Central to the Bat Mitzvah ceremony',
+        defaultForCelebrations: ['jewish-bar-mitzvah', 'jewish-bat-mitzvah'],
+      },
+      {
+        id: 'kiddush-table',
+        name: 'Kiddush Table',
+        description: 'Traditional table for the blessing over wine',
+        category: 'ceremonial',
+        defaultForCelebrations: ['jewish-bar-mitzvah', 'jewish-bat-mitzvah'],
+      },
+      {
+        id: 'challah-display',
+        name: 'Challah Bread Display',
+        description: 'Special presentation for traditional braided bread',
+        category: 'props',
+        culturalSignificance: 'Traditional Jewish bread for celebrations',
+        defaultForCelebrations: ['jewish-bar-mitzvah', 'jewish-bat-mitzvah'],
+      },
+      {
+        id: 'family-seating',
+        name: 'Extended Family Seating',
+        description: 'Special arrangement for large family gatherings',
+        category: 'seating',
+        defaultForCelebrations: ['jewish-bar-mitzvah', 'jewish-bat-mitzvah'],
+      },
+      {
+        id: 'memory-display',
+        name: 'Family Heritage Display',
+        description: 'Area to showcase family history and traditions',
+        category: 'props',
+        defaultForCelebrations: ['jewish-bar-mitzvah', 'jewish-bat-mitzvah'],
+      }
+    ]
+  };
+
+  const currentAmenities = celebrationType ? amenitiesData[celebrationType] || [] : [];
+  
+  const handleAmenityToggle = (amenityId: string) => {
+    const currentSelected = value?.selectedAmenities || [];
+    const updated = currentSelected.includes(amenityId)
+      ? currentSelected.filter(id => id !== amenityId)
+      : [...currentSelected, amenityId];
+    
+    onChange({
+      ...value,
+      selectedAmenities: updated
+    });
+  };
+
+  const handleCustomRequestChange = (customRequests: string[]) => {
+    onChange({
+      ...value,
+      customRequests
+    });
+  };
+
+  // Auto-populate defaults based on celebration type
+  useEffect(() => {
+    if (celebrationType && currentAmenities.length > 0 && !value?.selectedAmenities?.length) {
+      const defaultAmenities = currentAmenities
+        .filter(amenity => amenity.defaultForCelebrations.includes(celebrationType))
+        .map(amenity => amenity.id);
+      
+      onChange({
+        selectedAmenities: defaultAmenities,
+        customRequests: [],
+        culturalElements: [],
+        ceremonialRequirements: []
+      });
+    }
+  }, [celebrationType, currentAmenities, value, onChange]);
+
+  if (!celebrationType) {
+    return null;
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="space-y-8"
+    >
+      <div className="text-center mb-8">
+        <p className="text-lg text-primary-600 mb-4">
+          Select celebration elements that will make your event special and culturally authentic
+        </p>
+        <p className="text-sm text-primary-500">
+          We've pre-selected traditional elements based on your celebration type
+        </p>
+      </div>
+
+      {/* Amenities Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {currentAmenities.map((amenity) => {
+          const isSelected = value?.selectedAmenities?.includes(amenity.id) || false;
+          
+          return (
+            <motion.div
+              key={amenity.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <Card
+                className={cn(
+                  "p-4 cursor-pointer border-2 transition-all duration-300 hover:shadow-lg",
+                  isSelected
+                    ? "border-cultural-primary bg-gradient-to-br from-cultural-primary/5 to-cultural-secondary/5 shadow-lg"
+                    : "border-primary-200 hover:border-cultural-primary/50"
+                )}
+                onClick={() => handleAmenityToggle(amenity.id)}
+              >
+                <div className="flex items-start space-x-4">
+                  {/* Selection indicator */}
+                  <div className={cn(
+                    "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all mt-1",
+                    isSelected
+                      ? "bg-cultural-primary border-cultural-primary"
+                      : "border-primary-300"
+                  )}>
+                    {isSelected && (
+                      <CheckCircle className="w-4 h-4 text-white" />
+                    )}
+                  </div>
+
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <h4 className="font-bold text-primary-900">
+                        {amenity.name}
+                      </h4>
+                      {amenity.culturalSignificance && (
+                        <span className="px-2 py-1 bg-cultural-primary/10 rounded text-xs text-cultural-primary">
+                          Cultural
+                        </span>
+                      )}
+                    </div>
+                    
+                    <p className="text-sm text-primary-600 mb-2">
+                      {amenity.description}
+                    </p>
+                    
+                    {amenity.culturalSignificance && (
+                      <p className="text-xs text-cultural-primary italic">
+                        {amenity.culturalSignificance}
+                      </p>
+                    )}
+                    
+                    <div className="mt-2">
+                      <span className="inline-block px-2 py-1 bg-primary-100 rounded text-xs text-primary-700 capitalize">
+                        {amenity.category}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Custom Requests */}
+      <div>
+        <label className="block text-lg font-medium text-primary-900 mb-4">
+          Additional Special Requests (Optional)
+        </label>
+        <textarea
+          placeholder="Describe any special cultural elements, family traditions, or unique requirements..."
+          value={value?.customRequests?.join('\n') || ''}
+          onChange={(e) => {
+            const requests = e.target.value.split('\n').filter(req => req.trim());
+            handleCustomRequestChange(requests);
+          }}
+          className="w-full p-4 border border-primary-300 rounded-lg focus:border-cultural-primary focus:ring-2 focus:ring-cultural-primary/20 h-24 resize-none"
+        />
+      </div>
+
+      {/* Summary */}
+      {value?.selectedAmenities?.length && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-6 bg-gradient-to-r from-cultural-primary/10 to-cultural-secondary/10 rounded-xl"
+        >
+          <h4 className="font-medium text-cultural-primary mb-3">
+            Selected Celebration Elements ({value.selectedAmenities.length})
+          </h4>
+          <div className="grid md:grid-cols-2 gap-2">
+            {value.selectedAmenities.map((amenityId) => {
+              const amenity = currentAmenities.find(a => a.id === amenityId);
+              return amenity ? (
+                <div key={amenityId} className="flex items-center space-x-2 text-sm">
+                  <CheckCircle className="w-4 h-4 text-cultural-primary" />
+                  <span className="text-primary-700">{amenity.name}</span>
+                  {amenity.culturalSignificance && (
+                    <span className="text-cultural-primary">*</span>
+                  )}
+                </div>
+              ) : null;
+            })}
+          </div>
+          <p className="text-xs text-primary-500 mt-3">
+            * Culturally significant elements
+          </p>
+        </motion.div>
+      )}
+    </motion.div>
+  );
+};
+
+// Step 3: Cultural Preferences Selection
 const CulturalPreferencesStep: React.FC<{
   value: CultureType[];
   onChange: (value: CultureType[]) => void;

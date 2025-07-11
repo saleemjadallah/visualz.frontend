@@ -66,6 +66,21 @@ interface Scene3DProps {
     modelPath?: string;
     scale?: number;
   }>;
+  celebrationProps?: Array<{
+    id: string;
+    name: string;
+    type: 'decor' | 'entertainment' | 'seating' | 'lighting' | 'props' | 'ceremonial';
+    x: number;
+    y: number;
+    z?: number;
+    width: number;
+    height: number;
+    depth?: number;
+    rotation: number;
+    color?: string;
+    culturalSignificance?: string;
+    celebrationType?: string;
+  }>;
   colorPalette: {
     primary: string;
     secondary: string;
@@ -80,7 +95,9 @@ interface Scene3DProps {
   };
   onFurnitureSelect?: (furnitureId: string) => void;
   onFurnitureMove?: (furnitureId: string, position: { x: number; y: number }) => void;
+  onCelebrationPropSelect?: (propId: string) => void;
   culturalTheme?: string;
+  celebrationType?: string;
   enablePhysics?: boolean;
   enableSnapping?: boolean;
   enableLOD?: boolean;
@@ -138,11 +155,14 @@ function LoadingFallback() {
 export function Scene3D({
   roomDimensions,
   furnitureItems = [],
+  celebrationProps = [],
   colorPalette,
   lightingPlan,
   onFurnitureSelect,
   onFurnitureMove,
+  onCelebrationPropSelect,
   culturalTheme = 'modern',
+  celebrationType,
   enablePhysics = true,
   enableSnapping = true,
   enableLOD = true,
@@ -153,6 +173,7 @@ export function Scene3D({
   enableWebGLDebugging = false
 }: Scene3DProps) {
   const [selectedFurniture, setSelectedFurniture] = useState<string | null>(null);
+  const [selectedCelebrationProp, setSelectedCelebrationProp] = useState<string | null>(null);
   const [cameraPreset, setCameraPreset] = useState<string>('overview');
   const [isDragging, setIsDragging] = useState(false);
   const [dragObject, setDragObject] = useState<string | null>(null);
@@ -187,11 +208,18 @@ export function Scene3D({
 
   const handleFurnitureClick = (furnitureId: string) => {
     setSelectedFurniture(furnitureId);
+    setSelectedCelebrationProp(null); // Clear celebration prop selection
     onFurnitureSelect?.(furnitureId);
   };
 
   const handleFurnitureMove = (furnitureId: string, position: { x: number; y: number }) => {
     onFurnitureMove?.(furnitureId, position);
+  };
+
+  const handleCelebrationPropClick = (propId: string) => {
+    setSelectedCelebrationProp(propId);
+    setSelectedFurniture(null); // Clear furniture selection
+    onCelebrationPropSelect?.(propId);
   };
 
   const handleThemeChange = async (newTheme: string) => {
@@ -298,15 +326,18 @@ export function Scene3D({
               <PhysicsSceneContent 
                 roomDimensions={roomDimensions}
                 furnitureItems={furnitureItems}
+                celebrationProps={celebrationProps}
                 colorPalette={colorPalette}
                 lightingPlan={lightingPlan}
                 selectedFurniture={selectedFurniture}
+                selectedCelebrationProp={selectedCelebrationProp}
                 culturalTheme={currentTheme}
                 enableSnapping={enableSnapping}
                 enableLOD={enableLOD}
                 recommendedLODDistance={recommendedLODDistance}
                 onFurnitureClick={handleFurnitureClick}
                 onFurnitureMove={handleFurnitureMove}
+                onCelebrationPropClick={handleCelebrationPropClick}
                 enableWebGLOptimization={enableWebGLOptimization}
               />
               <PhysicsPerformanceMonitor />
@@ -315,14 +346,17 @@ export function Scene3D({
             <StandardSceneContent 
               roomDimensions={roomDimensions}
               furnitureItems={furnitureItems}
+              celebrationProps={celebrationProps}
               colorPalette={colorPalette}
               lightingPlan={lightingPlan}
               selectedFurniture={selectedFurniture}
+              selectedCelebrationProp={selectedCelebrationProp}
               culturalTheme={currentTheme}
               enableLOD={enableLOD}
               recommendedLODDistance={recommendedLODDistance}
               onFurnitureClick={handleFurnitureClick}
               onFurnitureMove={handleFurnitureMove}
+              onCelebrationPropClick={handleCelebrationPropClick}
               enableWebGLOptimization={enableWebGLOptimization}
             />
           )}
@@ -468,14 +502,41 @@ export function Scene3D({
         </div>
       </div>
 
-      {selectedFurniture && (
+      {(selectedFurniture || selectedCelebrationProp) && (
         <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg max-w-48">
           <h4 className="font-semibold text-gray-800 mb-1">Selected Item</h4>
-          <p className="text-sm text-gray-600">
-            {furnitureItems.find(item => item.id === selectedFurniture)?.name}
-          </p>
+          {selectedFurniture && (
+            <div>
+              <p className="text-sm text-gray-600">
+                {furnitureItems.find(item => item.id === selectedFurniture)?.name}
+              </p>
+              <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">
+                Furniture
+              </span>
+            </div>
+          )}
+          {selectedCelebrationProp && (
+            <div>
+              <p className="text-sm text-gray-600">
+                {celebrationProps.find(prop => prop.id === selectedCelebrationProp)?.name}
+              </p>
+              <div className="flex items-center space-x-2 mt-1">
+                <span className="inline-block px-2 py-1 bg-cultural-primary/20 text-cultural-primary text-xs rounded">
+                  Celebration
+                </span>
+                {celebrationProps.find(prop => prop.id === selectedCelebrationProp)?.culturalSignificance && (
+                  <span className="inline-block px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded">
+                    Cultural
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
           <button
-            onClick={() => setSelectedFurniture(null)}
+            onClick={() => {
+              setSelectedFurniture(null);
+              setSelectedCelebrationProp(null);
+            }}
             className="mt-2 text-xs text-blue-600 hover:text-blue-800"
           >
             Deselect
@@ -513,19 +574,142 @@ export function Scene3D({
   );
 }
 
+// Celebration Prop 3D Component
+function CelebrationProp3D({ 
+  prop, 
+  isSelected, 
+  onClick,
+  culturalTheme 
+}: { 
+  prop: any; 
+  isSelected: boolean; 
+  onClick: () => void;
+  culturalTheme: string;
+}) {
+  const meshRef = useRef<THREE.Mesh>(null);
+
+  // Get color based on prop type and cultural theme
+  const getPropColor = () => {
+    if (prop.color) return prop.color;
+    
+    switch (prop.type) {
+      case 'ceremonial':
+        return culturalTheme === 'korean' ? '#ff6b6b' : culturalTheme === 'jewish' ? '#4dabf7' : '#ffd43b';
+      case 'decor':
+        return culturalTheme === 'mexican' ? '#ff8cc8' : '#69db7c';
+      case 'entertainment':
+        return '#74c0fc';
+      case 'props':
+        return '#fcc419';
+      case 'seating':
+        return '#8ce99a';
+      case 'lighting':
+        return '#ffe066';
+      default:
+        return '#868e96';
+    }
+  };
+
+  // Get prop geometry based on type
+  const getPropGeometry = () => {
+    switch (prop.type) {
+      case 'ceremonial':
+        // Altar or ceremonial table - rectangular and elevated
+        return <boxGeometry args={[prop.width, prop.height * 0.8, prop.depth || prop.width * 0.6]} />;
+      case 'decor':
+        // Decorative elements - varied shapes
+        if (prop.name.toLowerCase().includes('balloon')) {
+          return <sphereGeometry args={[prop.width * 0.3, 16, 16]} />;
+        } else if (prop.name.toLowerCase().includes('arch')) {
+          return <torusGeometry args={[prop.width * 0.4, prop.width * 0.1, 8, 32]} />;
+        }
+        return <boxGeometry args={[prop.width, prop.height, prop.depth || prop.width]} />;
+      case 'entertainment':
+        // Entertainment areas - platform-like
+        return <cylinderGeometry args={[prop.width * 0.8, prop.width * 0.8, prop.height * 0.3, 16]} />;
+      case 'props':
+        // Display tables and prop areas
+        return <boxGeometry args={[prop.width, prop.height * 0.6, prop.depth || prop.width * 0.8]} />;
+      case 'seating':
+        // Special seating arrangements
+        return <boxGeometry args={[prop.width, prop.height * 0.4, prop.depth || prop.width * 0.5]} />;
+      case 'lighting':
+        // Lighting elements - tall and thin
+        return <cylinderGeometry args={[prop.width * 0.1, prop.width * 0.1, prop.height, 8]} />;
+      default:
+        return <boxGeometry args={[prop.width, prop.height, prop.depth || prop.width]} />;
+    }
+  };
+
+  return (
+    <group
+      position={[prop.x, (prop.z || 0) + prop.height / 2, prop.y]}
+      rotation={[0, (prop.rotation * Math.PI) / 180, 0]}
+      onClick={onClick}
+    >
+      <mesh 
+        ref={meshRef}
+        castShadow
+        receiveShadow
+      >
+        {getPropGeometry()}
+        <meshStandardMaterial 
+          color={getPropColor()}
+          transparent={prop.type === 'lighting'}
+          opacity={prop.type === 'lighting' ? 0.7 : 1}
+          roughness={0.3}
+          metalness={prop.type === 'ceremonial' ? 0.2 : 0.1}
+        />
+      </mesh>
+      
+      {/* Selection indicator */}
+      {isSelected && (
+        <mesh>
+          <boxGeometry args={[prop.width + 0.2, prop.height + 0.2, (prop.depth || prop.width) + 0.2]} />
+          <meshBasicMaterial 
+            color="#ff6b6b" 
+            transparent 
+            opacity={0.3} 
+            wireframe 
+          />
+        </mesh>
+      )}
+      
+      {/* Cultural significance indicator */}
+      {prop.culturalSignificance && (
+        <Html position={[0, prop.height * 0.6, 0]} center>
+          <div className="bg-cultural-primary text-white px-2 py-1 rounded text-xs">
+            Cultural
+          </div>
+        </Html>
+      )}
+      
+      {/* Label */}
+      <Html position={[0, prop.height + 0.5, 0]} center>
+        <div className="bg-white/90 backdrop-blur-sm px-2 py-1 rounded text-xs text-gray-800">
+          {prop.name}
+        </div>
+      </Html>
+    </group>
+  );
+}
+
 // Physics-enabled scene content
 function PhysicsSceneContent({
   roomDimensions,
   furnitureItems,
+  celebrationProps,
   colorPalette,
   lightingPlan,
   selectedFurniture,
+  selectedCelebrationProp,
   culturalTheme,
   enableSnapping,
   enableLOD,
   recommendedLODDistance,
   onFurnitureClick,
   onFurnitureMove,
+  onCelebrationPropClick,
   enableWebGLOptimization
 }: any) {
   return (
@@ -579,6 +763,17 @@ function PhysicsSceneContent({
           />
         )
       ))}
+
+      {/* Celebration Props */}
+      {celebrationProps.map((prop: any) => (
+        <CelebrationProp3D
+          key={prop.id}
+          prop={prop}
+          isSelected={selectedCelebrationProp === prop.id}
+          onClick={() => onCelebrationPropClick(prop.id)}
+          culturalTheme={culturalTheme}
+        />
+      ))}
     </>
   );
 }
@@ -611,14 +806,17 @@ function getFurnitureHeight(category: string): number {
 function StandardSceneContent({
   roomDimensions,
   furnitureItems,
+  celebrationProps,
   colorPalette,
   lightingPlan,
   selectedFurniture,
+  selectedCelebrationProp,
   culturalTheme,
   enableLOD,
   recommendedLODDistance,
   onFurnitureClick,
   onFurnitureMove,
+  onCelebrationPropClick,
   enableWebGLOptimization
 }: any) {
   return (
@@ -661,6 +859,17 @@ function StandardSceneContent({
             culturalTheme={culturalTheme}
           />
         )
+      ))}
+
+      {/* Celebration Props */}
+      {celebrationProps.map((prop: any) => (
+        <CelebrationProp3D
+          key={prop.id}
+          prop={prop}
+          isSelected={selectedCelebrationProp === prop.id}
+          onClick={() => onCelebrationPropClick(prop.id)}
+          culturalTheme={culturalTheme}
+        />
       ))}
     </>
   );

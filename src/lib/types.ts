@@ -1,8 +1,37 @@
 // Core Application Types for DesignVisualz
 
-export type CultureType = 'japanese' | 'scandinavian' | 'italian' | 'french' | 'modern';
+export type CultureType = 'japanese' | 'scandinavian' | 'italian' | 'french' | 'modern' | 'american' | 'mexican' | 'korean' | 'jewish';
 
 export type EventType = 'birthday' | 'wedding' | 'corporate' | 'cultural' | 'holiday';
+
+// Celebration-specific types
+export type CelebrationType = 
+  | 'american-birthday' 
+  | 'mexican-quinceanera' 
+  | 'korean-doljanchi' 
+  | 'jewish-bar-mitzvah' 
+  | 'jewish-bat-mitzvah';
+
+export interface CelebrationAmenity {
+  id: string;
+  name: string;
+  description: string;
+  category: 'decor' | 'entertainment' | 'seating' | 'lighting' | 'props' | 'ceremonial';
+  culturalSignificance?: string;
+  defaultForCelebrations: CelebrationType[];
+  incompatibleWith?: string[];
+}
+
+export interface CelebrationContextMapping {
+  celebrationType: CelebrationType;
+  culturalContext: CultureType;
+  eventType: EventType;
+  traditionalElements: string[];
+  suggestedAmenities: string[];
+  culturalRequirements: string[];
+  ageConsiderations?: string[];
+  ceremonialAspects?: string[];
+}
 
 export type BudgetTier = 'modest' | 'comfortable' | 'luxurious' | 'unlimited';
 
@@ -165,6 +194,7 @@ export interface Vendor {
 export interface EventRequirementsForm {
   step: number;
   eventType: EventType;
+  celebrationType?: CelebrationType;
   culturalPreferences: CultureType[];
   budgetTier: BudgetTier;
   guestCount: number;
@@ -181,6 +211,12 @@ export interface EventRequirementsForm {
       limitations: string[];
     };
     aiAnalysis: any;
+  };
+  celebrationAmenities?: {
+    selectedAmenities: string[];
+    customRequests: string[];
+    culturalElements: string[];
+    ceremonialRequirements: string[];
   };
   stylePreferences: {
     colors: string[];
