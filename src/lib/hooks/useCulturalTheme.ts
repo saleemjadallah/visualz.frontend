@@ -95,6 +95,30 @@ export const useCulturalTheme = (config: CulturalThemeConfig = {}) => {
         description: 'Bold & contemporary',
         inspiration: 'Urban loft, industrial chic',
         flag: '🌐'
+      },
+      american: {
+        name: 'American Classic',
+        description: 'Comfortable & patriotic',
+        inspiration: 'Family gatherings, stars and stripes',
+        flag: '🇺🇸'
+      },
+      mexican: {
+        name: 'Mexican Celebration',
+        description: 'Vibrant & festive',
+        inspiration: 'Colorful markets, papel picado',
+        flag: '🇲🇽'
+      },
+      korean: {
+        name: 'Korean Traditional',
+        description: 'Harmonious & balanced',
+        inspiration: 'Temple gardens, traditional hanbok',
+        flag: '🇰🇷'
+      },
+      jewish: {
+        name: 'Jewish Heritage',
+        description: 'Traditional & ceremonial',
+        inspiration: 'Sacred traditions, community gatherings',
+        flag: '🇮🇱'
       }
     };
     return themeInfo[currentTheme] || themeInfo.japanese;

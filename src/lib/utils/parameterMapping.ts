@@ -188,7 +188,11 @@ export const convertFormToLightingParams = (formData: VisionFormData): LightingP
     'french': ['crystal-chandeliers', 'candelabras'],
     'italian': ['chandeliers', 'wall-sconces'],
     'scandinavian': ['candles', 'string-lights'],
-    'modern': ['track-lighting', 'led-strips']
+    'modern': ['track-lighting', 'led-strips'],
+    'american': ['american-style-chandeliers', 'pendant-lights'],
+    'mexican': ['colorful-lanterns', 'papel-picado-lights'],
+    'korean': ['traditional-lanterns', 'natural-lighting'],
+    'jewish': ['ceremonial-lighting', 'elegant-fixtures']
   };
   
   return {
@@ -245,7 +249,11 @@ export const convertFormToFloralParams = (formData: VisionFormData): FloralParam
     'french': ['garden-rose', 'peony', 'hydrangea'],
     'italian': ['rose', 'lily', 'olive-branches'],
     'scandinavian': ['tulip', 'daffodil', 'wildflowers'],
-    'modern': ['orchid', 'calla-lily', 'modern-roses']
+    'modern': ['orchid', 'calla-lily', 'modern-roses'],
+    'american': ['american-beauty-rose', 'sunflower', 'red-white-blue'],
+    'mexican': ['marigold', 'dahlia', 'bougainvillea'],
+    'korean': ['hibiscus', 'lotus', 'azalea'],
+    'jewish': ['white-roses', 'lilies', 'traditional-flowers']
   };
   
   return {
@@ -309,7 +317,11 @@ export const convertFormToStageParams = (formData: VisionFormData): StageParamet
     'french': ['salon-furniture', 'elegant-drapery'],
     'italian': ['classical-columns', 'ornate-details'],
     'scandinavian': ['natural-materials', 'clean-lines'],
-    'modern': ['tech-features', 'minimalist-design']
+    'modern': ['tech-features', 'minimalist-design'],
+    'american': ['patriotic-elements', 'comfortable-seating'],
+    'mexican': ['colorful-decorations', 'festive-elements'],
+    'korean': ['traditional-platform', 'harmonious-design'],
+    'jewish': ['ceremonial-platform', 'traditional-elements']
   };
   
   return {

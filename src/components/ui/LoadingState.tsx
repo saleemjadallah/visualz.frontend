@@ -53,7 +53,11 @@ const LoadingState: React.FC<LoadingStateProps> = ({
       scandinavian: 'from-blue-500 to-cyan-500',
       italian: 'from-green-500 to-yellow-500',
       french: 'from-purple-500 to-blue-500',
-      modern: 'from-gray-500 to-blue-500'
+      modern: 'from-gray-500 to-blue-500',
+      american: 'from-red-500 to-blue-500',
+      mexican: 'from-green-500 to-red-500',
+      korean: 'from-blue-500 to-white',
+      jewish: 'from-blue-500 to-indigo-500'
     };
     return colors[culture] || colors.modern;
   };

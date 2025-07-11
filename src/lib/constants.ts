@@ -235,6 +235,122 @@ export const CULTURAL_THEMES: Record<CultureType, CulturalTheme> = {
     ],
     materials: ['varied', 'comfortable', 'durable', 'innovative', 'practical'],
     patterns: ['eclectic', 'bold', 'comfortable', 'innovative', 'expressive']
+  },
+
+  american: {
+    culture: 'american',
+    name: 'American Design Philosophy',
+    principles: [
+      {
+        name: 'Bold Expression',
+        description: 'Confident use of color and statement pieces',
+        application: 'Bold color combinations, comfortable seating, family-focused layouts',
+        colors: ['#FF0000', '#FFFFFF', '#0000FF'],
+        materials: ['leather', 'denim', 'wood', 'metal'],
+        patterns: ['bold', 'comfortable', 'patriotic', 'family-friendly']
+      }
+    ],
+    colorPalette: {
+      primary: '#1e40af',
+      secondary: '#dc2626',
+      accent: '#ffffff',
+      neutral: ['#f8f9fa', '#e9ecef', '#ced4da', '#adb5bd']
+    },
+    guidelines: [
+      'Create comfortable family gathering spaces',
+      'Use bold, confident design choices',
+      'Prioritize functionality and durability',
+      'Incorporate patriotic elements when appropriate'
+    ],
+    materials: ['leather', 'denim', 'wood', 'metal', 'cotton'],
+    patterns: ['bold', 'comfortable', 'practical', 'family-oriented']
+  },
+
+  mexican: {
+    culture: 'mexican',
+    name: 'Mexican Design Philosophy',
+    principles: [
+      {
+        name: 'Vibrant Color',
+        description: 'Rich, celebratory colors that reflect joy and tradition',
+        application: 'Bright textiles, colorful ceramics, festive decorations',
+        colors: ['#DC143C', '#228B22', '#FFD700', '#FF4500'],
+        materials: ['ceramic', 'textiles', 'papel picado', 'wood'],
+        patterns: ['geometric', 'floral', 'traditional', 'festive']
+      }
+    ],
+    colorPalette: {
+      primary: '#DC143C',
+      secondary: '#228B22',
+      accent: '#FFD700',
+      neutral: ['#FFF8DC', '#F5DEB3', '#DEB887', '#D2B48C']
+    },
+    guidelines: [
+      'Use vibrant, celebratory colors',
+      'Incorporate traditional patterns and textiles',
+      'Create spaces for family celebrations',
+      'Honor cultural traditions and customs'
+    ],
+    materials: ['ceramic', 'textiles', 'papel picado', 'wood', 'terracotta'],
+    patterns: ['geometric', 'floral', 'traditional', 'celebratory']
+  },
+
+  korean: {
+    culture: 'korean',
+    name: 'Korean Design Philosophy',
+    principles: [
+      {
+        name: 'Harmony and Balance',
+        description: 'Balanced proportions and harmonious color relationships',
+        application: 'Balanced furniture arrangements, traditional color harmony',
+        colors: ['#4169E1', '#FFFFFF', '#FFD700', '#DC143C'],
+        materials: ['wood', 'silk', 'ceramic', 'natural fibers'],
+        patterns: ['balanced', 'harmonious', 'traditional', 'respectful']
+      }
+    ],
+    colorPalette: {
+      primary: '#4169E1',
+      secondary: '#FFFFFF',
+      accent: '#FFD700',
+      neutral: ['#F8F8FF', '#E6E6FA', '#D3D3D3', '#C0C0C0']
+    },
+    guidelines: [
+      'Maintain balance and harmony in all elements',
+      'Respect traditional color combinations',
+      'Create spaces for multi-generational gatherings',
+      'Honor ancestral traditions'
+    ],
+    materials: ['wood', 'silk', 'ceramic', 'natural fibers', 'bamboo'],
+    patterns: ['balanced', 'harmonious', 'traditional', 'respectful']
+  },
+
+  jewish: {
+    culture: 'jewish',
+    name: 'Jewish Design Philosophy',
+    principles: [
+      {
+        name: 'Sacred Space',
+        description: 'Creating spaces that honor tradition and community',
+        application: 'Ceremonial areas, community gathering spaces, traditional elements',
+        colors: ['#4169E1', '#FFFFFF', '#C0C0C0', '#FFD700'],
+        materials: ['wood', 'fabric', 'metal', 'ceramic'],
+        patterns: ['traditional', 'ceremonial', 'community-focused', 'respectful']
+      }
+    ],
+    colorPalette: {
+      primary: '#4169E1',
+      secondary: '#FFFFFF',
+      accent: '#FFD700',
+      neutral: ['#F0F8FF', '#E6E6FA', '#D3D3D3', '#B0C4DE']
+    },
+    guidelines: [
+      'Create spaces that honor religious traditions',
+      'Design for community and family gatherings',
+      'Incorporate traditional ceremonial elements',
+      'Respect cultural and religious significance'
+    ],
+    materials: ['wood', 'fabric', 'metal', 'ceramic', 'velvet'],
+    patterns: ['traditional', 'ceremonial', 'community-focused', 'respectful']
   }
 };
 

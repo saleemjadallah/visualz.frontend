@@ -80,7 +80,11 @@ const CulturalSensitivityReview: React.FC<CulturalSensitivityReviewProps> = ({
       scandinavian: '🇸🇪',
       italian: '🇮🇹',
       french: '🇫🇷',
-      modern: '🌐'
+      modern: '🌐',
+      american: '🇺🇸',
+      mexican: '🇲🇽',
+      korean: '🇰🇷',
+      jewish: '🇮🇱'
     };
     return flags[culture] || flags.modern;
   };

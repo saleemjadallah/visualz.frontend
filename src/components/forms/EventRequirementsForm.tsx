@@ -891,15 +891,19 @@ const CelebrationAmenitiesStep: React.FC<{
       : [...currentSelected, amenityId];
     
     onChange({
-      ...value,
-      selectedAmenities: updated
+      selectedAmenities: updated,
+      customRequests: value?.customRequests || [],
+      culturalElements: value?.culturalElements || [],
+      ceremonialRequirements: value?.ceremonialRequirements || []
     });
   };
 
   const handleCustomRequestChange = (customRequests: string[]) => {
     onChange({
-      ...value,
-      customRequests
+      selectedAmenities: value?.selectedAmenities || [],
+      customRequests,
+      culturalElements: value?.culturalElements || [],
+      ceremonialRequirements: value?.ceremonialRequirements || []
     });
   };
 

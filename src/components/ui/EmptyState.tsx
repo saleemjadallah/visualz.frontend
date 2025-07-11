@@ -82,6 +82,38 @@ const EmptyState: React.FC<EmptyStateProps> = ({
             <Sparkles className="w-8 h-8 text-gray-600" />
           </div>
         </div>
+      ),
+      american: (
+        <div className="w-24 h-24 mx-auto mb-4 relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-red-100 to-blue-100 rounded-full" />
+          <div className="absolute inset-2 bg-white rounded-full flex items-center justify-center">
+            <Sparkles className="w-8 h-8 text-blue-600" />
+          </div>
+        </div>
+      ),
+      mexican: (
+        <div className="w-24 h-24 mx-auto mb-4 relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-green-100 to-red-100 rounded-full" />
+          <div className="absolute inset-2 bg-white rounded-full flex items-center justify-center">
+            <Palette className="w-8 h-8 text-green-600" />
+          </div>
+        </div>
+      ),
+      korean: (
+        <div className="w-24 h-24 mx-auto mb-4 relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-white rounded-full" />
+          <div className="absolute inset-2 bg-white rounded-full flex items-center justify-center">
+            <Globe className="w-8 h-8 text-blue-600" />
+          </div>
+        </div>
+      ),
+      jewish: (
+        <div className="w-24 h-24 mx-auto mb-4 relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full" />
+          <div className="absolute inset-2 bg-white rounded-full flex items-center justify-center">
+            <Sparkles className="w-8 h-8 text-indigo-600" />
+          </div>
+        </div>
       )
     };
     

@@ -188,7 +188,11 @@ export const useCulturalValidation = () => {
       scandinavian: ['japanese'], // Both value functionality
       italian: ['french'], // Both European, warm traditions
       french: ['italian'], // Both appreciate refinement
-      modern: ['scandinavian'] // Both value functionality
+      modern: ['scandinavian'], // Both value functionality
+      american: ['modern'], // Both value comfort and functionality
+      mexican: ['italian'], // Both appreciate vibrant family traditions
+      korean: ['japanese'], // Both value harmony and balance
+      jewish: ['french'] // Both appreciate tradition and refinement
     };
 
     return culturalCompatibility[primary] || [];
@@ -235,6 +239,38 @@ export const useCulturalValidation = () => {
         'Incorporate industrial elements',
         'Focus on convenience and efficiency',
         'Mix styles for eclectic appeal'
+      ],
+      american: [
+        'Prioritize comfort and family functionality',
+        'Use durable, family-friendly materials',
+        'Create open gathering spaces',
+        'Incorporate patriotic elements when appropriate',
+        'Focus on practical, comfortable design',
+        'Emphasize hospitality and welcoming spaces'
+      ],
+      mexican: [
+        'Use vibrant, celebratory colors',
+        'Incorporate traditional patterns and textiles',
+        'Create spaces for family celebrations',
+        'Honor cultural traditions respectfully',
+        'Use natural materials like ceramic and wood',
+        'Emphasize warmth and community gathering'
+      ],
+      korean: [
+        'Maintain balance and harmony in all elements',
+        'Respect traditional color combinations',
+        'Create spaces for multi-generational use',
+        'Honor ancestral traditions',
+        'Use natural materials and clean lines',
+        'Emphasize peaceful, meditative spaces'
+      ],
+      jewish: [
+        'Respect religious traditions and requirements',
+        'Create ceremonial and community spaces',
+        'Honor traditional elements appropriately',
+        'Ensure accessibility for all community members',
+        'Use materials that support sacred practices',
+        'Emphasize learning and gathering spaces'
       ]
     };
 
@@ -275,7 +311,11 @@ export const useCulturalValidation = () => {
         scandinavian: 'Scandinavian design emphasizes functionality, natural materials, and creating cozy, livable spaces',
         italian: 'Italian design celebrates warmth, family gathering, and the beauty of aged, crafted materials',
         french: 'French design focuses on elegance, sophistication, and timeless beauty with attention to detail',
-        modern: 'Modern design embraces bold innovation, mixing styles, and creating flexible, efficient spaces'
+        modern: 'Modern design embraces bold innovation, mixing styles, and creating flexible, efficient spaces',
+        american: 'American design prioritizes comfort, family gathering, and practical functionality with patriotic elements',
+        mexican: 'Mexican design celebrates vibrant colors, family traditions, and cultural heritage with festive elements',
+        korean: 'Korean design emphasizes harmony, balance, and respect for ancestral traditions with natural materials',
+        jewish: 'Jewish design honors religious traditions, community gathering, and sacred practices with respectful elements'
       };
       return insights[culture] || '';
     }, [])

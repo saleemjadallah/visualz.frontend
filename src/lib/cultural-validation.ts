@@ -74,6 +74,58 @@ const CULTURAL_GUIDELINES = {
       'Focus on usability',
       'Avoid overly complex designs'
     ]
+  },
+  american: {
+    respectfulColors: ['#FF0000', '#FFFFFF', '#0000FF', '#FFD700'],
+    avoidColors: [] as string[],
+    appropriatePatterns: ['patriotic', 'comfortable', 'family-friendly'],
+    restrictedSymbols: [] as string[],
+    materials: ['leather', 'denim', 'wood', 'metal'],
+    principles: ['comfort', 'functionality', 'family-focus'],
+    restrictions: [
+      'Ensure family-friendly design',
+      'Prioritize comfort and accessibility',
+      'Respect diverse backgrounds'
+    ]
+  },
+  mexican: {
+    respectfulColors: ['#DC143C', '#228B22', '#FFD700', '#FFFFFF'],
+    avoidColors: [] as string[],
+    appropriatePatterns: ['geometric', 'floral', 'traditional', 'festive'],
+    restrictedSymbols: ['aztec_sacred'], // Context-sensitive
+    materials: ['ceramic', 'textiles', 'papel picado', 'wood'],
+    principles: ['celebration', 'family', 'tradition'],
+    restrictions: [
+      'Respect sacred symbols and traditions',
+      'Honor family customs',
+      'Avoid stereotypical representations'
+    ]
+  },
+  korean: {
+    respectfulColors: ['#4169E1', '#FFFFFF', '#FFD700', '#DC143C'],
+    avoidColors: [] as string[],
+    appropriatePatterns: ['balanced', 'harmonious', 'traditional'],
+    restrictedSymbols: ['buddhist_sacred'], // Context-sensitive
+    materials: ['wood', 'silk', 'ceramic', 'natural fibers'],
+    principles: ['harmony', 'balance', 'respect'],
+    restrictions: [
+      'Maintain balance and harmony',
+      'Respect generational traditions',
+      'Honor ancestral customs'
+    ]
+  },
+  jewish: {
+    respectfulColors: ['#4169E1', '#FFFFFF', '#C0C0C0', '#FFD700'],
+    avoidColors: [] as string[],
+    appropriatePatterns: ['traditional', 'ceremonial', 'community-focused'],
+    restrictedSymbols: ['religious_sacred'], // Context-sensitive
+    materials: ['wood', 'fabric', 'metal', 'ceramic'],
+    principles: ['tradition', 'community', 'sacred_space'],
+    restrictions: [
+      'Respect religious traditions and laws',
+      'Honor ceremonial requirements',
+      'Ensure community accessibility'
+    ]
   }
 };
 
@@ -368,7 +420,11 @@ export class CulturalValidator {
       italian: ['gondola', 'pizza', 'pasta'],
       french: ['beret', 'baguette', 'wine'],
       scandinavian: ['viking', 'ikea'],
-      modern: ['tech', 'minimal', 'glass']
+      modern: ['tech', 'minimal', 'glass'],
+      american: ['cowboy', 'eagles', 'stars-stripes'],
+      mexican: ['sombreros', 'cactus', 'tequila'],
+      korean: ['taekwondo', 'kimchi', 'k-pop'],
+      jewish: ['stereotypical', 'religious-only', 'kosher-only']
     };
 
     const culturalStereotypes = stereotypicalElements[culture] || [];

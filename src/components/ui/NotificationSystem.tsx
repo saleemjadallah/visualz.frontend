@@ -171,7 +171,11 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
       scandinavian: 'border-l-blue-500',
       italian: 'border-l-green-500',
       french: 'border-l-purple-500',
-      modern: 'border-l-gray-600'
+      modern: 'border-l-gray-600',
+      american: 'border-l-blue-500',
+      mexican: 'border-l-green-500',
+      korean: 'border-l-blue-500',
+      jewish: 'border-l-indigo-500'
     };
     return accents[culture] || accents.modern;
   };
