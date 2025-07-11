@@ -18,6 +18,14 @@ import {
 // Backend integration endpoint configuration
 const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://visualz.xyz';
 
+// Helper function to get auth token
+const getAuthToken = (): string | null => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('access_token') || localStorage.getItem('token');
+  }
+  return null;
+};
+
 interface ParametricGenerationResult {
   furniture: {
     models: any[];
@@ -146,10 +154,12 @@ export const useParametricIntegration = (): UseParametricIntegrationState => {
 
       // Phase 3: Generate Furniture (35%)
       updateProgress('generating', 35);
+      const token = getAuthToken();
       const furnitureResponse = await fetch(`${BACKEND_BASE_URL}/api/parametric/furniture/generate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` }),
         },
         body: JSON.stringify({
           request: eventParams.furniture,
@@ -176,6 +186,7 @@ export const useParametricIntegration = (): UseParametricIntegrationState => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            ...(token && { 'Authorization': `Bearer ${token}` }),
           },
           body: JSON.stringify({
             parameters: eventParams.lighting,
@@ -197,6 +208,7 @@ export const useParametricIntegration = (): UseParametricIntegrationState => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            ...(token && { 'Authorization': `Bearer ${token}` }),
           },
           body: JSON.stringify({
             parameters: eventParams.floral,
@@ -218,6 +230,7 @@ export const useParametricIntegration = (): UseParametricIntegrationState => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            ...(token && { 'Authorization': `Bearer ${token}` }),
           },
           body: JSON.stringify({
             parameters: eventParams.stage,
@@ -237,6 +250,7 @@ export const useParametricIntegration = (): UseParametricIntegrationState => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` }),
         },
         body: JSON.stringify({
           furniture: furnitureResult,
