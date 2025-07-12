@@ -390,13 +390,13 @@ const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
               <div className="mb-8">
                 <div className="flex items-center space-x-3 mb-6">
                   <div className="w-12 h-12 bg-cultural-primary/10 rounded-xl flex items-center justify-center text-cultural-primary">
-                    {steps[currentStep - 1].icon}
+                    {steps.find(s => s.id === currentStep)?.icon || <Sparkles />}
                   </div>
                   <div>
                     <h2 className="text-2xl lg:text-3xl font-bold text-primary-900">
-                      {steps[currentStep - 1].title}
+                      {steps.find(s => s.id === currentStep)?.title || 'Event Details'}
                     </h2>
-                    <p className="text-primary-600">{steps[currentStep - 1].subtitle}</p>
+                    <p className="text-primary-600">{steps.find(s => s.id === currentStep)?.subtitle || 'Configure your event'}</p>
                   </div>
                 </div>
 
