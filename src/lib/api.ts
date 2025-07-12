@@ -440,6 +440,358 @@ export const culturalApi = {
   }> => {
     const response = await api.get(`/api/cultural/patterns/${culture}`);
     return response.data;
+  },
+
+  // Advanced Parametric Generation System
+  generateParametricFurniture: async (request: {
+    eventType: string;
+    culture: string;
+    guestCount: number;
+    spaceDimensions: { width: number; depth: number; height: number };
+    budgetRange: string;
+    formalityLevel?: string;
+    specialRequirements?: string[];
+  }): Promise<{
+    furniture: any[];
+    culturalScore: number;
+    recommendations: string[];
+    estimatedCost: number;
+    generation_id: string;
+  }> => {
+    const response = await api.post('/api/parametric/furniture/generate', {
+      request: {
+        eventType: request.eventType,
+        culture: request.culture,
+        guestCount: request.guestCount,
+        spaceDimensions: request.spaceDimensions,
+        budgetRange: request.budgetRange,
+        formalityLevel: request.formalityLevel || 'casual',
+        specialRequirements: request.specialRequirements || []
+      },
+      options: {
+        includeCulturalAnalysis: true,
+        generateRecommendations: true,
+        optimizeForBudget: true
+      }
+    });
+    return response.data;
+  },
+
+  generateParametricLighting: async (request: {
+    eventType: string;
+    culture: string;
+    ambiance: string;
+    powerBudget: number;
+    naturalLight: boolean;
+  }): Promise<{
+    lightingPlan: any;
+    culturalAlignment: number;
+    recommendations: string[];
+  }> => {
+    const response = await api.post('/api/parametric/lighting/generate', {
+      eventType: request.eventType,
+      culture: request.culture,
+      ambiance: request.ambiance,
+      powerBudget: request.powerBudget,
+      naturalLight: request.naturalLight
+    });
+    return response.data;
+  },
+
+  generateParametricFloral: async (request: {
+    eventType: string;
+    culture: string;
+    seasonality: string;
+    sustainability: string;
+    budget: number;
+  }): Promise<{
+    floralArrangements: any[];
+    sustainabilityScore: number;
+    culturalAppropriateness: number;
+    seasonalGuidance: string[];
+  }> => {
+    const response = await api.post('/api/parametric/floral/generate', {
+      eventType: request.eventType,
+      culture: request.culture,
+      seasonality: request.seasonality,
+      sustainability: request.sustainability,
+      budget: request.budget
+    });
+    return response.data;
+  },
+
+  generateCompleteEvent: async (request: {
+    eventType: string;
+    culture: string;
+    guestCount: number;
+    spaceDimensions: { width: number; depth: number; height: number };
+    budget: number;
+    preferences: string[];
+  }): Promise<{
+    furniture: any[];
+    lighting: any;
+    floral: any[];
+    stage?: any;
+    culturalScore: number;
+    budgetUtilization: number;
+    recommendations: string[];
+    exportOptions: string[];
+  }> => {
+    const response = await api.post('/api/parametric/generate-complete-event', request);
+    return response.data;
+  },
+
+  // 3D Export System
+  export3DModel: async (furnitureId: string, options: {
+    format: 'gltf' | 'glb' | 'obj' | 'stl';
+    quality: 'low' | 'medium' | 'high';
+    culturalMetadata?: boolean;
+    includeMaterials?: boolean;
+    compress?: boolean;
+  }): Promise<{
+    exportId: string;
+    downloadUrl: string;
+    fileSize: number;
+    culturalMetadata?: any;
+  }> => {
+    const response = await api.post(`/api/parametric-furniture/export/${furnitureId}`, {
+      format: options.format,
+      quality: options.quality,
+      cultural_metadata: options.culturalMetadata || false,
+      include_materials: options.includeMaterials || true,
+      compress: options.compress || true
+    });
+    return response.data;
+  },
+
+  download3DModel: async (exportId: string): Promise<Blob> => {
+    const response = await api.get(`/api/parametric-furniture/download/${exportId}`, {
+      responseType: 'blob'
+    });
+    return response.data;
+  },
+
+  // Multi-cultural Fusion Design
+  generateFusionDesign: async (request: {
+    projectId: string;
+    primaryPhilosophy: string;
+    secondaryPhilosophy: string;
+    fusionApproach: 'respectful_blend' | 'harmonic_fusion' | 'selective_integration';
+  }): Promise<{
+    design: any;
+    fusionAnalysis: {
+      compatibility: number;
+      culturalHarmony: number;
+      consultationRequired: boolean;
+      blendingGuidance: string[];
+    };
+    validationResult: {
+      culturalAppropriateness: number;
+      warnings: string[];
+      recommendations: string[];
+    };
+  }> => {
+    const response = await api.post('/api/ai/generate-fusion-design', {
+      project_id: request.projectId,
+      primary_philosophy: request.primaryPhilosophy,
+      secondary_philosophy: request.secondaryPhilosophy,
+      fusion_approach: request.fusionApproach
+    });
+    return response.data;
+  }
+};
+
+// Advanced Cultural Philosophy APIs
+export const culturalPhilosophyApi = {
+  getAllPhilosophies: async (): Promise<{
+    philosophies: Array<{
+      id: string;
+      name: string;
+      culture: string;
+      foundation: string;
+      core_principles: string[];
+      color_palette: any;
+      materials: any[];
+      cultural_sensitivity: any;
+    }>;
+  }> => {
+    const response = await api.get('/api/cultural-philosophy/philosophies');
+    return response.data;
+  },
+
+  getPhilosophy: async (philosophyId: string): Promise<{
+    philosophy: {
+      id: string;
+      name: string;
+      culture: string;
+      foundation: string;
+      core_principles: string[];
+      design_principles: string[];
+      color_palette: {
+        primary: string[];
+        secondary: string[];
+        avoid: string[];
+      };
+      materials: Array<{
+        name: string;
+        authenticity_markers: string[];
+        quality_indicators: string[];
+        suppliers: string[];
+      }>;
+      cultural_sensitivity: {
+        sacred_elements: string[];
+        avoid: string[];
+        respect_required: string[];
+        consultation_required: boolean;
+      };
+      regional_variations: any[];
+    };
+  }> => {
+    const response = await api.get(`/api/cultural-philosophy/philosophies/${philosophyId}`);
+    return response.data;
+  },
+
+  getCulturalRecommendations: async (request: {
+    philosophyId: string;
+    eventType: string;
+    budgetRange: string;
+    guestCount: number;
+    seasonality?: string;
+  }): Promise<{
+    recommendations: {
+      design_elements: string[];
+      color_guidance: any;
+      material_suggestions: any[];
+      vendor_recommendations: any[];
+      budget_allocation: any;
+      cultural_warnings: string[];
+    };
+    suitability_score: number;
+  }> => {
+    const response = await api.post('/api/cultural-philosophy/recommendations', {
+      philosophyId: request.philosophyId,
+      eventType: request.eventType,
+      budgetRange: request.budgetRange,
+      guestCount: request.guestCount,
+      seasonality: request.seasonality || 'spring'
+    });
+    return response.data;
+  },
+
+  getPhilosophyColors: async (philosophyId: string): Promise<{
+    color_palette: {
+      primary: Array<{
+        hex: string;
+        name: string;
+        cultural_meaning: string;
+        usage_context: string[];
+      }>;
+      secondary: any[];
+      accent: any[];
+      avoid: any[];
+    };
+    seasonal_variations: any;
+  }> => {
+    const response = await api.get(`/api/cultural-philosophy/philosophies/${philosophyId}/colors`);
+    return response.data;
+  },
+
+  getPhilosophyMaterials: async (philosophyId: string): Promise<{
+    materials: Array<{
+      name: string;
+      category: string;
+      authenticity_score: number;
+      suppliers: Array<{
+        name: string;
+        location: string;
+        authenticity_rating: number;
+        contact: string;
+      }>;
+      quality_indicators: string[];
+      seasonal_availability: any;
+    }>;
+  }> => {
+    const response = await api.get(`/api/cultural-philosophy/philosophies/${philosophyId}/materials`);
+    return response.data;
+  },
+
+  getPhilosophyVendors: async (philosophyId: string, location?: string): Promise<{
+    vendors: Array<{
+      name: string;
+      specialty: string;
+      authenticity_rating: number;
+      location: any;
+      contact: any;
+      verified: boolean;
+    }>;
+  }> => {
+    const url = location 
+      ? `/api/cultural-philosophy/philosophies/${philosophyId}/vendors?location=${location}`
+      : `/api/cultural-philosophy/philosophies/${philosophyId}/vendors`;
+    const response = await api.get(url);
+    return response.data;
+  },
+
+  getBudgetGuidance: async (philosophyId: string, request: {
+    eventType: string;
+    totalBudget: number;
+    guestCount: number;
+    priorities: string[];
+  }): Promise<{
+    budget_allocation: {
+      cultural_elements: number;
+      authentic_materials: number;
+      vendor_consultation: number;
+      traditional_crafts: number;
+      seasonal_elements: number;
+    };
+    priority_recommendations: string[];
+    cost_optimization: string[];
+    authenticity_vs_budget: any;
+  }> => {
+    const response = await api.post(`/api/cultural-philosophy/philosophies/${philosophyId}/budget-guidance`, request);
+    return response.data;
+  },
+
+  validateCulturalFusion: async (request: {
+    primaryPhilosophy: string;
+    secondaryPhilosophy: string;
+    eventContext: string;
+  }): Promise<{
+    compatibility: {
+      overall_score: number;
+      harmony_analysis: any;
+      potential_conflicts: string[];
+      recommended_approach: string;
+    };
+    fusion_guidance: {
+      blend_ratios: any;
+      safe_elements: string[];
+      avoid_combinations: string[];
+      consultation_required: boolean;
+    };
+  }> => {
+    const response = await api.post('/api/cultural-philosophy/fusion/compatibility', request);
+    return response.data;
+  },
+
+  searchPhilosophies: async (query: string, filters?: {
+    culture?: string;
+    event_type?: string;
+    complexity?: string;
+  }): Promise<{
+    results: any[];
+    total: number;
+    suggestions: string[];
+  }> => {
+    const params = new URLSearchParams({ query });
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value) params.append(key, value);
+      });
+    }
+    const response = await api.get(`/api/cultural-philosophy/search?${params}`);
+    return response.data;
   }
 };
 
