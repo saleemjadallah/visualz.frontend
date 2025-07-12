@@ -310,17 +310,21 @@ export const aiApi = {
     const response = await api.post<any>('/api/ai/generate-3d-scene', {
       event_type: formData.eventType,
       celebration_type: formData.celebrationType,
-      cultural_preferences: formData.culturalPreferences,  // Backend expects this field
-      cultural_background: formData.culturalPreferences,   // Also send this for compatibility
-      budget_tier: formData.budgetTier,                    // Backend expects this field
-      budget_range: formData.budgetTier,                   // Also send this for compatibility
+      cultural_preferences: Array.isArray(formData.culturalPreferences) 
+        ? formData.culturalPreferences 
+        : [formData.culturalPreferences].filter(Boolean),  // Ensure array format
+      cultural_background: Array.isArray(formData.culturalPreferences) 
+        ? formData.culturalPreferences 
+        : [formData.culturalPreferences].filter(Boolean),   // Also send as array
+      budget_tier: formData.budgetTier,                    
+      budget_range: formData.budgetTier,                   
       guest_count: formData.guestCount,
       age_range: formData.ageRange,
       space_data: formData.spaceData,
-      celebration_amenities: formData.celebrationAmenities,
-      style_preferences: formData.stylePreferences,
-      special_needs: formData.specialNeeds,               // Backend expects this field
-      accessibility_requirements: formData.specialNeeds   // Also send this for compatibility
+      celebration_amenities: formData.celebrationAmenities?.selectedAmenities || [],
+      style_preferences: formData.stylePreferences || [],
+      special_needs: Array.isArray(formData.specialNeeds) ? formData.specialNeeds : [],               
+      accessibility_requirements: Array.isArray(formData.specialNeeds) ? formData.specialNeeds : []   
     });
     return response.data;
   },
