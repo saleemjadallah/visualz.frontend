@@ -15,13 +15,13 @@ import {
   EventRequirementsForm
 } from './types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:9847';
+// Use Railway backend URL directly
+const API_BASE_URL = 'https://visualz.xyz';
 const API_TIMEOUT = 30000; // 30 seconds
 
 // Debug: Log the API URL being used
 if (typeof window !== 'undefined') {
   console.log('[API] Using base URL:', API_BASE_URL);
-  console.log('[API] Environment variable:', process.env.NEXT_PUBLIC_API_URL);
 }
 
 // Enhanced API response interface
