@@ -15,7 +15,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { culturalPhilosophyApi } from '@/lib/api';
-import Button from '@/app/components/ui/Button';
+import { Button } from '@/components/ui/Button';
 
 interface CulturalFusionDesignerProps {
   projectId: string;

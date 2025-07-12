@@ -16,7 +16,7 @@ import {
   Wand2
 } from 'lucide-react';
 import { culturalPhilosophyApi } from '@/lib/api';
-import Button from '@/app/components/ui/Button';
+import { Button } from '@/components/ui/Button';
 
 interface ParametricGenerationPanelProps {
   eventType: string;
