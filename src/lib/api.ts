@@ -342,26 +342,30 @@ export const aiApi = {
     return response.data;
   },
 
-  validateCulturalSensitivity: async (designId: string, culturalContext?: CultureType): Promise<{
+  validateCulturalSensitivity: async (philosophyId: string, eventType: string, elements: string[], guestCount: number = 0): Promise<{
     valid: boolean;
     warnings: string[];
     suggestions: string[];
     culturalScore: number;
   }> => {
-    const response = await api.post(`/api/ai/validate-cultural-sensitivity?design_id=${designId}`, {
-      cultural_context: culturalContext
+    const response = await api.post(`/api/cultural/validate`, {
+      philosophyId: philosophyId,
+      eventType: eventType,
+      elements: elements,
+      guestCount: guestCount
     });
     return response.data;
   },
 
-  getCulturalElements: async (culture: CultureType): Promise<{
+  getCulturalElements: async (philosophyId: string, elementType?: string): Promise<{
     colors: string[];
     patterns: any[];
     symbols: any[];
     materials: string[];
     restrictions: string[];
   }> => {
-    const response = await api.get(`/api/ai/cultural-elements/${culture}`);
+    const url = `/api/cultural/philosophies/${philosophyId}/elements${elementType ? `?element_type=${elementType}` : ''}`;
+    const response = await api.get(url);
     return response.data;
   },
 
