@@ -9,12 +9,31 @@ import SpaceUploadInterface from './components/sections/SpaceUploadInterface';
 import DesignGallery from './components/sections/DesignGallery';
 import CulturalIntelligencePanel from './components/cultural/CulturalIntelligencePanel';
 import { aiApi } from '@/lib/api';
-import { EventRequirementsForm as FormData, Design } from '@/lib/types';
+import { EventRequirementsForm as FormData } from '@/lib/types';
+
+// Type for the AI-generated 3D scene response
+interface GeneratedDesign {
+  scene_data: any;
+  cultural_metadata: Array<{ [key: string]: any }>;
+  accessibility_features: string[];
+  budget_breakdown: { [key: string]: any };
+  preview_url?: string;
+  design_id: string;
+  generation_metadata: {
+    generation_time_ms: number;
+    ai_model_used: string;
+    threejs_version: string;
+    template_count: number;
+    cultural_authenticity_score: number;
+    accessibility_compliance: string;
+    celebratory_features_included: any[];
+  };
+}
 import { Loader2, AlertCircle, Sparkles } from 'lucide-react';
 
 export default function HomePage() {
   const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedDesign, setGeneratedDesign] = useState<Design | null>(null);
+  const [generatedDesign, setGeneratedDesign] = useState<GeneratedDesign | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleFormComplete = async (formData: FormData) => {
@@ -101,33 +120,81 @@ export default function HomePage() {
               
               <div className="card-cultural p-8 max-w-4xl mx-auto">
                 <h3 className="text-2xl font-semibold mb-4" style={{ color: 'var(--cultural-text)' }}>
-                  {generatedDesign.name || 'Custom Event Design'}
+                  AI-Generated Event Design #{generatedDesign.design_id}
                 </h3>
                 <p className="text-lg mb-6" style={{ color: 'var(--cultural-text-light)' }}>
-                  {generatedDesign.description || 'Your personalized event design is ready!'}
+                  Your personalized event design is ready with cultural intelligence and 3D visualization!
                 </p>
                 
-                {generatedDesign.cultural_elements && (
+                {/* Generation Metadata */}
+                <div className="mb-6 p-4 rounded-lg" style={{ backgroundColor: 'var(--cultural-soft)' }}>
+                  <h4 className="text-sm font-medium mb-2" style={{ color: 'var(--cultural-text)' }}>
+                    Generation Details:
+                  </h4>
+                  <div className="grid grid-cols-2 gap-2 text-sm" style={{ color: 'var(--cultural-text-light)' }}>
+                    <div>Time: {generatedDesign.generation_metadata.generation_time_ms}ms</div>
+                    <div>Templates: {generatedDesign.generation_metadata.template_count}</div>
+                    <div>Cultural Score: {generatedDesign.generation_metadata.cultural_authenticity_score}/10</div>
+                    <div>Accessibility: {generatedDesign.generation_metadata.accessibility_compliance}</div>
+                  </div>
+                </div>
+                
+                {/* Cultural Metadata */}
+                {generatedDesign.cultural_metadata && generatedDesign.cultural_metadata.length > 0 && (
                   <div className="mb-6">
                     <h4 className="text-lg font-medium mb-3" style={{ color: 'var(--cultural-text)' }}>
                       Cultural Elements:
                     </h4>
                     <div className="space-y-2">
-                      {Object.entries(generatedDesign.cultural_elements).map(([key, value]) => (
-                        <div key={key} className="flex items-start">
-                          <span className="font-medium mr-2" style={{ color: 'var(--cultural-accent)' }}>
-                            {key}:
-                          </span>
-                          <span style={{ color: 'var(--cultural-text-light)' }}>
-                            {JSON.stringify(value)}
-                          </span>
+                      {generatedDesign.cultural_metadata.map((item, index) => (
+                        <div key={index} className="p-3 rounded-lg" style={{ backgroundColor: 'var(--cultural-soft)' }}>
+                          <pre className="text-sm" style={{ color: 'var(--cultural-text-light)' }}>
+                            {JSON.stringify(item, null, 2)}
+                          </pre>
                         </div>
                       ))}
                     </div>
                   </div>
                 )}
                 
-                {generatedDesign.visualization_config && (
+                {/* Accessibility Features */}
+                {generatedDesign.accessibility_features && generatedDesign.accessibility_features.length > 0 && (
+                  <div className="mb-6">
+                    <h4 className="text-lg font-medium mb-3" style={{ color: 'var(--cultural-text)' }}>
+                      Accessibility Features:
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {generatedDesign.accessibility_features.map((feature, index) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 rounded-full text-sm"
+                          style={{ 
+                            backgroundColor: 'var(--cultural-accent)',
+                            color: 'var(--cultural-text)'
+                          }}
+                        >
+                          {feature}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Budget Breakdown */}
+                {generatedDesign.budget_breakdown && (
+                  <div className="mb-6">
+                    <h4 className="text-lg font-medium mb-3" style={{ color: 'var(--cultural-text)' }}>
+                      Budget Breakdown:
+                    </h4>
+                    <div className="p-4 rounded-lg" style={{ backgroundColor: 'var(--cultural-soft)' }}>
+                      <pre className="text-sm" style={{ color: 'var(--cultural-text-light)' }}>
+                        {JSON.stringify(generatedDesign.budget_breakdown, null, 2)}
+                      </pre>
+                    </div>
+                  </div>
+                )}
+                
+                {generatedDesign.preview_url && (
                   <div className="mt-6 p-4 rounded-lg" style={{ backgroundColor: 'var(--cultural-soft)' }}>
                     <p className="text-sm" style={{ color: 'var(--cultural-text-light)' }}>
                       3D visualization configuration ready. Scroll down to see more designs or refine your requirements.

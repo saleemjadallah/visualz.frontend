@@ -305,8 +305,8 @@ export const aiApi = {
     return response.data;
   },
 
-  generateCelebrationDesign: async (formData: EventRequirementsForm): Promise<Design> => {
-    const response = await api.post<Design>('/api/ai/generate-3d-scene', {
+  generateCelebrationDesign: async (formData: EventRequirementsForm): Promise<any> => {
+    const response = await api.post<any>('/api/ai/generate-3d-scene', {
       event_type: formData.eventType,
       celebration_type: formData.celebrationType,
       cultural_preferences: formData.culturalPreferences,

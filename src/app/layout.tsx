@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
+import { CulturalThemeProvider } from '@/components/cultural/ThemeProvider'
 import './globals.css'
 
 const inter = Inter({ 
@@ -33,9 +34,11 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://pro-cdn.lineicons.com/4.0/fill/lineicons-fill.css" />
       </head>
       <body className="font-body antialiased">
-        <div className="min-h-screen">
-          {children}
-        </div>
+        <CulturalThemeProvider>
+          <div className="min-h-screen">
+            {children}
+          </div>
+        </CulturalThemeProvider>
       </body>
     </html>
   )
