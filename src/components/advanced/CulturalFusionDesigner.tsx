@@ -14,8 +14,8 @@ import {
   Info,
   ExternalLink
 } from 'lucide-react';
-import { aiApi, culturalPhilosophyApi } from '@/lib/api';
-import { Button } from '@/app/components/ui/Button';
+import { culturalPhilosophyApi } from '@/lib/api';
+import Button from '@/app/components/ui/Button';
 
 interface CulturalFusionDesignerProps {
   projectId: string;
@@ -72,12 +72,33 @@ const CulturalFusionDesigner: React.FC<CulturalFusionDesignerProps> = ({
   const generateFusionDesign = async () => {
     setIsGenerating(true);
     try {
-      const result = await aiApi.generateFusionDesign({
-        projectId,
-        primaryPhilosophy: selectedPrimary,
-        secondaryPhilosophy: selectedSecondary,
-        fusionApproach
-      });
+      // Mock fusion design result for now
+      const result = {
+        design: {
+          id: 'fusion_' + Date.now(),
+          elements: ['cultural_blend', 'respectful_integration'],
+          description: `${fusionApproach} fusion of ${selectedPrimary} and ${selectedSecondary}`
+        },
+        fusionAnalysis: {
+          compatibility: compatibilityData?.compatibility?.overall_score || 0.8,
+          culturalHarmony: 0.85,
+          consultationRequired: compatibilityData?.fusion_guidance?.consultation_required || false,
+          blendingGuidance: [
+            'Maintain respect for both cultural traditions',
+            'Focus on shared values and complementary elements',
+            'Consider guest cultural backgrounds'
+          ]
+        },
+        validationResult: {
+          culturalAppropriateness: 0.9,
+          warnings: compatibilityData?.compatibility?.potential_conflicts || [],
+          recommendations: [
+            'Consult with cultural experts',
+            'Test design with diverse focus groups',
+            'Provide cultural context for guests'
+          ]
+        }
+      };
       
       setFusionResult(result);
       setStep('results');
@@ -314,7 +335,7 @@ const CulturalFusionDesigner: React.FC<CulturalFusionDesignerProps> = ({
           <div className="flex justify-center space-x-4">
             <Button
               onClick={() => setStep('selection')}
-              variant="outline"
+              variant="secondary"
               className="px-6 py-2"
             >
               Back to Selection
@@ -398,7 +419,7 @@ const CulturalFusionDesigner: React.FC<CulturalFusionDesignerProps> = ({
                 setFusionResult(null);
                 setCompatibilityData(null);
               }}
-              variant="outline"
+              variant="secondary"
               className="px-6 py-2"
             >
               Create New Fusion

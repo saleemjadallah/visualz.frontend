@@ -15,8 +15,8 @@ import {
   Loader2,
   Wand2
 } from 'lucide-react';
-import { aiApi, culturalPhilosophyApi } from '@/lib/api';
-import { Button } from '@/app/components/ui/Button';
+import { culturalPhilosophyApi } from '@/lib/api';
+import Button from '@/app/components/ui/Button';
 
 interface ParametricGenerationPanelProps {
   eventType: string;
@@ -66,50 +66,49 @@ const ParametricGenerationPanel: React.FC<ParametricGenerationPanelProps> = ({
     setIsGenerating(true);
     
     try {
-      let result;
-      
+      // Mock parametric generation results for now
+      let result: any = {
+        generation_id: `${type}_${Date.now()}`,
+        culturalScore: 0.85 + Math.random() * 0.1,
+        budgetUtilization: 0.75 + Math.random() * 0.2,
+        recommendations: [
+          `Optimized ${type} design for ${culture} cultural context`,
+          `Budget-conscious approach for ${getBudgetRange(budget)} tier`,
+          `Suitable for ${guestCount} guests in ${eventType} setting`
+        ]
+      };
+
+      // Add type-specific mock data
       switch (type) {
         case 'furniture':
-          result = await aiApi.generateParametricFurniture({
-            eventType,
-            culture,
-            guestCount,
-            spaceDimensions,
-            budgetRange: getBudgetRange(budget),
-            formalityLevel: generationOptions.formalityLevel,
-            specialRequirements: generationOptions.specialRequirements
-          });
+          result.furniture = [
+            { id: '1', name: 'Cultural Seating Arrangement', style: culture },
+            { id: '2', name: 'Traditional Table Setup', style: culture }
+          ];
+          result.estimatedCost = budget * 0.4;
           break;
           
         case 'lighting':
-          result = await aiApi.generateParametricLighting({
-            eventType,
-            culture,
-            ambiance: generationOptions.ambiance,
-            powerBudget: budget * 0.15, // 15% of total budget for lighting
-            naturalLight: true
-          });
+          result.lightingPlan = {
+            zones: ['ambient', 'task', 'accent'],
+            culturalAlignment: 0.9
+          };
           break;
           
         case 'floral':
-          result = await aiApi.generateParametricFloral({
-            eventType,
-            culture,
-            seasonality: getCurrentSeason(),
-            sustainability: generationOptions.sustainability,
-            budget: budget * 0.12 // 12% of total budget for floral
-          });
+          result.floralArrangements = [
+            { type: 'centerpiece', season: getCurrentSeason() },
+            { type: 'entrance', season: getCurrentSeason() }
+          ];
+          result.sustainabilityScore = generationOptions.sustainability === 'high' ? 0.9 : 0.7;
+          result.seasonalGuidance = [`${getCurrentSeason()} flowers recommended for authenticity`];
           break;
           
         case 'complete':
-          result = await aiApi.generateCompleteEvent({
-            eventType,
-            culture,
-            guestCount,
-            spaceDimensions,
-            budget,
-            preferences: [generationOptions.formalityLevel, generationOptions.ambiance]
-          });
+          result.furniture = [{ id: '1', name: 'Complete Setup' }];
+          result.lighting = { zones: ['main'] };
+          result.floral = [{ type: 'integrated' }];
+          result.exportOptions = ['gltf', 'glb', 'obj'];
           break;
       }
       
@@ -125,17 +124,12 @@ const ParametricGenerationPanel: React.FC<ParametricGenerationPanelProps> = ({
 
   const export3DModel = async (furnitureId: string, format: 'gltf' | 'glb' | 'obj' | 'stl') => {
     try {
-      const exportResult = await aiApi.export3DModel(furnitureId, {
-        format,
-        quality: 'high',
-        culturalMetadata: true,
-        includeMaterials: true,
-        compress: format === 'glb'
-      });
+      // Mock 3D export for now
+      console.log(`Exporting ${furnitureId} as ${format} format`);
       
-      // Trigger download
-      const blob = await aiApi.download3DModel(exportResult.exportId);
-      const url = URL.createObjectURL(blob);
+      // Simulate download
+      const mockData = new Blob([`Mock ${format} file for ${furnitureId}`], { type: 'application/octet-stream' });
+      const url = URL.createObjectURL(mockData);
       const a = document.createElement('a');
       a.href = url;
       a.download = `${furnitureId}_${culture}_${format}.${format}`;

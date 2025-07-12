@@ -21,7 +21,7 @@ import {
   Calendar
 } from 'lucide-react';
 import { culturalPhilosophyApi } from '@/lib/api';
-import { Button } from '@/app/components/ui/Button';
+import Button from '@/app/components/ui/Button';
 
 interface CulturalPhilosophyExplorerProps {
   onPhilosophySelected?: (philosophy: any) => void;

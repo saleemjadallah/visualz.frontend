@@ -39,7 +39,19 @@ const nextConfig = {
         path: false,
         'webgl-sdf-generator': false,
       };
+      
+      // Mock webgl-sdf-generator to prevent import errors
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'webgl-sdf-generator': false,
+      };
     }
+    
+    // Ignore webgl-sdf-generator in troika-three-text
+    config.externals = config.externals || [];
+    config.externals.push({
+      'webgl-sdf-generator': 'false'
+    });
 
     // Bundle analyzer (only in production)
     if (!dev && process.env.ANALYZE === 'true') {
