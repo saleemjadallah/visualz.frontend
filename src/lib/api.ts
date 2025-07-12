@@ -310,14 +310,14 @@ export const aiApi = {
     const response = await api.post<any>('/api/ai/generate-3d-scene', {
       event_type: formData.eventType,
       celebration_type: formData.celebrationType,
-      cultural_preferences: formData.culturalPreferences,
-      budget_tier: formData.budgetTier,
+      cultural_background: formData.culturalPreferences,  // Changed from cultural_preferences
+      budget_range: formData.budgetTier,  // Changed from budget_tier
       guest_count: formData.guestCount,
       age_range: formData.ageRange,
       space_data: formData.spaceData,
       celebration_amenities: formData.celebrationAmenities,
       style_preferences: formData.stylePreferences,
-      special_needs: formData.specialNeeds
+      accessibility_requirements: formData.specialNeeds  // Changed from special_needs
     });
     return response.data;
   },
