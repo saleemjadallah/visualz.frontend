@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import NavigationHeader from './components/layout/NavigationHeader';
 import HeroSection from './components/sections/HeroSection';
 import CulturalThemeSelector from './components/cultural/CulturalThemeSelector';
@@ -10,6 +11,22 @@ import DesignGallery from './components/sections/DesignGallery';
 import CulturalIntelligencePanel from './components/cultural/CulturalIntelligencePanel';
 import { aiApi } from '@/lib/api';
 import { EventRequirementsForm as FormData } from '@/lib/types';
+
+// Dynamically import 3D component to prevent SSR issues
+const GeneratedDesign3D = dynamic(
+  () => import('@/components/visualization/GeneratedDesign3D').then(mod => ({ default: mod.GeneratedDesign3D })),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center h-[400px]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cultural-primary mx-auto mb-4"></div>
+          <p className="text-cultural-text-light">Loading 3D visualization...</p>
+        </div>
+      </div>
+    )
+  }
+);
 
 // Type for the AI-generated 3D scene response
 interface GeneratedDesign {
@@ -35,6 +52,7 @@ export default function HomePage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedDesign, setGeneratedDesign] = useState<GeneratedDesign | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isFullscreen3D, setIsFullscreen3D] = useState(false);
 
   const handleFormComplete = async (formData: FormData) => {
     setIsGenerating(true);
@@ -194,10 +212,27 @@ export default function HomePage() {
                   </div>
                 )}
                 
+                {/* 3D Visualization */}
+                {generatedDesign.scene_data && (
+                  <div className="mt-6">
+                    <h4 className="text-lg font-medium mb-3" style={{ color: 'var(--cultural-text)' }}>
+                      3D Visualization
+                    </h4>
+                    <div className="rounded-lg overflow-hidden border" style={{ borderColor: 'var(--cultural-accent)' }}>
+                      <GeneratedDesign3D 
+                        design={generatedDesign}
+                        isFullscreen={isFullscreen3D}
+                        onToggleFullscreen={() => setIsFullscreen3D(!isFullscreen3D)}
+                        onClose={() => setIsFullscreen3D(false)}
+                      />
+                    </div>
+                  </div>
+                )}
+                
                 {generatedDesign.preview_url && (
                   <div className="mt-6 p-4 rounded-lg" style={{ backgroundColor: 'var(--cultural-soft)' }}>
                     <p className="text-sm" style={{ color: 'var(--cultural-text-light)' }}>
-                      3D visualization configuration ready. Scroll down to see more designs or refine your requirements.
+                      3D visualization ready! You can interact with the scene above, move furniture, and explore different views.
                     </p>
                   </div>
                 )}

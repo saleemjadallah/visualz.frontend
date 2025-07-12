@@ -65,6 +65,21 @@ interface Scene3DProps {
     style?: string;
     modelPath?: string;
     scale?: number;
+    material?: {
+      type: string;
+      pbrProperties?: {
+        roughness?: number;
+        metalness?: number;
+        textureUrls?: {
+          diffuse?: string;
+          normal?: string;
+          roughness?: string;
+          metalness?: string;
+          ao?: string;
+        };
+      };
+      culturalMaterial?: string;
+    };
   }>;
   celebrationProps?: Array<{
     id: string;

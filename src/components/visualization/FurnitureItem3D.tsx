@@ -7,6 +7,7 @@ import * as THREE from 'three';
 import { useTextureManager } from './TextureManager';
 import { FurnitureModel } from './FurnitureModels';
 import { GLTFModel } from './GLTFModels';
+import { usePBRMaterial, CULTURAL_PBR_MAPPING } from './PBRMaterials';
 
 interface FurnitureItem3DProps {
   furniture: {
@@ -20,11 +21,26 @@ interface FurnitureItem3DProps {
     rotation: number;
     color?: string;
     style?: string;
+    material?: {
+      type: string;
+      pbrProperties?: {
+        roughness?: number;
+        metalness?: number;
+        textureUrls?: {
+          diffuse?: string;
+          normal?: string;
+          roughness?: string;
+          metalness?: string;
+          ao?: string;
+        };
+      };
+    };
   };
   isSelected: boolean;
   onClick: () => void;
   onMove: (position: { x: number; y: number }) => void;
   culturalTheme?: string;
+  materialQuality?: 'low' | 'medium' | 'high';
 }
 
 export function FurnitureItem3D({ 
@@ -32,12 +48,14 @@ export function FurnitureItem3D({
   isSelected, 
   onClick, 
   onMove,
-  culturalTheme = 'modern'
+  culturalTheme = 'modern',
+  materialQuality = 'high'
 }: FurnitureItem3DProps) {
   const meshRef = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const { getMaterial } = useTextureManager();
+  const [usePBR, setUsePBR] = useState(materialQuality !== 'low');
 
   // Convert 2D position to 3D (y becomes z, add appropriate height)
   const position: [number, number, number] = [
@@ -107,14 +125,48 @@ export function FurnitureItem3D({
     };
   }
 
+  // Helper function to get PBR material based on furniture type and cultural theme
+  function getPBRMaterialType(category: string, surface: 'wood' | 'fabric' | 'metal' | 'stone', culturalTheme: string): string {
+    const culturalMapping = CULTURAL_PBR_MAPPING[culturalTheme as keyof typeof CULTURAL_PBR_MAPPING];
+    if (culturalMapping && culturalMapping[surface]) {
+      return culturalMapping[surface];
+    }
+    
+    // Default mappings
+    const defaultMappings = {
+      wood: 'oak-wood',
+      fabric: 'linen-fabric',
+      metal: 'brushed-steel',
+      stone: 'black-granite'
+    };
+    
+    return defaultMappings[surface];
+  }
+
   function getFurnitureGeometry(category: string, dimensions: any) {
     const { width, height, depth } = dimensions;
     
     switch (category) {
       case 'table':
       case 'desk':
-        const tableMaterial = getMaterial('oak');
-        const tableLegMaterial = getMaterial('walnut');
+        const tableMaterialType = furniture.material?.type || getPBRMaterialType(category, 'wood', culturalTheme);
+        const tableLegMaterialType = getPBRMaterialType(category, 'wood', culturalTheme);
+        
+        // Use PBR materials if enabled and available
+        const tableMaterial = usePBR
+          ? usePBRMaterial({ materialType: tableMaterialType, culturalTheme, surfaceType: 'wood' })
+          : getMaterial('oak');
+        const tableLegMaterial = usePBR
+          ? usePBRMaterial({ materialType: tableLegMaterialType, culturalTheme, surfaceType: 'wood' })
+          : getMaterial('walnut');
+          
+        // Apply custom PBR properties if provided
+        if (usePBR && furniture.material?.pbrProperties) {
+          const props = furniture.material.pbrProperties;
+          if (props.roughness !== undefined) tableMaterial.roughness = props.roughness;
+          if (props.metalness !== undefined) tableMaterial.metalness = props.metalness;
+        }
+        
         return (
           <>
             {/* Table top */}
@@ -139,8 +191,15 @@ export function FurnitureItem3D({
       
       case 'chair':
       case 'seating':
-        const chairFrameMaterial = getMaterial('walnut');
-        const chairCushionMaterial = getMaterial('linen');
+        const chairFrameMaterialType = getPBRMaterialType(category, 'wood', culturalTheme);
+        const chairCushionMaterialType = getPBRMaterialType(category, 'fabric', culturalTheme);
+        
+        const chairFrameMaterial = usePBR
+          ? usePBRMaterial({ materialType: chairFrameMaterialType, culturalTheme, surfaceType: 'wood' })
+          : getMaterial('walnut');
+        const chairCushionMaterial = usePBR
+          ? usePBRMaterial({ materialType: chairCushionMaterialType, culturalTheme, surfaceType: 'fabric' })
+          : getMaterial('linen');
         return (
           <>
             {/* Seat cushion */}
@@ -170,8 +229,15 @@ export function FurnitureItem3D({
       
       case 'sofa':
       case 'couch':
-        const sofaFrameMaterial = getMaterial('pine');
-        const sofaCushionMaterial = getMaterial('velvet');
+        const sofaFrameMaterialType = getPBRMaterialType(category, 'wood', culturalTheme);
+        const sofaCushionMaterialType = getPBRMaterialType(category, 'fabric', culturalTheme);
+        
+        const sofaFrameMaterial = usePBR
+          ? usePBRMaterial({ materialType: sofaFrameMaterialType, culturalTheme, surfaceType: 'wood' })
+          : getMaterial('pine');
+        const sofaCushionMaterial = usePBR
+          ? usePBRMaterial({ materialType: sofaCushionMaterialType, culturalTheme, surfaceType: 'fabric' })
+          : getMaterial('velvet');
         return (
           <>
             {/* Main body */}
@@ -192,7 +258,10 @@ export function FurnitureItem3D({
         );
       
       default:
-        const defaultMaterial = getMaterial('oak');
+        const defaultMaterialType = furniture.material?.type || 'oak-wood';
+        const defaultMaterial = usePBR
+          ? usePBRMaterial({ materialType: defaultMaterialType, culturalTheme })
+          : getMaterial('oak');
         return (
           <mesh castShadow receiveShadow>
             <boxGeometry args={[width, height, depth]} />

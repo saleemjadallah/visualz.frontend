@@ -7,3 +7,4 @@ export { EventRoom } from './EventRoom';
 export { FurniturePlacement, useFurniturePlacement } from './FurniturePlacement';
 export { CulturalThemeManager, useCulturalTheme, ThemeSelector } from './CulturalThemeManager';
 export { FurnitureLoader, FurnitureModel, useFurnitureLibrary, FurnitureLibrary } from './FurnitureLoader';
+export { GeneratedDesign3D } from './GeneratedDesign3D';
