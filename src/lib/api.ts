@@ -307,25 +307,45 @@ export const aiApi = {
   },
 
   generateCelebrationDesign: async (formData: EventRequirementsForm): Promise<any> => {
-    const response = await api.post<any>('/api/ai/generate-3d-scene', {
-      event_type: formData.eventType,
-      celebration_type: formData.celebrationType,
+    // Ensure required fields are present and properly formatted
+    const payload = {
+      // REQUIRED FIELDS
+      event_type: formData.eventType || 'birthday',  // Required string
+      guest_count: Number(formData.guestCount) || 20,  // Required integer
+      
+      // OPTIONAL FIELDS WITH PROPER ARRAY FORMATTING
+      celebration_type: formData.celebrationType || null,
       cultural_preferences: Array.isArray(formData.culturalPreferences) 
         ? formData.culturalPreferences 
-        : [formData.culturalPreferences].filter(Boolean),  // Ensure array format
+        : formData.culturalPreferences ? [formData.culturalPreferences] : [],
       cultural_background: Array.isArray(formData.culturalPreferences) 
         ? formData.culturalPreferences 
-        : [formData.culturalPreferences].filter(Boolean),   // Also send as array
-      budget_tier: formData.budgetTier,                    
-      budget_range: formData.budgetTier,                   
-      guest_count: formData.guestCount,
-      age_range: formData.ageRange,
-      space_data: formData.spaceData,
-      celebration_amenities: formData.celebrationAmenities?.selectedAmenities || [],
-      style_preferences: formData.stylePreferences || [],
-      special_needs: Array.isArray(formData.specialNeeds) ? formData.specialNeeds : [],               
-      accessibility_requirements: Array.isArray(formData.specialNeeds) ? formData.specialNeeds : []   
-    });
+        : formData.culturalPreferences ? [formData.culturalPreferences] : [],
+      budget_tier: formData.budgetTier || 'medium',
+      budget_range: formData.budgetTier || 'medium',
+      age_range: formData.ageRange || 'adult',
+      space_data: formData.spaceData || { width: 10, depth: 10, height: 3 },
+      celebration_amenities: Array.isArray(formData.celebrationAmenities?.selectedAmenities) 
+        ? formData.celebrationAmenities.selectedAmenities 
+        : [],
+      style_preferences: Array.isArray(formData.stylePreferences) 
+        ? formData.stylePreferences 
+        : [],
+      special_needs: Array.isArray(formData.specialNeeds) 
+        ? formData.specialNeeds 
+        : [],
+      accessibility_requirements: Array.isArray(formData.specialNeeds) 
+        ? formData.specialNeeds 
+        : [],
+      // Additional optional fields with defaults
+      venue_type: 'indoor',
+      timing: {},
+      special_requirements: []
+    };
+
+    console.log('Sending 3D scene generation payload:', JSON.stringify(payload, null, 2));
+    
+    const response = await api.post<any>('/api/ai/generate-3d-scene', payload);
     return response.data;
   },
 
