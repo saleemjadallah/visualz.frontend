@@ -59,7 +59,7 @@ const celebrationTypes = [
     features: ['Ceremonial mass', 'Waltz dance', 'Court of honor', 'Traditional music']
   },
   {
-    type: 'korean-doljanchi' as CelebrationType,
+    type: 'korean-first-birthday' as CelebrationType,
     title: 'Korean Doljanchi',
     description: 'First birthday celebration with traditional ceremonies and symbolism',
     flag: '🇰🇷',
@@ -81,6 +81,46 @@ const celebrationTypes = [
     flag: '✡️',
     culturalContext: 'jewish' as CultureType,
     features: ['Torah reading', 'Traditional blessings', 'Celebratory meal', 'Family gathering']
+  },
+  {
+    type: 'indian-wedding' as CelebrationType,
+    title: 'Indian Wedding',
+    description: 'Traditional Hindu wedding ceremony with vibrant colors and rituals',
+    flag: '🇮🇳',
+    culturalContext: 'modern' as CultureType,
+    features: ['Mandap ceremony', 'Baraat procession', 'Seven vows', 'Mehendi celebration']
+  },
+  {
+    type: 'chinese-tea-ceremony' as CelebrationType,
+    title: 'Chinese Tea Ceremony',
+    description: 'Traditional Chinese wedding tea ceremony honoring families',
+    flag: '🇨🇳',
+    culturalContext: 'modern' as CultureType,
+    features: ['Tea serving ritual', 'Red envelopes', 'Double happiness symbols', 'Family blessings']
+  },
+  {
+    type: 'nigerian-wedding' as CelebrationType,
+    title: 'Nigerian Wedding',
+    description: 'Vibrant Nigerian wedding celebration with traditional customs',
+    flag: '🇳🇬',
+    culturalContext: 'modern' as CultureType,
+    features: ['Traditional attire', 'Money spraying', 'Drumming and dancing', 'Kola nut ceremony']
+  },
+  {
+    type: 'brazilian-carnival' as CelebrationType,
+    title: 'Brazilian Carnival Party',
+    description: 'Festive Brazilian celebration with music and dance',
+    flag: '🇧🇷',
+    culturalContext: 'modern' as CultureType,
+    features: ['Samba dancing', 'Carnival masks', 'Brazilian music', 'Colorful decorations']
+  },
+  {
+    type: 'italian-festa' as CelebrationType,
+    title: 'Italian Festa',
+    description: 'Traditional Italian celebration with family and feast',
+    flag: '🇮🇹',
+    culturalContext: 'italian' as CultureType,
+    features: ['Family feast', 'Traditional music', 'Italian decorations', 'Wine ceremony']
   }
 ];
 
@@ -685,6 +725,11 @@ const CelebrationAmenitiesStep: React.FC<{
   value?: FormData['celebrationAmenities'];
   onChange: (value: FormData['celebrationAmenities']) => void;
 }> = ({ celebrationType, value, onChange }) => {
+  
+  // If no celebration type is provided, return null
+  if (!celebrationType) {
+    return null;
+  }
   
   // Celebration amenities data with smart suggestions
   const amenitiesData: Record<CelebrationType, CelebrationAmenity[]> = {
