@@ -130,13 +130,15 @@ const EventRequirementsForm: React.FC<EventRequirementsFormProps> = ({
         }
         break;
       case 2:
-        // Space upload: valid if has photos OR manual entry is complete
+        // Space upload: valid if has photos OR manual entry has required fields
         setIsStepValid(Boolean(
           (formData.spaceData?.hasPhotos === true) || 
-          (formData.spaceData?.manualEntry?.length && formData.spaceData.manualEntry.length > 0 && 
-           formData.spaceData?.manualEntry?.width && formData.spaceData.manualEntry.width > 0 && 
-           formData.spaceData?.manualEntry?.height && formData.spaceData.manualEntry.height > 0 &&
-           formData.spaceData?.manualEntry?.roomType && formData.spaceData.manualEntry.roomType.length > 0)
+          (formData.spaceData?.manualEntry && 
+           formData.spaceData.manualEntry.length > 0 && 
+           formData.spaceData.manualEntry.width > 0 && 
+           formData.spaceData.manualEntry.height > 0 &&
+           formData.spaceData.manualEntry.roomType && 
+           formData.spaceData.manualEntry.roomType.length > 0)
         ));
         break;
       case 3:
@@ -2010,34 +2012,36 @@ const SpaceUploadStep: React.FC<SpaceUploadStepProps> = ({ value, onChange }) =>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Features (comma-separated)
+              Features (optional)
             </label>
-            <input
-              type="text"
-              value={manualData.features.join(', ')}
+            <textarea
+              value={typeof manualData.features === 'string' ? manualData.features : manualData.features.join(', ')}
               onChange={(e) => setManualData(prev => ({ 
                 ...prev, 
-                features: e.target.value.split(',').map(f => f.trim()).filter(Boolean) 
+                features: e.target.value ? e.target.value.split(',').map(f => f.trim()).filter(Boolean) : []
               }))}
               className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
               placeholder="Large windows, hardwood floors, high ceilings"
+              rows={2}
             />
+            <p className="text-xs text-gray-500 mt-1">Separate features with commas</p>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Limitations (comma-separated)
+              Limitations (optional)
             </label>
-            <input
-              type="text"
-              value={manualData.limitations.join(', ')}
+            <textarea
+              value={typeof manualData.limitations === 'string' ? manualData.limitations : manualData.limitations.join(', ')}
               onChange={(e) => setManualData(prev => ({ 
                 ...prev, 
-                limitations: e.target.value.split(',').map(l => l.trim()).filter(Boolean) 
+                limitations: e.target.value ? e.target.value.split(',').map(l => l.trim()).filter(Boolean) : []
               }))}
               className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
               placeholder="No nails in walls, limited electrical outlets"
+              rows={2}
             />
+            <p className="text-xs text-gray-500 mt-1">Separate limitations with commas</p>
           </div>
         </div>
       )}
