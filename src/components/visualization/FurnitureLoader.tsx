@@ -2,8 +2,8 @@
 
 import React, { useState, useCallback, useRef } from 'react';
 import { useLoader } from '@react-three/fiber';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import * as THREE from 'three';
 
 // Furniture model configuration

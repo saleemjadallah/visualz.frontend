@@ -167,6 +167,7 @@ function LoadingFallback() {
   );
 }
 
+// Scene3D component - must be used within a React Three Fiber Canvas
 export function Scene3D({
   roomDimensions,
   furnitureItems = [],
@@ -892,3 +893,5 @@ function StandardSceneContent({
     </>
   );
 }
+// Default export for compatibility with dynamic imports
+export default Scene3D;

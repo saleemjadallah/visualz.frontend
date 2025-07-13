@@ -6,7 +6,7 @@ import { X, Maximize2, Minimize2, Download, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
 // Dynamically import Scene3D to prevent SSR issues
-const Scene3D = dynamic(() => import('./Scene3D').then(mod => ({ default: mod.Scene3D })), {
+const Scene3D = dynamic(() => import('./Scene3D'), {
   ssr: false,
   loading: () => (
     <div className="flex items-center justify-center h-full bg-gray-50">
