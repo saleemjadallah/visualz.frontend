@@ -39,28 +39,23 @@ const NavigationHeader = () => {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-4">
               {[
-                { id: 'design', label: 'Design Studio', icon: 'palette' as const, action: 'scroll-to-vision' },
-                { id: 'gallery', label: 'Gallery', icon: 'camera' as const, action: 'scroll-to-gallery' },
-                { id: 'cultural', label: 'Cultural Guide', icon: 'globe' as const, action: 'scroll-to-cultural' },
+                { id: 'chat', label: 'AI Chat', icon: 'comment' as const, action: 'stay' },
+                { id: 'gallery', label: 'Gallery', icon: 'camera' as const, action: 'link', href: '/gallery' },
+                { id: 'cultural', label: 'Cultural Guide', icon: 'globe' as const, action: 'link', href: '/cultural' },
                 { id: 'vendors', label: 'Marketplace', icon: 'home' as const, action: 'external' }
-              ].map(({ id, label, icon, action }) => (
+              ].map(({ id, label, icon, action, href }) => (
                 <button
                   key={id}
                   onClick={() => {
                     setActiveTab(id);
-                    if (action === 'scroll-to-vision') {
-                      // Scroll to EventVisionSteps section
-                      const visionSection = document.querySelector('[data-section="vision-steps"]') 
-                        || document.querySelector('.section-cultural');
-                      visionSection?.scrollIntoView({ behavior: 'smooth' });
-                    } else if (action === 'scroll-to-gallery') {
-                      // Scroll to DesignGallery section
-                      const gallerySection = document.querySelector('[data-section="design-gallery"]');
-                      gallerySection?.scrollIntoView({ behavior: 'smooth' });
-                    } else if (action === 'scroll-to-cultural') {
-                      // Scroll to CulturalIntelligencePanel section
-                      const culturalSection = document.querySelector('[data-section="cultural-intelligence"]');
-                      culturalSection?.scrollIntoView({ behavior: 'smooth' });
+                    if (action === 'stay') {
+                      // Stay on current page (chat)
+                    } else if (action === 'link' && href) {
+                      // Navigate to internal link
+                      window.location.href = href;
+                    } else if (action === 'external') {
+                      // Handle external links
+                      // TODO: Add external marketplace link
                     }
                   }}
                   className={`nav-item ${activeTab === id ? 'nav-item-active' : ''}`}
