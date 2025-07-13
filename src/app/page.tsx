@@ -14,7 +14,7 @@ import { EventRequirementsForm as FormData } from '@/lib/types';
 
 // Dynamically import 3D component to prevent SSR issues
 const GeneratedDesign3D = dynamic(
-  () => import('@/components/visualization/GeneratedDesign3D').then(mod => ({ default: mod.GeneratedDesign3D })),
+  () => import('@/components/visualization/GeneratedDesign3D'),
   { 
     ssr: false,
     loading: () => (

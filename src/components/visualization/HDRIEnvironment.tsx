@@ -2,7 +2,7 @@
 
 import React, { useMemo, useEffect, useState } from 'react';
 import { useThree } from '@react-three/fiber';
-import { useEnvironment } from '@react-three/drei';
+// Removed unused import
 import * as THREE from 'three';
 
 // HDRI Environment presets for different lighting scenarios
@@ -121,10 +121,9 @@ export function HDRIEnvironment({
     return HDRI_PRESETS[selectedPreset];
   }, [selectedPreset]);
 
-  // Load environment map using drei
-  const envMap = useEnvironment({
-    preset: envConfig.preset
-  });
+  // For now, we'll skip using useEnvironment due to version compatibility
+  // and rely on the Environment component directly
+  const envMap = null;
 
   // Apply environment settings
   useEffect(() => {

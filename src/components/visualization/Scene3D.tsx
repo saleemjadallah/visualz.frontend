@@ -387,6 +387,9 @@ export function Scene3D({
             enableRefraction={false}
           />
           
+          {/* Basic Environment Lighting */}
+          <Environment preset={currentHDRIPreset} />
+          
           {/* Environment Effects */}
           <EnvironmentEffects 
             preset={currentHDRIPreset}

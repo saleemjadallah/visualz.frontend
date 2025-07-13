@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useTexture, useEnvironment } from '@react-three/drei';
+// Removed unused import
 import * as THREE from 'three';
 
 // PBR Material Library with realistic physical properties
@@ -273,8 +273,9 @@ interface PBRMaterialProps {
 
 // Advanced PBR Material Hook
 export function usePBRMaterial({ materialType, culturalTheme = 'modern', surfaceType }: PBRMaterialProps) {
-  // Get environment map for reflections
-  const envMap = useEnvironment({ preset: 'studio' });
+  // Environment map will be loaded separately if needed
+  // useEnvironment must be used within Canvas context
+  const envMap = null;
   
   const material = useMemo(() => {
     let config;

@@ -234,3 +234,6 @@ export function GeneratedDesign3D({
     </div>
   );
 }
+
+// Default export for better compatibility with dynamic imports
+export default GeneratedDesign3D;
