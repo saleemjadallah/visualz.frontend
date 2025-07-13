@@ -87,6 +87,9 @@ export const ChatInterface = () => {
         setMessages(prev => [...prev, confirmMessage]);
         setExtractedParams(result.extractedParams);
         
+        // Notify main page that generation is starting
+        window.dispatchEvent(new Event('generatingDesign'));
+        
         // Trigger 3D generation
         await generateDesign(result.extractedParams);
       } else {
