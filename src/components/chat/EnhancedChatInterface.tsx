@@ -87,7 +87,8 @@ export const EnhancedChatInterface = () => {
           type: 'assistant',
           content: result.clarificationQuestion || 'I need a bit more information...',
           timestamp: new Date(),
-          clarificationOptions: result.clarificationOptions ? [result.clarificationOptions] : undefined
+          clarificationOptions: result.clarificationOptions ? [result.clarificationOptions] : undefined,
+          parameters: result.extractedParams, // Ensure params are attached to the clarification message
         };
 
         setMessages(prev => [...prev, clarificationMessage]);
