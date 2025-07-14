@@ -146,13 +146,15 @@ export const EnhancedChatInterface = () => {
   const handleClarificationResponse = async (response: string, originalMessage: ChatMessage) => {
     // When responding to a clarification, merge the latest params from that message
     // with the user's new response to avoid state race conditions.
-    const latestParams = originalMessage.parameters || extractedParams;
+    const latestParams = originalMessage.parameters || {};
     
     setPendingClarification(null);
     
     const messageToSend = `${response}`;
     const newExtractedParams = { ...latestParams };
 
+    // It's crucial to pass the combined parameters directly to handleSendMessage
+    // instead of relying on the component's state.
     await handleSendMessage(messageToSend, newExtractedParams);
   };
 
