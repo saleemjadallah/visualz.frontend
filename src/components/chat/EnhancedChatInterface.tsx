@@ -93,6 +93,7 @@ export const EnhancedChatInterface = () => {
         setMessages(prev => [...prev, clarificationMessage]);
         setPendingClarification(result.clarificationOptions || null);
         setGenerationProgress({ stage: 'idle', percentage: 0, message: '' });
+        setExtractedParams(prev => ({ ...prev, ...result.extractedParams }));
       } else if (result.readyToGenerate) {
         // All parameters collected, generate parametric design
         const confirmMessage: ChatMessage = {

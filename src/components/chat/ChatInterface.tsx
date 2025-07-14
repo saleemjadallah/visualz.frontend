@@ -74,6 +74,7 @@ export const ChatInterface = () => {
 
         setMessages(prev => [...prev, clarificationMessage]);
         setPendingClarification(result.clarificationOptions || null);
+        setExtractedParams(prev => ({ ...prev, ...result.extractedParams }));
       } else if (result.readyToGenerate) {
         // All parameters collected, generate design
         const confirmMessage: ChatMessage = {
