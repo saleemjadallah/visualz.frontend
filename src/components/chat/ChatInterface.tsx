@@ -70,6 +70,9 @@ export const ChatInterface = () => {
 
       // Call our AI parameter extraction service
       const result = await extractParametersFromMessage(requestData);
+      
+      // 🐛 DEBUG: Log the raw result
+      console.log('🔍 DEBUG - Raw API result:', result);
 
       if (result.needsClarification) {
         // AI needs clarification
@@ -181,7 +184,8 @@ export const ChatInterface = () => {
       // Use existing AI service
       // Map chat parameters to backend format
       const mappedEventType = parameters.eventType?.replace('-', '_') || 'celebration';
-      const mappedBudgetRange = parameters.budget?.replace('-', '_').replace('k', '000') || 'medium';
+      // Don't transform budget - it's already in the correct format (e.g., "under-2k", "2k-5k")
+      const mappedBudgetRange = parameters.budget || 'medium';
       
       const designResult = await generateDesign3D({
         eventRequirements: {

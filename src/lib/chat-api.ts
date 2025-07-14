@@ -175,6 +175,8 @@ export const formatParameterValue = (key: string, value: any): string => {
 
 // Validation helpers
 export const validateParameter = (key: string, value: any): boolean => {
+  console.log(`🔍 DEBUG - Validating parameter: ${key} = ${value}`);
+  
   switch (key) {
     case 'guestCount':
       const count = parseInt(value);
@@ -184,7 +186,9 @@ export const validateParameter = (key: string, value: any): boolean => {
     case 'culture':
       return SYSTEM_CAPABILITIES.cultures.includes(value);
     case 'budget':
-      return SYSTEM_CAPABILITIES.budgetRanges.includes(value);
+      const isValid = SYSTEM_CAPABILITIES.budgetRanges.includes(value);
+      console.log(`🔍 DEBUG - Budget validation: ${value} is ${isValid ? 'valid' : 'invalid'}. Valid options:`, SYSTEM_CAPABILITIES.budgetRanges);
+      return isValid;
     case 'style':
       return SYSTEM_CAPABILITIES.stylePreferences.includes(value);
     case 'spaceType':
