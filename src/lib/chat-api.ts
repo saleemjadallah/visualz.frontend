@@ -98,6 +98,7 @@ export const extractParametersFromMessage = async (
     message: request.message,
     existingParams: request.existingParams,
     conversationHistoryLength: request.conversationHistory.length,
+    lastMessage: request.conversationHistory[request.conversationHistory.length - 1],
     url: `${API_BASE_URL}/api/ai/extract-parameters`
   });
 
@@ -110,7 +111,8 @@ export const extractParametersFromMessage = async (
       conversation_history: request.conversationHistory.map(msg => ({
         type: msg.type,
         content: msg.content,
-        timestamp: msg.timestamp
+        timestamp: msg.timestamp,
+        clarificationOptions: msg.clarificationOptions
       }))
     })
   });
