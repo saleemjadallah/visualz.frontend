@@ -93,17 +93,40 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://visualz.xyz';
 export const extractParametersFromMessage = async (
   request: ParameterExtractionRequest
 ): Promise<ParameterExtractionResponse> => {
+  // 🐛 DEBUG: Log outgoing request
+  console.log('🔍 DEBUG - Sending to /api/ai/extract-parameters:', {
+    message: request.message,
+    existingParams: request.existingParams,
+    conversationHistoryLength: request.conversationHistory.length,
+    url: `${API_BASE_URL}/api/ai/extract-parameters`
+  });
+
   const response = await fetch(`${API_BASE_URL}/api/ai/extract-parameters`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(request)
+    body: JSON.stringify({
+      message: request.message,
+      existing_params: request.existingParams, // Convert to snake_case for backend
+      conversation_history: request.conversationHistory.map(msg => ({
+        type: msg.type,
+        content: msg.content,
+        timestamp: msg.timestamp
+      }))
+    })
   });
 
   if (!response.ok) {
-    throw new Error(`Parameter extraction failed: ${response.statusText}`);
+    const errorText = await response.text();
+    console.error('❌ Parameter extraction API error:', response.status, errorText);
+    throw new Error(`Parameter extraction failed: ${response.statusText} - ${errorText}`);
   }
 
-  return response.json();
+  const result = await response.json();
+  
+  // 🐛 DEBUG: Log API response
+  console.log('🔍 DEBUG - API response:', result);
+  
+  return result;
 };
 
 export const generateDesign3D = async (

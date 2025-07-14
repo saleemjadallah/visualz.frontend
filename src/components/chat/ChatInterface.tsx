@@ -31,6 +31,11 @@ export const ChatInterface = () => {
   const [pendingClarification, setPendingClarification] = useState<ClarificationOption | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // 🐛 DEBUG: Add state logging
+  useEffect(() => {
+    console.log('🔍 DEBUG - Current extracted params:', extractedParams);
+  }, [extractedParams]);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -55,12 +60,16 @@ export const ChatInterface = () => {
     setIsProcessing(true);
 
     try {
-      // Call our AI parameter extraction service
-      const result = await extractParametersFromMessage({
+      // 🐛 DEBUG: Log what we're sending to API
+      const requestData = {
         message,
         existingParams: extractedParamsOverride || extractedParams,
         conversationHistory: getRecentMessages(messages, 5)
-      });
+      };
+      console.log('🔍 DEBUG - Sending to extractParametersFromMessage:', requestData);
+
+      // Call our AI parameter extraction service
+      const result = await extractParametersFromMessage(requestData);
 
       if (result.needsClarification) {
         // AI needs clarification
@@ -75,7 +84,13 @@ export const ChatInterface = () => {
 
         setMessages(prev => [...prev, clarificationMessage]);
         setPendingClarification(result.clarificationOptions || null);
-        setExtractedParams(prev => ({ ...prev, ...result.extractedParams }));
+        
+        // 🔥 CRITICAL: Properly merge parameters
+        setExtractedParams(prev => {
+          const merged = { ...prev, ...result.extractedParams };
+          console.log('🔍 DEBUG - Merging params:', { prev, new: result.extractedParams, merged });
+          return merged;
+        });
       } else if (result.readyToGenerate) {
         // All parameters collected, generate design
         const confirmMessage: ChatMessage = {
@@ -87,7 +102,10 @@ export const ChatInterface = () => {
         };
 
         setMessages(prev => [...prev, confirmMessage]);
+        
+        // 🔥 CRITICAL: Use final parameters
         setExtractedParams(result.extractedParams);
+        console.log('🔍 DEBUG - Final params for generation:', result.extractedParams);
         
         // Notify main page that generation is starting
         window.dispatchEvent(new Event('generatingDesign'));
@@ -105,7 +123,13 @@ export const ChatInterface = () => {
         };
 
         setMessages(prev => [...prev, responseMessage]);
-        setExtractedParams(prev => ({ ...prev, ...result.extractedParams }));
+        
+        // 🔥 CRITICAL: Properly merge parameters for continue conversation
+        setExtractedParams(prev => {
+          const merged = { ...prev, ...result.extractedParams };
+          console.log('🔍 DEBUG - Merging continue params:', { prev, new: result.extractedParams, merged });
+          return merged;
+        });
       }
     } catch (error) {
       console.error('Chat error:', error);
@@ -132,16 +156,24 @@ export const ChatInterface = () => {
     
     setPendingClarification(null);
     
+    // 🔥 CRITICAL: Merge with current state to preserve all parameters
+    const currentParams = extractedParams;
+    const combinedParams = { ...currentParams, ...latestParams };
+    
+    console.log('🔍 DEBUG - Clarification response:', {
+      response,
+      currentParams,
+      latestParams,
+      combinedParams
+    });
+    
     // Create a new synthetic message that includes the structured response
     // and send that to the backend for the most reliable extraction.
     const messageToSend = `${response}`; 
-    
-    // We must update the local state immediately with the full context before sending.
-    const newExtractedParams = { ...latestParams };
 
     // It's crucial to pass the combined parameters directly to handleSendMessage
     // instead of relying on the component's state.
-    await handleSendMessage(messageToSend, newExtractedParams);
+    await handleSendMessage(messageToSend, combinedParams);
   };
 
   const generateDesign = async (parameters: ExtractedParameters) => {
@@ -265,7 +297,7 @@ export const ChatInterface = () => {
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage(inputValue)}
+              onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage(inputValue)}
               placeholder="Describe your event vision..."
               className="w-full border border-gray-300 rounded-lg px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               disabled={isProcessing}
