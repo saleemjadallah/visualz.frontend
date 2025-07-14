@@ -1,7 +1,7 @@
 import { ExtractedParameters, Design3DGenerationRequest } from './chat-api';
 
 // Get API base URL from environment or use default
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://visualz.xyz';
 
 // Parametric generation request types
 export interface ParametricFurnitureRequest {
