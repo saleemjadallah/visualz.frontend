@@ -134,7 +134,7 @@ export default function ThreeDTest() {
   return (
     <>
       <Head>
-        <title>3D Generation Test Results</title>
+        <title>3D Generation Test Results - Working</title>
         <meta name="description" content="Test the 3D generation endpoints directly" />
       </Head>
 
