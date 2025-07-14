@@ -39,7 +39,7 @@ export const ChatInterface = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async (message: string) => {
+  const handleSendMessage = async (message: string, extractedParamsOverride?: ExtractedParameters) => {
     if (!message.trim() || isProcessing) return;
 
     // Add user message
@@ -58,7 +58,7 @@ export const ChatInterface = () => {
       // Call our AI parameter extraction service
       const result = await extractParametersFromMessage({
         message,
-        existingParams: extractedParams,
+        existingParams: extractedParamsOverride || extractedParams,
         conversationHistory: getRecentMessages(messages, 5)
       });
 
@@ -124,9 +124,21 @@ export const ChatInterface = () => {
     await handleSendMessage(action);
   };
 
-  const handleClarificationResponse = async (response: string) => {
+  const handleClarificationResponse = async (response: string, originalMessage: ChatMessage) => {
+    // When responding to a clarification, merge the latest params from that message
+    // with the user's new response to avoid state race conditions.
+    const latestParams = originalMessage.parameters || extractedParams;
+    
     setPendingClarification(null);
-    await handleSendMessage(response);
+    
+    // Create a new synthetic message that includes the structured response
+    // and send that to the backend for the most reliable extraction.
+    const messageToSend = `${response}`; 
+    
+    // We must update the local state immediately with the full context before sending.
+    const newExtractedParams = { ...latestParams };
+
+    await handleSendMessage(messageToSend, newExtractedParams);
   };
 
   const generateDesign = async (parameters: ExtractedParameters) => {
@@ -215,7 +227,7 @@ export const ChatInterface = () => {
               {pendingClarification.options.map((option, index) => (
                 <button
                   key={index}
-                  onClick={() => handleClarificationResponse(option)}
+                  onClick={() => handleClarificationResponse(option, messages[messages.length - 1])}
                   className="px-4 py-2 bg-white hover:bg-blue-50 border border-blue-300 rounded-full text-sm font-medium text-blue-800 transition-all hover:shadow-md"
                 >
                   {option}

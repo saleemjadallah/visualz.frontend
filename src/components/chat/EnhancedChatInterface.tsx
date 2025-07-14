@@ -56,7 +56,7 @@ export const EnhancedChatInterface = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async (message: string) => {
+  const handleSendMessage = async (message: string, paramsOverride?: ExtractedParameters) => {
     if (!message.trim() || isProcessing) return;
 
     // Add user message
@@ -76,7 +76,7 @@ export const EnhancedChatInterface = () => {
       // Call our AI parameter extraction service
       const result = await extractParametersFromMessage({
         message,
-        existingParams: extractedParams,
+        existingParams: paramsOverride || extractedParams,
         conversationHistory: getRecentMessages(messages, 5)
       });
 
@@ -142,9 +142,17 @@ export const EnhancedChatInterface = () => {
     await handleSendMessage(action);
   };
 
-  const handleClarificationResponse = async (response: string) => {
+  const handleClarificationResponse = async (response: string, originalMessage: ChatMessage) => {
+    // When responding to a clarification, merge the latest params from that message
+    // with the user's new response to avoid state race conditions.
+    const latestParams = originalMessage.parameters || extractedParams;
+    
     setPendingClarification(null);
-    await handleSendMessage(response);
+    
+    const messageToSend = `${response}`;
+    const newExtractedParams = { ...latestParams };
+
+    await handleSendMessage(messageToSend, newExtractedParams);
   };
 
   const generateParametricDesign = async (parameters: ExtractedParameters) => {
@@ -283,7 +291,7 @@ Your design achieves a cultural authenticity score of ${designResult.generation_
               {pendingClarification.options.map((option, index) => (
                 <button
                   key={index}
-                  onClick={() => handleClarificationResponse(option)}
+                  onClick={() => handleClarificationResponse(option, messages[messages.length - 1])}
                   className="px-4 py-2 bg-white hover:bg-blue-50 border border-blue-300 rounded-full text-sm font-medium text-blue-800 transition-all hover:shadow-md"
                 >
                   {option}
